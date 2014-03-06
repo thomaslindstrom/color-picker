@@ -54,7 +54,7 @@
             _tabBarHeight = (_pane.find '.tab-bar').height()
 
             _view = _pane.activeView
-            _position = _view.pixelPositionForScreenPosition _view.getEditor().getCursorBufferPosition()
+            _position = _view.pixelPositionForScreenPosition _view.getEditor().getCursorScreenPosition()
             _gutterWidth = (_view.find '.gutter').width()
 
             _top = 15 + _position.top - _view.scrollTop() + _view.lineHeight + _tabBarHeight
