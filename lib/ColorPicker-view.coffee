@@ -164,8 +164,8 @@
             selectedColor: null
             currentColor: null
             saturation: x: 0, y: 0
-            hue: y: 0
-            alpha: y: 0
+            hue: 0
+            alpha: 0
         }
 
     # -------------------------------------
@@ -183,14 +183,14 @@
                 .css 'left', _percentageLeft + '%'
 
         refreshSaturationCanvas: ->
-            _color = HueSelector.getColorAtPosition @storage.hue.y
+            _color = HueSelector.getColorAtPosition @storage.hue
             SaturationSelector.render _color.color
 
     # -------------------------------------
     #  Alpha
     # -------------------------------------
         setAlpha: (positionY) ->
-            @storage.alpha.y = positionY
+            @storage.alpha = positionY
             AlphaSelector.$selection
                 .css 'top', (positionY / AlphaSelector.height) * 100 + '%'
 
@@ -203,7 +203,7 @@
     #  Hue
     # -------------------------------------
         setHue: (positionY) ->
-            @storage.hue.y = positionY
+            @storage.hue = positionY
             HueSelector.$selection
                 .css 'top', (positionY / HueSelector.height) * 100 + '%'
 
@@ -219,7 +219,7 @@
             color ?= SaturationSelector.getColorAtPosition _saturation.x, _saturation.y
             _color = color.color
 
-            _alphaValue = 100 - (((@storage.alpha.y / AlphaSelector.height) * 100) << 0)
+            _alphaValue = 100 - (((@storage.alpha / AlphaSelector.height) * 100) << 0)
 
             if _alphaValue isnt 100
                 _rgb = switch color.type
