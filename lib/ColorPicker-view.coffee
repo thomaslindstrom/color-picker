@@ -75,7 +75,7 @@
             $body = this.parents 'body'
 
             do => # Bind the color output control
-                $body.on 'click', (e) =>
+                $body.on 'mousedown', (e) =>
                     return @close() unless /ColorPicker/.test e.target.className
                     return unless e.target.className is 'ColorPicker-color'
 
@@ -244,6 +244,12 @@
         inputColor: (color) ->
             _color = color.color
 
+            # TODO: Don't do this
+            if color.type is 'hexa'
+                _hex = (_color.match /rgba\((\#.+),/)[1]
+                color.type = 'rgba'
+                _color = color.color = _color.replace _hex, (Convert.hexToRgb _hex).join ', '
+
             # Convert the color to HSV
             _hsv = switch color.type
                 when 'rgba' then Convert.rgbToHsv _color.match /(\d+)/g
@@ -253,7 +259,7 @@
 
             # Set all controls in the right place to reflect the new color
 
-            # Get the hue
+            # Get the hue. 360 is the H max
             @setHue (HueSelector.height / 360) * _hsv[0]
 
             # Get the saturation
