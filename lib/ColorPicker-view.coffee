@@ -49,6 +49,11 @@
         open: ->
             @isOpen = true
             this.addClass 'is--visible'
+            this.removeClass 'no--arrow'
+
+            _colorPickerWidth = this.width()
+            _colorPickerHeight = this.height()
+            _halfColorPickerWidth = _colorPickerWidth / 2
 
             _pane = atom.workspaceView.getActivePaneView()
             _tabBarHeight = (_pane.find '.tab-bar').height()
@@ -58,11 +63,25 @@
             _gutterWidth = (_view.find '.gutter').width()
 
             _top = 15 + _position.top - _view.scrollTop() + _view.lineHeight + _tabBarHeight
-            _left = _position.left - _view.scrollLeft() - (this.width() / 2) + _gutterWidth
+            _left = _position.left - _view.scrollLeft() + _gutterWidth
 
+            # Make adjustments based on view size: don't let
+            # the color picker disappear
+            _viewWidth = _view.width()
+            _viewHeight = _view.height()
+
+            if _top + _colorPickerHeight - 15 > _viewHeight
+                _top = _viewHeight + _tabBarHeight - _colorPickerHeight - 20
+                this.addClass 'no--arrow'
+
+            if _left + _halfColorPickerWidth > _viewWidth
+                _left = _viewWidth - _halfColorPickerWidth - 20
+                this.addClass 'no--arrow'
+
+            # Place the color picker
             this
                 .css 'top', Math.max 1, _top
-                .css 'left', Math.max 1, _left
+                .css 'left', Math.max 1, _left - _halfColorPickerWidth
 
         close: ->
             @isOpen = false
