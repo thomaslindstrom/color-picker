@@ -3,7 +3,7 @@
   "main": "./lib/ColorPicker",
   "version": "0.0.0",
   "private": true,
-  "description": "A color picker for the Atom Editor. Right click a color and select color picker to open it.",
+  "description": "A Color Picker for the Atom Editor. Right click a color and select color picker to open it.",
   "repository": "https://github.com/thomaslindstrom/color-picker",
   "license": "MIT",
   "engines": {

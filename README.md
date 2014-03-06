@@ -1,14 +1,16 @@
 # A Color Picker for Atom
 
-A color picker for Atom. Either right click a color and select `Color picker`, or place the cursor on a color and hit `CMD-CTRL-C`.
+A color picker for Atom. Either right click a color and select `Color picker`, or place the cursor on a color and hit `CMD-CTRL-C`. Currently reads HEXA, RGBA, RGB and HEX.
 
 ## Preview
 
-image
+![Color Picker in action](http://f.cl.ly/items/3B1L3z0p2Q0R0y2Y0M2I/colorpicker.gif)
 
-## Incoming features
+## Incoming
 
+- If HEXA is read, spit HEXA out too
+- Code cleanup
+- Polishing
 - Color name lookup (eg. red, blue, green)
 - Sass/Less color variable lookup
-- Code cleanup
-- Add tests
+- Tests
