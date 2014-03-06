@@ -2,32 +2,38 @@
 #  Color Picker
 # ----------------------------------------------------------------------------
     {View} = require 'atom'
-
     Convert = require './ColorPicker-convert'
+
     ColorPicker = undefined
     SaturationSelector = undefined
     HueSelector = undefined
+    AlphaSelector = undefined
 
     module.exports = class ColorPickerView extends View
         @content: ->
             c = 'ColorPicker-'
 
             @div id: 'ColorPicker', class: 'ColorPicker', =>
+                @div id: c + 'color', class: c + 'color', =>
+                    @div id: c + 'value', class: c + 'value'
+
                 @div id: c + 'picker', class: c + 'picker', =>
                     @div id: c + 'saturationSelectorWrapper', class: c + 'saturationSelectorWrapper', =>
                         @div id: c + 'saturationSelection', class: c + 'saturationSelection'
                         @canvas id: c + 'saturationSelector', class: c + 'saturationSelector', width: '180px', height: '180px'
+                    @div id: c + 'alphaSelectorWrapper', class: c + 'alphaSelectorWrapper', =>
+                        @div id: c + 'alphaSelection', class: c + 'alphaSelection'
+                        @canvas id: c + 'alphaSelector', class: c + 'alphaSelector', width: '20px', height: '180px'
                     @div id: c + 'hueSelectorWrapper', class: c + 'hueSelectorWrapper', =>
                         @div id: c + 'hueSelection', class: c + 'hueSelection'
                         @canvas id: c + 'hueSelector', class: c + 'hueSelector', width: '20px', height: '180px'
-                @div id: c + 'color', class: c + 'color', =>
-                    @div id: c + 'value', class: c + 'value'
 
         initialize: ->
             (atom.workspaceView.find '.vertical').append this
 
             ColorPicker = require './ColorPicker'
             SaturationSelector = require './ColorPicker-saturationSelector'
+            AlphaSelector = require './ColorPicker-alphaSelector'
             HueSelector = require './ColorPicker-hueSelector'
 
             HueSelector.render()
@@ -46,12 +52,12 @@
 
             _pane = atom.workspaceView.getActivePaneView()
             _tabBarHeight = (_pane.find '.tab-bar').height()
-            _gutterWidth = (_pane.find '.gutter').width()
 
-            _view = (_pane.find '.editor').view()
+            _view = _pane.activeView
             _position = _view.pixelPositionForScreenPosition _view.getEditor().getCursorBufferPosition()
+            _gutterWidth = (_view.find '.gutter').width()
 
-            _top = 20 + _position.top - _view.scrollTop() + _view.lineHeight + _tabBarHeight
+            _top = 15 + _position.top - _view.scrollTop() + _view.lineHeight + _tabBarHeight
             _left = _position.left - _view.scrollLeft() - (this.width() / 2) + _gutterWidth
 
             this
@@ -84,28 +90,6 @@
                     @replaceColor()
                     @close()
 
-            do => # Bind the hue selector controls
-                _isGrabbingHueSelection = false
-
-                $body.on 'mousedown mousemove mouseup', (e) =>
-                    _offsetTop = HueSelector.$el.offset().top
-                    _offsetY = Math.max 1, (Math.min HueSelector.height, (e.pageY - _offsetTop))
-
-                    switch e.type
-                        when 'mousedown'
-                            return unless e.target.className is 'ColorPicker-hueSelector'
-                            e.preventDefault()
-                            _isGrabbingHueSelection = true
-                        when 'mousemove'
-                            return unless _isGrabbingHueSelection
-                            e.preventDefault()
-                        when 'mouseup'
-                            _isGrabbingHueSelection = false
-                    return unless _isGrabbingHueSelection
-
-                    @setHue _offsetY
-                    @refreshColor 'hue'
-
             do => # Bind the saturation selector controls
                 _isGrabbingSaturationSelection = false
 
@@ -129,23 +113,60 @@
                     @setSaturation _offsetX, _offsetY
                     @refreshColor 'saturation'
 
+            do => # Bind the alpha selector controls
+                _isGrabbingAlphaSelection = false
+
+                $body.on 'mousedown mousemove mouseup', (e) =>
+                    _offsetTop = AlphaSelector.$el.offset().top
+                    _offsetY = Math.max 1, (Math.min AlphaSelector.height, (e.pageY - _offsetTop))
+
+                    switch e.type
+                        when 'mousedown'
+                            return unless e.target.className is 'ColorPicker-alphaSelector'
+                            e.preventDefault()
+                            _isGrabbingAlphaSelection = true
+                        when 'mousemove'
+                            return unless _isGrabbingAlphaSelection
+                            e.preventDefault()
+                        when 'mouseup'
+                            _isGrabbingAlphaSelection = false
+                    return unless _isGrabbingAlphaSelection
+
+                    @setAlpha _offsetY
+                    @refreshColor 'alpha'
+
+            do => # Bind the hue selector controls
+                _isGrabbingHueSelection = false
+
+                $body.on 'mousedown mousemove mouseup', (e) =>
+                    _offsetTop = HueSelector.$el.offset().top
+                    _offsetY = Math.max 1, (Math.min HueSelector.height, (e.pageY - _offsetTop))
+
+                    switch e.type
+                        when 'mousedown'
+                            return unless e.target.className is 'ColorPicker-hueSelector'
+                            e.preventDefault()
+                            _isGrabbingHueSelection = true
+                        when 'mousemove'
+                            return unless _isGrabbingHueSelection
+                            e.preventDefault()
+                        when 'mouseup'
+                            _isGrabbingHueSelection = false
+                    return unless _isGrabbingHueSelection
+
+                    @setHue _offsetY
+                    @refreshColor 'hue'
+
     # -------------------------------------
     #  Controller state storage
     # -------------------------------------
         storage: {
             selectedColor: null
             currentColor: null
-            hue: y: 0
             saturation: x: 0, y: 0
+            hue: y: 0
+            alpha: y: 0
         }
-
-    # -------------------------------------
-    #  Hue
-    # -------------------------------------
-        setHue: (positionY) ->
-            @storage.hue.y = positionY
-            HueSelector.$selection
-                .css 'top', (positionY / HueSelector.height) * 100 + '%'
 
     # -------------------------------------
     #  Saturation
@@ -166,6 +187,27 @@
             SaturationSelector.render _color.color
 
     # -------------------------------------
+    #  Alpha
+    # -------------------------------------
+        setAlpha: (positionY) ->
+            @storage.alpha.y = positionY
+            AlphaSelector.$selection
+                .css 'top', (positionY / AlphaSelector.height) * 100 + '%'
+
+        refreshAlphaCanvas: ->
+            _saturation = @storage.saturation
+            _color = SaturationSelector.getColorAtPosition _saturation.x, _saturation.y
+            AlphaSelector.render Convert.hexToRgb _color.color
+
+    # -------------------------------------
+    #  Hue
+    # -------------------------------------
+        setHue: (positionY) ->
+            @storage.hue.y = positionY
+            HueSelector.$selection
+                .css 'top', (positionY / HueSelector.height) * 100 + '%'
+
+    # -------------------------------------
     #  Color
     # -------------------------------------
 
@@ -174,7 +216,16 @@
             # TODO: Translate HEXA to RGBA
 
             _saturation = @storage.saturation
-            _color = color or (SaturationSelector.getColorAtPosition _saturation.x, _saturation.y).color
+            color ?= SaturationSelector.getColorAtPosition _saturation.x, _saturation.y
+            _color = color.color
+
+            _alphaValue = 100 - (((@storage.alpha.y / AlphaSelector.height) * 100) << 0)
+
+            if _alphaValue isnt 100
+                _rgb = switch color.type
+                    when 'hex' then Convert.hexToRgb color.color
+                    when 'rgb' then color.color
+                if _rgb then _color = "rgba(#{ _rgb.join ', ' }, #{ _alphaValue / 100 })"
 
             @storage.currentColor = _color
 
@@ -185,6 +236,8 @@
 
         refreshColor: (trigger) ->
             if trigger is 'hue' then @refreshSaturationCanvas()
+            if trigger is 'hue' or trigger is 'saturation' then @refreshAlphaCanvas()
+
             @setColor()
 
         # User selects a new color => reflect the change
@@ -193,20 +246,31 @@
 
             # Convert the color to HSV
             _hsv = switch color.type
-                when 'hex' then Convert.rgbToHsv Convert.hexToRgb _color
+                when 'rgba' then Convert.rgbToHsv _color.match /(\d+)/g
                 when 'rgb' then Convert.rgbToHsv _color.match /(\d+)/g
+                when 'hex' then Convert.rgbToHsv Convert.hexToRgb _color
             return unless _hsv
 
             # Set all controls in the right place to reflect the new color
 
+            # Get the hue
             @setHue (HueSelector.height / 360) * _hsv[0]
 
+            # Get the saturation
             _saturationX = Math.max 1, SaturationSelector.width * _hsv[1]
             _saturationY = Math.max 1, SaturationSelector.height * (1 - _hsv[2])
             @setSaturation _saturationX, _saturationY
             @refreshSaturationCanvas()
 
-            @setColor _color
+            # Get the alpha
+            if color.type is 'rgba'
+                _alpha = parseFloat (_color.match /rgba\((.+),(.+),(.+),(.+)\)/)[4]
+                if _alpha isnt 1 then @setAlpha AlphaSelector.height * (1 - _alpha)
+            if not _alpha then @setAlpha 0
+
+            @refreshAlphaCanvas()
+
+            @setColor color
 
     # -------------------------------------
     #  Selection

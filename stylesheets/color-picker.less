@@ -9,12 +9,14 @@
 // ---------------------------------------------------------------------------
     @color-ui: #ebebeb;
 
+    @image-transparency: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAAECAYAAACp8Z5+AAAAJElEQVQIW2PcvXv3fwYg6OzsBFEMjBgCLi4uYBXl5eUQFegCAIYVD/syLxKnAAAAAElFTkSuQmCC);
+
     .ColorPicker {
         background: @color-ui;
-        width: 230px; height: 300px;
+        width: 260px; height: 300px;
         position: absolute;
-        top: 50%; right: 50%;
-        border-radius: 8px 8px 2px 2px;
+        top: 50%; bottom: 0;
+        border-radius: 3px 3px 2px 2px;
         box-shadow: 0 10px 30px 10px rgba(0, 0, 0, .2);
         visibility: hidden;
         opacity: 0;
@@ -52,6 +54,15 @@
 
             &:before {
                 content: '';
+                background: @image-transparency;
+                background-size: 10px 10px;
+                width: 100%; height: 100%;
+                position: absolute;
+                top: 0; right: 0; left: 0;
+                z-index: -1;
+                opacity: .1; }
+            &:after {
+                content: '';
                 width: 0; height: 0;
                 margin: auto;
                 border: 8px solid transparent;
@@ -62,14 +73,15 @@
 
             .ColorPicker-value {
                 font-family: 'Source Code Pro', @font-family;
-                font-size: 18px;
+                font-size: 17px;
                 font-weight: 400;
                 color: #fff;
                 text-align: center;
                 text-shadow:
                     0 2px 30px rgba(0, 0, 0, .5),
                     0 0 2px rgba(0, 0, 0, .3),
-                    0 1px 1px rgba(0, 0, 0, .1);
+                    0 1px 1px rgba(0, 0, 0, .1),
+                    0 1px rgba(0, 0, 0, .1);
                 position: absolute;
                 top: 50%; right: 0; left: 0;
                 pointer-events: none;
@@ -108,7 +120,7 @@
                     0 0 1px rgba(0, 0, 0, .3),
                     inset 0 0 1px rgba(0, 0, 0, .8);
                 position: absolute;
-                top: 100%; left: ;
+                top: 100%; left: 0;
                 z-index: 20;
                 pointer-events: none; }
 
@@ -117,6 +129,55 @@
                 cursor: crosshair;
                 display: block;
                 pointer-events: all; }
+
+    // -------------------------------------
+    //  Alpha Selector
+    // -------------------------------------
+        .ColorPicker-alphaSelectorWrapper {
+            position: absolute;
+            bottom: 10px; right: 40px;
+            pointer-events: none;
+
+            &:before {
+                content: '';
+                background: @image-transparency;
+                background-size: 10px 10px;
+                width: 100%; height: 100%;
+                position: absolute;
+                top: 0; right: 0; left: 0;
+                z-index: -1;
+                opacity: .1; }
+            &:after {
+                content: '';
+                border: 2px solid @color-ui;
+                border-radius: 3px;
+                box-shadow: inset 0 0 1px rgba(0, 0, 0, .5);
+                position: absolute;
+                top: -2px; right: -2px; bottom: -2px; left: -2px;
+                z-index: 10; }
+        }
+
+            .ColorPicker-alphaSelection {
+                width: 18px; height: 7px;
+                margin-top: -4px;
+                border: 2px solid #fff;
+                border-radius: 1px;
+                box-shadow:
+                    0 0 1px rgba(0, 0, 0, .3),
+                    inset 0 0 1px rgba(0, 0, 0, .6);
+                position: absolute;
+                top: 0; right: 1px; left: 1px;
+                z-index: 20;
+                pointer-events: none; }
+
+            .ColorPicker-alphaSelector {
+                width: 20px; height: 180px;
+                display: block;
+                cursor: -webkit-grab;
+                pointer-events: all;
+
+                &:active { cursor: -webkit-grabbing; }
+            }
 
     // -------------------------------------
     //  Hue Selector
@@ -145,7 +206,7 @@
                     0 0 1px rgba(0, 0, 0, .3),
                     inset 0 0 1px rgba(0, 0, 0, .6);
                 position: absolute;
-                top: 20%; right: 1px; left: 1px;
+                top: 1px; right: 1px; left: 1px;
                 z-index: 20;
                 pointer-events: none; }
 

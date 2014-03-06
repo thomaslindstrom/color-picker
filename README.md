@@ -8,7 +8,7 @@ image
 
 ## Incoming features
 
-- Alpha channel selector
+- Color name lookup (eg. red, blue, green)
 - Sass/Less color variable lookup
 - Code cleanup
 - Add tests
