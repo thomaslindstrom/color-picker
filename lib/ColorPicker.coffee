@@ -7,7 +7,7 @@
     # -------------------------------------
         COLOR_REGEXES = [
             # Matches HEX + A: eg
-            # rgba(#fff, 0.3)
+            # rgba(#fff, 0.3) and rgba(#000000, .8)
             { type: 'hexa', regex: /(rgba\(((\#[a-f0-9]{6}|\#[a-f0-9]{3}))\s*,\s*(0|1|0*\.\d+)\))/ig }
 
             # Matches RGB + A: eg.
@@ -60,7 +60,7 @@
                             end: _index + color.length
                             row: _cursorRow
 
-                        # Make sure the indexes are correct by removing
+                        # Make sure the indices are correct by removing
                         # the instances from the string after use
                         _line = _line.replace color, (new Array color.length + 1).join ' '
 
