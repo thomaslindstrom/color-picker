@@ -46,6 +46,17 @@
             @detach()
 
     # -------------------------------------
+    #  Controller state storage
+    # -------------------------------------
+        storage: {
+            selectedColor: null
+            currentColor: null
+            saturation: x: 0, y: 0
+            hue: 0
+            alpha: 0
+        }
+
+    # -------------------------------------
     #  Show or hide color picker
     # -------------------------------------
         open: ->
@@ -180,17 +191,6 @@
                     @refreshColor 'hue'
 
     # -------------------------------------
-    #  Controller state storage
-    # -------------------------------------
-        storage: {
-            selectedColor: null
-            currentColor: null
-            saturation: x: 0, y: 0
-            hue: 0
-            alpha: 0
-        }
-
-    # -------------------------------------
     #  Saturation
     # -------------------------------------
         setSaturation: (positionX, positionY) ->
@@ -319,11 +319,12 @@
 
         replaceColor: ->
             _color = @storage.selectedColor
+            _newColor = @storage.currentColor
             _editor = atom.workspace.getActiveEditor()
 
             # Replace the text
             _editor.replaceSelectedText null, =>
-                return @storage.currentColor
+                return _newColor
 
             # Clear selections and select the color
             _editor.clearSelections()
@@ -332,5 +333,5 @@
                     column: _color.index
                     row: _color.row
                 end:
-                    column: _color.index + @storage.currentColor.length
+                    column: _color.index + _newColor.length
                     row: _color.row
