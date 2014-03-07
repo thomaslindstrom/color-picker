@@ -34,6 +34,8 @@
                 ColorPickerView = require './ColorPicker-view'
                 @view = new ColorPickerView
 
+            deactivate: -> @view.destroy()
+
             open: ->
                 _editor = atom.workspace.getActiveEditor()
                 _line = _editor.getCursor().getCurrentBufferLine()

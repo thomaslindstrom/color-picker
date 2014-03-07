@@ -41,7 +41,9 @@
             @bind()
 
         # Tear down any state and detach
-        destroy: -> @detach()
+        destroy: ->
+            this.remove()
+            @detach()
 
     # -------------------------------------
     #  Show or hide color picker
@@ -232,8 +234,6 @@
 
         # Set the current color after control interaction
         setColor: (color) ->
-            # TODO: Translate HEXA to RGBA
-
             _saturation = @storage.saturation
             color ?= SaturationSelector.getColorAtPosition _saturation.x, _saturation.y
             _color = color.color
