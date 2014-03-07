@@ -17,6 +17,9 @@
                 @div id: c + 'color', class: c + 'color', =>
                     @div id: c + 'value', class: c + 'value'
 
+                @div id: c + 'initialWrapper', class: c + 'initialWrapper', =>
+                    @div id: c + 'initial', class: c + 'initial'
+
                 @div id: c + 'picker', class: c + 'picker', =>
                     @div id: c + 'saturationSelectorWrapper', class: c + 'saturationSelectorWrapper', =>
                         @div id: c + 'saturationSelection', class: c + 'saturationSelection'
@@ -61,7 +64,7 @@
     # -------------------------------------
         open: ->
             @isOpen = true
-            this.addClass 'is--visible'
+            this.addClass 'is--visible is--initial'
             this.removeClass 'no--arrow'
 
             _colorPickerWidth = this.width()
@@ -99,7 +102,7 @@
 
         close: ->
             @isOpen = false
-            this.removeClass 'is--visible'
+            this.removeClass 'is--visible is--initial'
 
     # -------------------------------------
     #  Bind controls
@@ -110,10 +113,13 @@
             do => # Bind the color output control
                 $body.on 'mousedown', (e) =>
                     return @close() unless /ColorPicker/.test e.target.className
-                    return unless e.target.className is 'ColorPicker-color'
 
-                    @replaceColor()
-                    @close()
+                    switch e.target.className
+                        when 'ColorPicker-color'
+                            @replaceColor()
+                            @close()
+                        when 'ColorPicker-initialWrapper'
+                            @close()
                 .on 'keydown', (e) =>
                     return unless @isOpen
                     return @close() unless e.which is 13
@@ -235,6 +241,9 @@
 
         # Set the current color after control interaction
         setColor: (color) ->
+            unless color then this.removeClass 'is--initial'
+            else _setInitialColor = true
+
             _saturation = @storage.saturation
             color ?= SaturationSelector.getColorAtPosition _saturation.x, _saturation.y
             _color = color.color
@@ -251,8 +260,14 @@
 
             (this.find '#ColorPicker-value').html _color
             (this.find '#ColorPicker-color')
-                .css 'background', _color
+                .css 'background-color', _color
                 .css 'border-bottom-color', _color
+
+            if _setInitialColor
+                (this.find '#ColorPicker-initial')
+                    .css 'background-color', _color
+                    .html _color
+
 
         refreshColor: (trigger) ->
             if trigger is 'hue' then @refreshSaturationCanvas()
