@@ -272,8 +272,8 @@
 
             # Convert the color to HSV
             _hsv = switch color.type
-                when 'rgba' then Convert.rgbToHsv _color.match /(\d+)/g
-                when 'rgb' then Convert.rgbToHsv _color.match /(\d+)/g
+                when 'rgba' then Convert.rgbToHsv _color
+                when 'rgb' then Convert.rgbToHsv _color
                 when 'hex' then Convert.rgbToHsv Convert.hexToRgb _color
             return unless _hsv
 

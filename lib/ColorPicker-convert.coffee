@@ -69,6 +69,8 @@
     #  RGB to HSV
     # -------------------------------------
         rgbToHsv: (rgb) ->
+            if typeof rgb is 'string' then rgb = rgb.match /(\d+)/g
+
             [r, g, b] = rgb
 
             computedH = 0
