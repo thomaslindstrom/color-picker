@@ -110,6 +110,8 @@
         bind: ->
             $body = this.parents 'body'
 
+            atom.workspaceView.on 'pane:active-item-changed', => @close()
+
             do => # Bind the color output control
                 $body.on 'mousedown', (e) =>
                     return @close() unless /ColorPicker/.test e.target.className
