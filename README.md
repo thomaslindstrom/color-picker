@@ -8,10 +8,9 @@ A color picker for Atom. Either right click a color and select `Color picker`, o
 
 ## Incoming
 
-- If HEXA is read, spit HEXA out too
+- Show the initial color when picking a new one
+- Sass/Less color variable lookup
 - Code cleanup
 - Edit the color value
-- Polishing
-- Color name lookup (eg. red, blue, green)
-- Sass/Less color variable lookup
+- If HEXA is read, spit HEXA
 - Tests
