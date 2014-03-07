@@ -2,6 +2,8 @@
 #  Color Picker
 # ----------------------------------------------------------------------------
 
+        ConditionalContextMenu = require './conditional-contextmenu'
+
     # -------------------------------------
     #  Color regex matchers
     # -------------------------------------
@@ -28,16 +30,25 @@
     # -------------------------------------
         module.exports =
             view: null
+            color: null
 
             activate: ->
                 atom.workspaceView.command "color-picker:open", => @open()
+
+                ConditionalContextMenu.item {
+                    label: 'Color picker'
+                    command: 'color-picker:open',
+                }, => return true if @color = @getColorAtCursor()
+
                 ColorPickerView = require './ColorPicker-view'
                 @view = new ColorPickerView
 
             deactivate: -> @view.destroy()
 
-            open: ->
+            getColorAtCursor: ->
                 _editor = atom.workspace.getActiveEditor()
+                return unless _editor
+
                 _line = _editor.getCursor().getCurrentBufferLine()
                 _cursorBuffer = _editor.getCursorBufferPosition()
                 _cursorRow = _cursorBuffer.row
@@ -65,14 +76,18 @@
                         # Make sure the indices are correct by removing
                         # the instances from the string after use
                         _line = _line.replace color, (new Array color.length + 1).join ' '
+                return unless _matches.length > 0
 
                 # Find the "selected" color by looking at caret position
                 _color = do -> for color in _matches
                     if color.index <= _cursorColumn and color.end >= _cursorColumn
                         return color
-                return unless _color
+                return _color
+
+            open: ->
+                return unless @color
 
                 @view.open()
-                @view.storage.selectedColor = _color
-                @view.inputColor _color
+                @view.storage.selectedColor = @color
+                @view.inputColor @color
                 @view.selectColor()
