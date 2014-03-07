@@ -45,6 +45,7 @@
 
         # Tear down any state and detach
         destroy: ->
+            @close()
             this.remove()
             @detach()
 
@@ -108,9 +109,9 @@
     #  Bind controls
     # -------------------------------------
         bind: ->
-            $body = this.parents 'body'
-
+            window.onresize = => if @isOpen then @close()
             atom.workspaceView.on 'pane:active-item-changed', => @close()
+            $body = this.parents 'body'
 
             do => # Bind the color output control
                 $body.on 'mousedown', (e) =>
