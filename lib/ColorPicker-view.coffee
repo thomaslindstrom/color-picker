@@ -53,8 +53,10 @@
     #  Controller state storage
     # -------------------------------------
         storage: {
+            activeView: null
             selectedColor: null
             currentColor: null
+
             saturation: x: 0, y: 0
             hue: 0
             alpha: 0
@@ -63,6 +65,8 @@
     # -------------------------------------
     #  Show or hide color picker
     # -------------------------------------
+        isOpen: false
+
         open: ->
             @isOpen = true
             this.addClass 'is--visible is--initial'
@@ -76,12 +80,15 @@
             _paneOffset = top: _pane[0].offsetTop, left: _pane[0].offsetLeft
             _tabBarHeight = (_pane.find '.tab-bar').height()
 
-            _view = _pane.activeView
+            @storage.activeView = _view = _pane.activeView
             _position = _view.pixelPositionForScreenPosition _view.getEditor().getCursorScreenPosition()
             _gutterWidth = (_view.find '.gutter').width()
 
-            _top = 15 + _position.top - _view.scrollTop() + _view.lineHeight + _tabBarHeight
-            _left = _position.left - _view.scrollLeft() + _gutterWidth
+            _scroll = top: _view.scrollTop(), left: _view.scrollLeft()
+            _view.verticalScrollbar.on 'scroll.color-picker', => @scroll()
+
+            _top = 15 + _position.top - _scroll.top + _view.lineHeight + _tabBarHeight
+            _left = _position.left - _scroll.left + _gutterWidth
 
             # Make adjustments based on view size: don't let
             # the color picker disappear
@@ -91,19 +98,25 @@
             if _top + _colorPickerHeight - 15 > _viewHeight
                 _top = _viewHeight + _tabBarHeight - _colorPickerHeight - 20
                 this.addClass 'no--arrow'
+            _top += _paneOffset.top
 
             if _left + _halfColorPickerWidth > _viewWidth
                 _left = _viewWidth - _halfColorPickerWidth - 20
                 this.addClass 'no--arrow'
+            _left += _paneOffset.left - _halfColorPickerWidth
 
-            # Place the color picker
-            this
-                .css 'top', Math.max 1, _top + _paneOffset.top
-                .css 'left', Math.max 1, _left + _paneOffset.left - _halfColorPickerWidth
+            this # Place the color picker
+                .css 'top', Math.max 20, _top
+                .css 'left', Math.max 20, _left
 
         close: ->
             @isOpen = false
             this.removeClass 'is--visible is--initial'
+
+            return unless @storage.activeView
+            @storage.activeView.verticalScrollbar.off 'scroll.color-picker'
+
+        scroll: -> if @isOpen then @close()
 
     # -------------------------------------
     #  Bind controls
