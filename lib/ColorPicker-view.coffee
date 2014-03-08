@@ -55,7 +55,7 @@
         storage: {
             activeView: null
             selectedColor: null
-            currentColor: null
+            pickedColor: null
 
             saturation: x: 0, y: 0
             hue: 0
@@ -90,8 +90,8 @@
             _top = 15 + _position.top - _scroll.top + _view.lineHeight + _tabBarHeight
             _left = _position.left - _scroll.left + _gutterWidth
 
-            # Make adjustments based on view size: don't let
-            # the color picker disappear
+            # Make adjustments based on view size: don't let the
+            # color picker disappear or overflow
             _viewWidth = _view.width()
             _viewHeight = _view.height()
 
@@ -273,7 +273,7 @@
                     when 'rgb' then color.color
                 if _rgb then _color = "rgba(#{ _rgb.join ', ' }, #{ _alphaValue / 100 })"
 
-            @storage.currentColor = _color
+            @storage.pickedColor = _color
 
             (this.find '#ColorPicker-value').html _color
             (this.find '#ColorPicker-color')
@@ -351,7 +351,7 @@
 
         replaceColor: ->
             _color = @storage.selectedColor
-            _newColor = @storage.currentColor
+            _newColor = @storage.pickedColor
             _editor = atom.workspace.getActiveEditor()
 
             # Replace the text

@@ -30,7 +30,12 @@
             _componentToHex = (component) ->
                 _hex = component.toString 16
                 return if _hex.length is 1 then "0#{ _hex }" else _hex
-            return [(_componentToHex rgb[0]), (_componentToHex rgb[1]), (_componentToHex rgb[2])].join ''
+
+            return [
+                (_componentToHex rgb[0]),
+                (_componentToHex rgb[1]),
+                (_componentToHex rgb[2])
+            ].join ''
 
     # -------------------------------------
     #  RGB to HSL
@@ -92,6 +97,7 @@
             r = r / 255
             g = g / 255
             b = b / 255
+
             minRGB = Math.min(r, Math.min(g, b))
             maxRGB = Math.max(r, Math.max(g, b))
 
