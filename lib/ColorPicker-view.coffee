@@ -135,7 +135,8 @@
                             @replaceColor()
                             @close()
                         when 'ColorPicker-initialWrapper'
-                            @close()
+                            @inputColor @storage.selectedColor
+                            this.addClass 'is--initial'
                 .on 'keydown', (e) =>
                     return unless @isOpen
                     return @close() unless e.which is 13
