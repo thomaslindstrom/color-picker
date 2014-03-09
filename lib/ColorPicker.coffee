@@ -5,9 +5,9 @@
         ConditionalContextMenu = require './conditional-contextmenu'
 
     # -------------------------------------
-    #  Color regex matchers
+    #  Regex matchers
     # -------------------------------------
-        COLOR_REGEXES = [
+        REGEXES = [
             # Matches HEX + A: eg
             # rgba(#fff, 0.3) and rgba(#000000, .8)
             { type: 'hexa', regex: /(rgba\(((\#[a-f0-9]{6}|\#[a-f0-9]{3}))\s*,\s*(0|1|0*\.\d+)\))/ig }
@@ -30,7 +30,7 @@
     # -------------------------------------
         module.exports =
             view: null
-            color: null
+            match: null
 
             activate: ->
                 atom.workspaceView.command "color-picker:open", => @open()
@@ -38,14 +38,14 @@
                 ConditionalContextMenu.item {
                     label: 'Color picker'
                     command: 'color-picker:open',
-                }, => return true if @color = @getColorAtCursor()
+                }, => return true if @match = @getMatchAtCursor()
 
                 ColorPickerView = require './ColorPicker-view'
                 @view = new ColorPickerView
 
             deactivate: -> @view.destroy()
 
-            getColorAtCursor: ->
+            getMatchAtCursor: ->
                 _editor = atom.workspace.getActiveEditor()
                 return unless _editor
 
@@ -54,40 +54,41 @@
                 _cursorRow = _cursorBuffer.row
                 _cursorColumn = _cursorBuffer.column
 
-                _matches = []
+                _filteredMatches = []
 
-                # Match the current line against the regexes to get the colors
-                for colorRegex in COLOR_REGEXES
-                    type = colorRegex.type
-                    regex = colorRegex.regex
+                # Match the current line against the regexes
+                for item in REGEXES
+                    _type = item.type
+                    _regex = item.regex
 
-                    continue unless _colors = _line.match regex
+                    continue unless _matches = _line.match _regex
 
-                    for color in _colors
-                        continue if (_index = _line.indexOf color) is -1
+                    for match in _matches
+                        continue if (_index = _line.indexOf match) is -1
 
-                        _matches.push
-                            color: color
-                            type: type
+
+                        _filteredMatches.push
+                            color: match
+                            type: _type
                             index: _index
-                            end: _index + color.length
+                            end: _index + match.length
                             row: _cursorRow
 
                         # Make sure the indices are correct by removing
                         # the instances from the string after use
-                        _line = _line.replace color, (new Array color.length + 1).join ' '
-                return unless _matches.length > 0
+                        _line = _line.replace match, (new Array match.length + 1).join ' '
+                return unless _filteredMatches.length > 0
 
-                # Find the "selected" color by looking at caret position
-                _color = do -> for color in _matches
-                    if color.index <= _cursorColumn and color.end >= _cursorColumn
-                        return color
-                return _color
+                # Find the "selected" match by looking at caret position
+                _match = do -> for match in _filteredMatches
+                    if match.index <= _cursorColumn and match.end >= _cursorColumn
+                        return match
+                return _match
 
             open: ->
-                return unless @color
+                return unless @match
 
                 @view.open()
-                @view.storage.selectedColor = @color
-                @view.inputColor @color
+                @view.storage.selectedColor = @match
+                @view.inputColor @match
                 @view.selectColor()
