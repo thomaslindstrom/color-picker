@@ -1,5 +1,5 @@
 # ----------------------------------------------------------------------------
-#  Saturation selector
+#  ColorPicker: Saturation selector
 # ----------------------------------------------------------------------------
         Convert = require './ColorPicker-convert'
 
