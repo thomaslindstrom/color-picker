@@ -45,6 +45,7 @@
 
             deactivate: -> @view.destroy()
 
+            # Get a match at the current cursor position
             getMatchAtCursor: ->
                 _editor = atom.workspace.getActiveEditor()
                 return unless _editor
@@ -54,34 +55,42 @@
                 _cursorRow = _cursorBuffer.row
                 _cursorColumn = _cursorBuffer.column
 
-                _filteredMatches = []
+                return @matchAtPosition _cursorColumn, (@matchesOnLine _line, _cursorRow)
 
-                # Match the current line against the regexes
-                for item in REGEXES
-                    _type = item.type
-                    _regex = item.regex
-
-                    continue unless _matches = _line.match _regex
+            # Match the current line against the regexes
+            # @String line
+            # @Number cursorRow
+            matchesOnLine: (line, cursorRow) ->
+                _filteredMatches = []; for { type, regex } in REGEXES
+                    continue unless _matches = line.match regex
 
                     for match in _matches
-                        continue if (_index = _line.indexOf match) is -1
-
+                        # Skip if the match has “been used” already
+                        continue if (_index = line.indexOf match) is -1
 
                         _filteredMatches.push
                             color: match
-                            type: _type
+                            type: type
                             index: _index
                             end: _index + match.length
-                            row: _cursorRow
+                            row: cursorRow
 
                         # Make sure the indices are correct by removing
                         # the instances from the string after use
-                        _line = _line.replace match, (new Array match.length + 1).join ' '
+                        line = line.replace match, (Array match.length + 1).join ' '
                 return unless _filteredMatches.length > 0
 
-                # Find the "selected" match by looking at caret position
-                _match = do -> for match in _filteredMatches
-                    if match.index <= _cursorColumn and match.end >= _cursorColumn
+                return _filteredMatches
+
+            # Get a single match on a position based on a match array
+            # as seen in matchesOnLine
+            # @Number column
+            # @Array matches
+            matchAtPosition: (column, matches) ->
+                return unless column and matches
+
+                _match = do -> for match in matches
+                    if match.index <= column and match.end >= column
                         return match
                 return _match
 
