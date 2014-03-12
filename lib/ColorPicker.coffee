@@ -123,7 +123,8 @@
                     _definition = _getDefinition()
                     _matches = @matchesOnLine _definition.definition, 1
 
-                    return unless _matches and _color = _matches[0]
+                    return @view.error() unless _matches and _color = _matches[0]
+                    return @view.error() if (_color.type.split ':')[0] is 'variable'
 
                     match.color = _color.match
                     match.type = _color.type
@@ -132,7 +133,8 @@
                 else # definition already exists
                     _matches = @matchesOnLine _definition.definition, 1
 
-                    return unless _matches and _color = _matches[0]
+                    return @view.error() unless _matches and _color = _matches[0]
+                    return @view.error() if (_color.type.split ':')[0] is 'variable'
 
                     match.color = _color.match
                     match.type = _color.type

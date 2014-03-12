@@ -125,10 +125,18 @@
 
         close: ->
             @isOpen = false
-            this.removeClass 'is--visible is--initial is--searching'
+            this.removeClass 'is--visible is--initial is--searching is--error'
 
             return unless @storage.activeView
             @storage.activeView.verticalScrollbar.off 'scroll.color-picker'
+
+        error: ->
+            @storage.selectedColor = null
+            console.log 'error'
+
+            this
+                .removeClass 'is--searching'
+                .addClass 'is--error'
 
         scroll: -> if @isOpen then @close()
 
