@@ -149,7 +149,7 @@
 
                     switch _className
                         when 'ColorPicker-color'
-                            if _color.hasOwnProperty 'pointer' and _pointer = _color.pointer
+                            if (_color.hasOwnProperty 'pointer') and _pointer = _color.pointer
                                 (atom.workspace.open _pointer.filePath).finally =>
                                     _editor = atom.workspaceView.getActivePane().getActiveItem()
                                     _editor.clearSelections()
