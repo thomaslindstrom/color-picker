@@ -153,7 +153,7 @@
                         when 'ColorPicker-color'
                             if (_color?.hasOwnProperty 'pointer') and _pointer = _color.pointer
                                 (atom.workspace.open _pointer.filePath).finally =>
-                                    _editor = atom.workspaceView.getActivePane().getActiveItem()
+                                    _editor = atom.workspace.activePaneItem
                                     _editor.clearSelections()
                                     _editor.setSelectedBufferRange _pointer.range
                             else @replaceColor()
