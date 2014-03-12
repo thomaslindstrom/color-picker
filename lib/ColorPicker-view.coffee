@@ -154,9 +154,9 @@
                                     _editor = atom.workspaceView.getActivePane().getActiveItem()
                                     _editor.clearSelections()
                                     _editor.setSelectedBufferRange _pointer.range
-                            else
-                                @replaceColor()
-                                @close()
+                            else @replaceColor()
+
+                            @close()
                         when 'ColorPicker-initialWrapper'
                             @inputColor _color
                             this.addClass 'is--initial'
