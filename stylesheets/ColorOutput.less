@@ -31,6 +31,7 @@
 
         .no--arrow &:after { display: none; }
         .is--pointer & { border-radius: 2px; }
+        .is--searching &:after { display: none; }
     }
 
         .ColorPicker-value,
@@ -56,14 +57,15 @@
                 top: 50%; right: 0; left: 0;
                 pointer-events: none;
 
+                -webkit-backface-visibility: hidden;
                 -webkit-transition: -webkit-transform .3s;
                 -webkit-transform: translate(0, -105%);
                 .ColorPicker-color:hover & { -webkit-transform: translate(0, -140%); }
 
                 .is--initial & { -webkit-transform: translate(0, -50%); }
                 .is--initial .ColorPicker-color:hover & { -webkit-transform: translate(0, -90%); }
-                .is--pointer &,
-                .is--pointer .ColorPicker-color:hover & { -webkit-transform: translate(0, -80%); }
+                .is--pointer & { -webkit-transform: translate(0, -90%); }
+                .is--pointer .ColorPicker-color:hover & { -webkit-transform: translate(0, -95%) scale(1.1); }
 
                 .is--pointer &:after {
                     content: attr(data-variable);
