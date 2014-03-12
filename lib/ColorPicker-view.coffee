@@ -75,8 +75,8 @@
             _selectedColor = @storage.selectedColor
 
             if not _selectedColor or _selectedColor.hasOwnProperty 'pointer'
-                this.addClass 'is--pointer'
-            else this.removeClass 'is--pointer'
+                this.addClass 'is--pointer is--searching'
+            else this.removeClass 'is--pointer is--searching'
 
             _colorPickerWidth = this.width()
             _colorPickerHeight = this.height()
@@ -304,7 +304,8 @@
                     .html _color
 
             if color.hasOwnProperty 'pointer'
-                (this.find '#ColorPicker-value')
+                this.removeClass 'is--searching'
+                    .find '#ColorPicker-value'
                     .attr 'data-variable', color.match
 
 
