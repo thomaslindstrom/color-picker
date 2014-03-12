@@ -8,9 +8,11 @@ A color picker for Atom. Either right click a color and select `Color picker`, o
 
 ## Incoming
 
-- Sass/Less color variable lookup
 - Code cleanup
-- Edit the color value
 - If RGB is read, spit RGB
 - If HEXA is read, spit HEXA
+- Preview color manipulation functions (lighten, darken)
+- Convertions
+- Stylus variable lookup
+- Edit the color value
 - Tests
