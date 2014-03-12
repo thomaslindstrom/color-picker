@@ -6,7 +6,7 @@ A color picker for Atom. Either right click a color and select `Color picker`, o
 
 ## Preview
 
-![Color Picker in action](http://f.cl.ly/items/3B1L3z0p2Q0R0y2Y0M2I/colorpicker.gif)
+![Color Picker in action](http://f.cl.ly/items/1J232z2S111Y2G2s1A45/output.gif)
 
 ## Incoming
 
