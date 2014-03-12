@@ -118,14 +118,18 @@
                 # TODO: Don't repeat. And make this better
                 unless _definition.hasOwnProperty 'pointer' then _definition.finally =>
                     _definition = _getDefinition()
-                    _color = (@matchesOnLine _definition.definition, 1)[0]
+                    _matches = @matchesOnLine _definition.definition, 1
+
+                    return unless _matches and _color = _matches[0]
 
                     match.color = _color.match
                     match.type = _color.type
                     match.pointer = _definition.pointer
                     callback match
                 else # definition already exists
-                    _color = (@matchesOnLine _definition.definition, 1)[0]
+                    _matches = @matchesOnLine _definition.definition, 1
+
+                    return unless _matches and _color = _matches[0]
 
                     match.color = _color.match
                     match.type = _color.type
