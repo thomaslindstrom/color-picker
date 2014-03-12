@@ -75,13 +75,15 @@
         open: ->
             @isOpen = true
             this.addClass 'is--visible is--initial'
-            this.removeClass 'no--arrow'
+            this.removeClass 'no--arrow is--pointer is--searching'
 
             _selectedColor = @storage.selectedColor
 
+            if not _selectedColor
+                this.addClass 'is--searching'
+
             if not _selectedColor or _selectedColor.hasOwnProperty 'pointer'
-                this.addClass 'is--pointer is--searching'
-            else this.removeClass 'is--pointer is--searching'
+                this.addClass 'is--pointer'
 
             _colorPickerWidth = this.width()
             _colorPickerHeight = this.height()
@@ -123,7 +125,7 @@
 
         close: ->
             @isOpen = false
-            this.removeClass 'is--visible is--initial'
+            this.removeClass 'is--visible is--initial is--searching'
 
             return unless @storage.activeView
             @storage.activeView.verticalScrollbar.off 'scroll.color-picker'
@@ -149,7 +151,7 @@
 
                     switch _className
                         when 'ColorPicker-color'
-                            if (_color.hasOwnProperty 'pointer') and _pointer = _color.pointer
+                            if (_color?.hasOwnProperty 'pointer') and _pointer = _color.pointer
                                 (atom.workspace.open _pointer.filePath).finally =>
                                     _editor = atom.workspaceView.getActivePane().getActiveItem()
                                     _editor.clearSelections()
