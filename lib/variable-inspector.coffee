@@ -59,7 +59,7 @@
                     _definitions[name] = {
                         name: name
                         type: type
-                        definition: (_match.matchText.match _regex)[1]
+                        # definition: ''
 
                         pointer:
                             filePath: _bestMatch.filePath
