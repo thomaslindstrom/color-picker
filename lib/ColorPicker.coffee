@@ -80,6 +80,7 @@
 
             open: ->
                 return unless @match
+                @view.reset()
                 @setMatchColor()
                 @view.open()
 
@@ -95,7 +96,6 @@
                 if @match.hasOwnProperty 'color'
                     @view.storage.selectedColor = @match
                     @view.inputColor @match
-                    @view.selectColor()
                     return
 
                 _callback = => @setMatchColor()

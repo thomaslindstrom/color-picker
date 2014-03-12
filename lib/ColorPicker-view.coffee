@@ -72,16 +72,21 @@
     # -------------------------------------
         isOpen: false
 
-        open: ->
-            @isOpen = true
+        reset: ->
             this.addClass 'is--visible is--initial'
             this.removeClass 'no--arrow is--pointer is--searching'
 
+            (this.find '#ColorPicker-value').html ''
+            (this.find '#ColorPicker-color')
+                .css 'background-color', ''
+                .css 'border-bottom-color', ''
+            (this.find '#ColorPicker-value').attr 'data-variable', ''
+
+        open: ->
+            @isOpen = true
+
             _selectedColor = @storage.selectedColor
-
-            if not _selectedColor
-                this.addClass 'is--searching'
-
+            if not _selectedColor then this.addClass 'is--searching'
             if not _selectedColor or _selectedColor.hasOwnProperty 'pointer'
                 this.addClass 'is--pointer'
 
