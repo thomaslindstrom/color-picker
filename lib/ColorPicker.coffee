@@ -114,29 +114,14 @@
 
                 _matchRegex = regex for { type, regex } in _regexes when type is match.type
                 _variableName = (match.match.match RegExp _matchRegex.source, 'i')[2] # hahaha
-                _getDefinition = -> VariableInspector.findDefinition _variableName, match.type
 
-                _definition = _getDefinition()
-
-                # TODO: Don't repeat. And make this better
-                unless _definition.hasOwnProperty 'pointer' then _definition.finally =>
-                    _definition = _getDefinition()
-                    _matches = @matchesOnLine _definition.definition, 1
+                (VariableInspector.findDefinition _variableName, match.type).then (definition) =>
+                    _matches = @matchesOnLine definition.definition, 1
 
                     return @view.error() unless _matches and _color = _matches[0]
                     return @view.error() if (_color.type.split ':')[0] is 'variable'
 
                     match.color = _color.match
                     match.type = _color.type
-                    match.pointer = _definition.pointer
-                    callback match
-                else # definition already exists
-                    _matches = @matchesOnLine _definition.definition, 1
-
-                    return @view.error() unless _matches and _color = _matches[0]
-                    return @view.error() if (_color.type.split ':')[0] is 'variable'
-
-                    match.color = _color.match
-                    match.type = _color.type
-                    match.pointer = _definition.pointer
+                    match.pointer = definition.pointer
                     callback match

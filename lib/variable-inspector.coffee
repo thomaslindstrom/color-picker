@@ -28,16 +28,16 @@
                 # We already know where the definition is
                 if _definition = _definitions[name]
                     _pointer = _definition.pointer
-                    _file = atom.project.findBufferForPath _pointer.filePath
-                    _text = _file.getTextInRange _pointer.range
 
-                    _definition.definition = (_text.match _regex)[1]
-                    return _definition
+                    return (atom.project.bufferForPath _pointer.filePath).then (buffer) =>
+                        _text = buffer.getTextInRange _pointer.range
+                        _definition.definition = (_text.match _regex)[1]
+                        return _definition
 
                 # We don't know where the definition is, look it up
                 atom.project.scan _regex, undefined, (result) ->
                     _results.push result
-                .finally ->
+                .then =>
                     # Figure out what file is holding the definition
                     # Assume it's the one closest to the current path
                     _targetPath = atom.workspaceView.getActivePaneItem().getPath()
@@ -59,9 +59,10 @@
                     _definitions[name] = {
                         name: name
                         type: type
-                        # definition: ''
 
                         pointer:
                             filePath: _bestMatch.filePath
                             range: _match.range
                     }
+
+                    return @findDefinition name, type
