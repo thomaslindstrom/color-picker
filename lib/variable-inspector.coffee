@@ -2,7 +2,7 @@
 #  Variable inspector
 # ----------------------------------------------------------------------------
 
-        _definition = {}
+        _definitions = {}
 
     # -------------------------------------
     #  Variable regex matchers
@@ -20,13 +20,21 @@
             # @String name
             # @String type
             findDefinition: (name, type) ->
-                return _definition[name] if _definition[name]
-
                 return unless _regexString = _regexes[type]
                 _regex = RegExp (_regexString.replace '__VARIABLE__', name)
 
                 _results = []
 
+                # We already know where the definition is
+                if _definition = _definitions[name]
+                    _pointer = _definition.pointer
+                    _file = atom.project.findBufferForPath _pointer.filePath
+                    _text = _file.getTextInRange _pointer.range
+
+                    _definition.definition = (_text.match _regex)[1]
+                    return _definition
+
+                # We don't know where the definition is, look it up
                 atom.project.scan _regex, undefined, (result) ->
                     _results.push result
                 .finally ->
@@ -48,7 +56,7 @@
                             _bestMatchHits = _thisMatchHits
                     return unless _bestMatch and _match = _bestMatch.matches[0]
 
-                    _definition[name] = {
+                    _definitions[name] = {
                         name: name
                         type: type
                         definition: (_match.matchText.match _regex)[1]
