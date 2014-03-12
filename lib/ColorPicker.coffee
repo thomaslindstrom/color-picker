@@ -83,6 +83,8 @@
                 @setMatchColor()
                 @view.open()
 
+            # Set the color of a match to its object, and then send it
+            # to the color picker view
             # @Object match
             # @Function callback
             setMatchColor: ->
@@ -103,7 +105,8 @@
                     when 'variable:less' then @setVariableDefinitionColor @match, _callback
                     else do => @match.color = @match.match; _callback @match
 
-            # ...
+            # Look up a variable definition, and if the definition is a
+            # color, return it
             # @Object match
             # @Function callback
             setVariableDefinitionColor: (match, callback) ->
