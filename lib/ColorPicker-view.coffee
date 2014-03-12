@@ -397,6 +397,8 @@
             _newColor = @storage.pickedColor
             _editor = atom.workspace.getActiveEditor()
 
+            @selectColor()
+
             # Replace the text
             _editor.replaceSelectedText null, =>
                 return _newColor
