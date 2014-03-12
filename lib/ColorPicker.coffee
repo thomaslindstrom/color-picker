@@ -4,7 +4,8 @@
 
         ConditionalContextMenu = require './conditional-contextmenu'
         VariableInspector = require './variable-inspector'
-        Regexes = require './ColorPicker-regexes.coffee'
+
+        _regexes = require './ColorPicker-regexes.coffee'
 
     # -------------------------------------
     #  Public functionality
@@ -42,7 +43,9 @@
             # @String line
             # @Number cursorRow
             matchesOnLine: (line, cursorRow) ->
-                _filteredMatches = []; for { type, regex } in Regexes
+                return unless line and cursorRow
+
+                _filteredMatches = []; for { type, regex } in _regexes
                     continue unless _matches = line.match regex
 
                     for match in _matches
@@ -50,7 +53,7 @@
                         continue if (_index = line.indexOf match) is -1
 
                         _filteredMatches.push
-                            color: match
+                            match: match
                             type: type
                             index: _index
                             end: _index + match.length
@@ -77,8 +80,54 @@
 
             open: ->
                 return unless @match
-
+                @setMatchColor()
                 @view.open()
-                @view.storage.selectedColor = @match
-                @view.inputColor @match
-                @view.selectColor()
+
+            # @Object match
+            # @Function callback
+            setMatchColor: ->
+                return unless @match
+
+                @view.storage.selectedColor = null
+
+                if @match.hasOwnProperty 'color'
+                    @view.storage.selectedColor = @match
+                    @view.inputColor @match
+                    @view.selectColor()
+                    return
+
+                _callback = => @setMatchColor()
+
+                return switch @match.type
+                    when 'variable:sass' then @setVariableDefinitionColor @match, _callback
+                    when 'variable:less' then @setVariableDefinitionColor @match, _callback
+                    else do => @match.color = @match.match; _callback @match
+
+            # ...
+            # @Object match
+            # @Function callback
+            setVariableDefinitionColor: (match, callback) ->
+                return unless match and callback
+
+                _matchRegex = regex for { type, regex } in _regexes when type is match.type
+                _variableName = (match.match.match RegExp _matchRegex.source, 'i')[2] # hahaha
+                _getDefinition = -> VariableInspector.findDefinition _variableName, match.type
+
+                _definition = _getDefinition()
+
+                # TODO: Don't repeat. And make this better
+                unless _definition.hasOwnProperty 'pointer' then _definition.finally =>
+                    _definition = _getDefinition()
+                    _color = (@matchesOnLine _definition.definition, 1)[0]
+
+                    match.color = _color.match
+                    match.type = _color.type
+                    match.pointer = _definition.pointer
+                    callback match
+                else # definition already exists
+                    _color = (@matchesOnLine _definition.definition, 1)[0]
+
+                    match.color = _color.match
+                    match.type = _color.type
+                    match.pointer = _definition.pointer
+                    callback match

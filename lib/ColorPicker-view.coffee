@@ -72,6 +72,12 @@
             this.addClass 'is--visible is--initial'
             this.removeClass 'no--arrow'
 
+            _selectedColor = @storage.selectedColor
+
+            if not _selectedColor or _selectedColor.hasOwnProperty 'pointer'
+                this.addClass 'is--pointer'
+            else this.removeClass 'is--pointer'
+
             _colorPickerWidth = this.width()
             _colorPickerHeight = this.height()
             _halfColorPickerWidth = _colorPickerWidth / 2
@@ -87,6 +93,7 @@
             _scroll = top: _view.scrollTop(), left: _view.scrollLeft()
             _view.verticalScrollbar.on 'scroll.color-picker', => @scroll()
 
+            # Add 15 to account for the arrow on top of the color picker
             _top = 15 + _position.top - _scroll.top + _view.lineHeight + _tabBarHeight
             _left = _position.left - _scroll.left + _gutterWidth
 
@@ -128,14 +135,25 @@
 
             do => # Bind the color output control
                 $body.on 'mousedown', (e) =>
-                    return @close() unless /ColorPicker/.test e.target.className
+                    _target = e.target
+                    _className = _target.className
 
-                    switch e.target.className
+                    return @close() unless /ColorPicker/.test _className
+
+                    _color = @storage.selectedColor
+
+                    switch _className
                         when 'ColorPicker-color'
-                            @replaceColor()
-                            @close()
+                            if _color.hasOwnProperty 'pointer' and _pointer = _color.pointer
+                                (atom.workspace.open _pointer.filePath).finally =>
+                                    _editor = atom.workspaceView.getActivePane().getActiveItem()
+                                    _editor.clearSelections()
+                                    _editor.setSelectedBufferRange _pointer.range
+                            else
+                                @replaceColor()
+                                @close()
                         when 'ColorPicker-initialWrapper'
-                            @inputColor @storage.selectedColor
+                            @inputColor _color
                             this.addClass 'is--initial'
                 .on 'keydown', (e) =>
                     return unless @isOpen
@@ -284,6 +302,10 @@
                 (this.find '#ColorPicker-initial')
                     .css 'background-color', _color
                     .html _color
+
+            if color.hasOwnProperty 'pointer'
+                (this.find '#ColorPicker-value')
+                    .attr 'data-variable', color.match
 
 
         refreshColor: (trigger) ->
