@@ -137,7 +137,6 @@
 
         error: ->
             @storage.selectedColor = null
-            console.log 'error'
 
             this
                 .removeClass 'is--searching'
