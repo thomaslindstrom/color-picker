@@ -30,6 +30,8 @@
             top: -16px; left: 0; right: 0; }
 
         .no--arrow &:after { display: none; }
+        .is--pointer & { border-radius: 2px; }
+        .is--searching &:after { display: none; }
     }
 
         .ColorPicker-value,
@@ -57,10 +59,42 @@
 
                 -webkit-transition: -webkit-transform .3s;
                 -webkit-transform: translate(0, -105%);
+
+                -webkit-backface-visibility: hidden;
+                -webkit-transform-style: preserve-3d;
+
                 .ColorPicker-color:hover & { -webkit-transform: translate(0, -140%); }
 
                 .is--initial & { -webkit-transform: translate(0, -50%); }
                 .is--initial .ColorPicker-color:hover & { -webkit-transform: translate(0, -90%); }
+                .is--pointer & { -webkit-transform: translate(0, -90%); }
+                .is--pointer .ColorPicker-color:hover & { -webkit-transform: translate(0, -95%) scale(1.1); }
+
+                .is--error &,
+                .is--error .ColorPicker-color:hover & { -webkit-transform: translate(0, -50%); }
+
+                .is--pointer &:after {
+                    content: attr(data-variable);
+                    font-size: 11px;
+                    color: #fff;
+                    text-overflow: ellipsis;
+                    text-shadow: 0 0 1px #000;
+                    white-space: nowrap;
+                    margin: auto;
+                    overflow: hidden;
+                    position: absolute;
+                    top: 30px; right: 5px; left: 5px; }
+
+                .is--searching & { display: none; }
+
+                .is--error &:after {
+                    content: 'No color found :(';
+                    font-size: 11px;
+                    color: #000;
+                    text-shadow: none;
+                    margin: auto;
+                    overflow: hidden;
+                    top: -5px; right: 5px; left: 5px; }
             }
 
         // -------------------------------------
@@ -82,6 +116,8 @@
                 .is--initial & {
                     pointer-events: none;
                     -webkit-transform: translate(0, 100%); }
+
+                .is--pointer & { display: none; }
 
                 &:before {
                     content: '';

@@ -3,6 +3,14 @@
 # ----------------------------------------------------------------------------
 
     module.exports = [
+        # Matches Sass variable: eg.
+        # $color-var
+        { type: 'variable:sass', regex: /([\$])([\w0-9-_]+)/ig }
+
+        # Matches LESS variable: eg.
+        # @color-var
+        { type: 'variable:less', regex: /([\@])([\w0-9-_]+)/ig }
+
         # Matches HEX + A: eg
         # rgba(#fff, 0.3) and rgba(#000000, .8)
         { type: 'hexa', regex: /(rgba\(((\#[a-f0-9]{6}|\#[a-f0-9]{3}))\s*,\s*(0|1|0*\.\d+)\))/ig }

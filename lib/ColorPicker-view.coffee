@@ -14,6 +14,11 @@
             c = 'ColorPicker-'
 
             @div id: 'ColorPicker', class: 'ColorPicker', =>
+                @div id: c + 'loader', class: c + 'loader', =>
+                    @div class: c + 'loaderDot'
+                    @div class: c + 'loaderDot'
+                    @div class: c + 'loaderDot'
+
                 @div id: c + 'color', class: c + 'color', =>
                     @div id: c + 'value', class: c + 'value'
 
@@ -67,10 +72,23 @@
     # -------------------------------------
         isOpen: false
 
+        reset: ->
+            this.addClass 'is--visible is--initial'
+            this.removeClass 'no--arrow is--pointer is--searching'
+
+            (this.find '#ColorPicker-value').html ''
+            (this.find '#ColorPicker-color')
+                .css 'background-color', ''
+                .css 'border-bottom-color', ''
+            (this.find '#ColorPicker-value').attr 'data-variable', ''
+
         open: ->
             @isOpen = true
-            this.addClass 'is--visible is--initial'
-            this.removeClass 'no--arrow'
+
+            _selectedColor = @storage.selectedColor
+            if not _selectedColor then this.addClass 'is--searching'
+            if not _selectedColor or _selectedColor.hasOwnProperty 'pointer'
+                this.addClass 'is--pointer'
 
             _colorPickerWidth = this.width()
             _colorPickerHeight = this.height()
@@ -87,6 +105,7 @@
             _scroll = top: _view.scrollTop(), left: _view.scrollLeft()
             _view.verticalScrollbar.on 'scroll.color-picker', => @scroll()
 
+            # Add 15 to account for the arrow on top of the color picker
             _top = 15 + _position.top - _scroll.top + _view.lineHeight + _tabBarHeight
             _left = _position.left - _scroll.left + _gutterWidth
 
@@ -111,10 +130,18 @@
 
         close: ->
             @isOpen = false
-            this.removeClass 'is--visible is--initial'
+            this.removeClass 'is--visible is--initial is--searching is--error'
 
             return unless @storage.activeView
             @storage.activeView.verticalScrollbar.off 'scroll.color-picker'
+
+        error: ->
+            @storage.selectedColor = null
+            console.log 'error'
+
+            this
+                .removeClass 'is--searching'
+                .addClass 'is--error'
 
         scroll: -> if @isOpen then @close()
 
@@ -128,14 +155,25 @@
 
             do => # Bind the color output control
                 $body.on 'mousedown', (e) =>
-                    return @close() unless /ColorPicker/.test e.target.className
+                    _target = e.target
+                    _className = _target.className
 
-                    switch e.target.className
+                    return @close() unless /ColorPicker/.test _className
+
+                    _color = @storage.selectedColor
+
+                    switch _className
                         when 'ColorPicker-color'
-                            @replaceColor()
+                            if (_color?.hasOwnProperty 'pointer') and _pointer = _color.pointer
+                                (atom.workspace.open _pointer.filePath).finally =>
+                                    _editor = atom.workspace.activePaneItem
+                                    _editor.clearSelections()
+                                    _editor.setSelectedBufferRange _pointer.range
+                            else @replaceColor()
+
                             @close()
                         when 'ColorPicker-initialWrapper'
-                            @inputColor @storage.selectedColor
+                            @inputColor _color
                             this.addClass 'is--initial'
                 .on 'keydown', (e) =>
                     return unless @isOpen
@@ -284,6 +322,11 @@
                 (this.find '#ColorPicker-initial')
                     .css 'background-color', _color
                     .html _color
+
+            if color.hasOwnProperty 'pointer'
+                this.removeClass 'is--searching'
+                    .find '#ColorPicker-value'
+                    .attr 'data-variable', color.match
 
 
         refreshColor: (trigger) ->
