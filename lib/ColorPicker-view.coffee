@@ -14,6 +14,11 @@
             c = 'ColorPicker-'
 
             @div id: 'ColorPicker', class: 'ColorPicker', =>
+                @div id: c + 'loader', class: c + 'loader', =>
+                    @div class: c + 'loaderDot'
+                    @div class: c + 'loaderDot'
+                    @div class: c + 'loaderDot'
+
                 @div id: c + 'color', class: c + 'color', =>
                     @div id: c + 'value', class: c + 'value'
 
