@@ -57,9 +57,12 @@
                 top: 50%; right: 0; left: 0;
                 pointer-events: none;
 
-                -webkit-backface-visibility: hidden;
                 -webkit-transition: -webkit-transform .3s;
                 -webkit-transform: translate(0, -105%);
+
+                -webkit-backface-visibility: hidden;
+                -webkit-transform-style: preserve-3d;
+
                 .ColorPicker-color:hover & { -webkit-transform: translate(0, -140%); }
 
                 .is--initial & { -webkit-transform: translate(0, -50%); }
