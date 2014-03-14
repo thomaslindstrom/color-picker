@@ -15,7 +15,7 @@
             match: null
 
             activate: ->
-                atom.workspaceView.command "color-picker:open", => @open()
+                atom.workspaceView.command "color-picker:open", => @open true
 
                 ConditionalContextMenu.item {
                     label: 'Color picker'
@@ -78,7 +78,9 @@
                         return match
                 return _match
 
-            open: ->
+            open: (getMatch = false) ->
+                if getMatch then @match = @getMatchAtCursor()
+
                 return unless @match
                 @view.reset()
                 @setMatchColor()
