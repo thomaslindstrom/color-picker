@@ -5,11 +5,19 @@
         _definitions = {}
 
     # -------------------------------------
-    #  Variable regex matchers
+    #  Variable patterns
     # -------------------------------------
-        _regexes = {
+        _variablePatterns = {
             'variable:sass': '\\$__VARIABLE__\\:[\\s?](.+)[\\;|\\n]'
             'variable:less': '\\@__VARIABLE__\\:[\\s?](.+)[\\;|\\n]'
+        }
+
+    # -------------------------------------
+    #  File path patterns
+    # -------------------------------------
+        _globPatterns = {
+            'variable:sass': ['**/*.scss', '**/*.sass']
+            'variable:less': ['**/*.less']
         }
 
     # -------------------------------------
@@ -20,7 +28,7 @@
             # @String name
             # @String type
             findDefinition: (name, type) ->
-                return unless _regexString = _regexes[type]
+                return unless _regexString = _variablePatterns[type]
                 _regex = RegExp (_regexString.replace '__VARIABLE__', name)
 
                 _results = []
@@ -34,8 +42,12 @@
                         _definition.definition = (_text.match _regex)[1]
                         return _definition
 
+                _options = unless _globPatterns[type] then null else {
+                    paths: _globPatterns[type]
+                }
+
                 # We don't know where the definition is, look it up
-                atom.project.scan _regex, undefined, (result) ->
+                atom.project.scan _regex, _options, (result) ->
                     _results.push result
                 .then =>
                     # Figure out what file is holding the definition
@@ -54,7 +66,7 @@
                         if _thisMatchHits > _bestMatchHits
                             _bestMatch = result
                             _bestMatchHits = _thisMatchHits
-                    return unless _bestMatch and _match = _bestMatch.matches[0]
+                    return this unless _bestMatch and _match = _bestMatch.matches[0]
 
                     _definitions[name] = {
                         name: name
