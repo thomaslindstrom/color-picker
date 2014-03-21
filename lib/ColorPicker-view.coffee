@@ -294,25 +294,40 @@
     # -------------------------------------
 
         # Set the current color after control interaction
-        setColor: (color) ->
+        setColor: (color, preferredColorType) ->
             unless color then this.removeClass 'is--initial'
             else _setInitialColor = true
 
             _saturation = @storage.saturation
             color ?= SaturationSelector.getColorAtPosition _saturation.x, _saturation.y
-            _color = color.color
+            _color = _displayColor = color.color
 
             _alphaValue = 100 - (((@storage.alpha / AlphaSelector.height) * 100) << 0)
 
+            # Spit the same color type as the input (selected) color
+            if preferredColorType
+                # TODO: This is far from optimal
+                _hexRgbFragments = (Convert.hexToRgb _color).join ', '
+
+                if _alphaValue is 100 then _displayColor = switch preferredColorType
+                    when 'rgb' then "rgb(#{ _hexRgbFragments })"
+                    when 'rgba' then "rgb(#{ _hexRgbFragments })"
+                    else _displayColor = _color
+                else _displayColor = switch preferredColorType
+                    when 'rgb' then "rgba(#{ _hexRgbFragments }, " + _alphaValue / 100 + ')'
+                    when 'rgba' then "rgba(#{ _hexRgbFragments }, " + _alphaValue / 100 + ')'
+                    when 'hex' then "rgba(#{ _hexRgbFragments }, " + _alphaValue / 100 + ')'
+
+            # Translate the color to rgba if an alpha value is set
             if _alphaValue isnt 100
                 _rgb = switch color.type
-                    when 'hex' then Convert.hexToRgb color.color
-                    when 'rgb' then color.color
+                    when 'hex' then Convert.hexToRgb _color
+                    when 'rgb' then _color
                 if _rgb then _color = "rgba(#{ _rgb.join ', ' }, #{ _alphaValue / 100 })"
 
-            @storage.pickedColor = _color
+            @storage.pickedColor = _displayColor
 
-            (this.find '#ColorPicker-value').html _color
+            (this.find '#ColorPicker-value').html _displayColor
             (this.find '#ColorPicker-color')
                 .css 'background-color', _color
                 .css 'border-bottom-color', _color
@@ -327,12 +342,12 @@
                     .find '#ColorPicker-value'
                     .attr 'data-variable', color.match
 
-
         refreshColor: (trigger) ->
             if trigger is 'hue' then @refreshSaturationCanvas()
             if trigger is 'hue' or trigger is 'saturation' then @refreshAlphaCanvas()
 
-            @setColor()
+            # Send the preferred color type as well
+            @setColor undefined, @storage.selectedColor.type
 
         # User selects a new color => reflect the change
         inputColor: (color) ->
