@@ -317,26 +317,31 @@
                     when 'rgb' then "rgba(#{ _hexRgbFragments }, " + _alphaValue / 100 + ')'
                     when 'rgba' then "rgba(#{ _hexRgbFragments }, " + _alphaValue / 100 + ')'
                     when 'hex' then "rgba(#{ _hexRgbFragments }, " + _alphaValue / 100 + ')'
+                    when 'hexa' then "rgba(#{ _color }, " + _alphaValue / 100 + ')'
 
             # Translate the color to rgba if an alpha value is set
             if _alphaValue isnt 100
                 _rgb = switch color.type
+                    when 'hexa' then Convert.hexaToRgb _color
                     when 'hex' then Convert.hexToRgb _color
                     when 'rgb' then _color
                 if _rgb then _color = "rgba(#{ _rgb.join ', ' }, #{ _alphaValue / 100 })"
 
             @storage.pickedColor = _displayColor
 
+            # Set the color
             (this.find '#ColorPicker-value').html _displayColor
             (this.find '#ColorPicker-color')
                 .css 'background-color', _color
                 .css 'border-bottom-color', _color
 
+            # Save the initial color this function is given it
             if _setInitialColor
                 (this.find '#ColorPicker-initial')
                     .css 'background-color', _color
                     .html _color
 
+            # The color is a variable
             if color.hasOwnProperty 'pointer'
                 this.removeClass 'is--searching'
                     .find '#ColorPicker-value'
@@ -353,14 +358,9 @@
         inputColor: (color) ->
             _color = color.color
 
-            # TODO: Don't do this
-            if color.type is 'hexa'
-                _hex = (_color.match /rgba\((\#.+),/)[1]
-                color.type = 'rgba'
-                _color = color.color = _color.replace _hex, (Convert.hexToRgb _hex).join ', '
-
             # Convert the color to HSV
             _hsv = switch color.type
+                when 'hexa' then Convert.rgbToHsv Convert.hexaToRgb _color
                 when 'rgba' then Convert.rgbToHsv _color
                 when 'rgb' then Convert.rgbToHsv _color
                 when 'hex' then Convert.rgbToHsv Convert.hexToRgb _color
@@ -378,13 +378,13 @@
             @refreshSaturationCanvas()
 
             # Get the alpha
-            if color.type is 'rgba'
-                _alpha = parseFloat (_color.match /rgba\((.+),(.+),(.+),(.+)\)/)[4]
-                if _alpha isnt 1 then @setAlpha AlphaSelector.height * (1 - _alpha)
-            if not _alpha then @setAlpha 0
+            _alpha = switch color.type
+                when 'rgba' then parseFloat (_color.match /rgba\((.+),(.+),(.+),(.+)\)/)[4]
+                when 'hexa' then parseFloat (_color.match /rgba\((\#.+),\s*(0|1|0*\.\d+)\)/)[2]
+            if _alpha and _alpha isnt 1 then @setAlpha AlphaSelector.height * (1 - _alpha)
+            else if not _alpha then @setAlpha 0
 
             @refreshAlphaCanvas()
-
             @setColor color
 
     # -------------------------------------
