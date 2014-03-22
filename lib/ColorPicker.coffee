@@ -54,6 +54,7 @@
 
                         _filteredMatches.push
                             match: match
+                            regexMatch: match.match RegExp regex.source, 'i'
                             type: type
                             index: _index
                             end: _index + match.length

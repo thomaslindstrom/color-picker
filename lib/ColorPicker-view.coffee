@@ -359,6 +359,7 @@
             _color = color.color
 
             # Convert the color to HSV
+            # _hsv needs to be an array [h, s, v]
             _hsv = switch color.type
                 when 'hexa' then Convert.rgbToHsv Convert.hexaToRgb _color
                 when 'rgba' then Convert.rgbToHsv _color
@@ -366,7 +367,7 @@
                 when 'hex' then Convert.rgbToHsv Convert.hexToRgb _color
             return unless _hsv
 
-            # Set all controls in the right place to reflect the new color
+            # Set all controls in the right place to reflect the input color
 
             # Get the hue. 360 is the H max
             @setHue (HueSelector.height / 360) * _hsv[0]
@@ -379,9 +380,11 @@
 
             # Get the alpha
             _alpha = switch color.type
-                when 'rgba' then parseFloat (_color.match /rgba\((.+),(.+),(.+),(.+)\)/)[4]
-                when 'hexa' then parseFloat (_color.match /rgba\((\#.+),\s*(0|1|0*\.\d+)\)/)[2]
-            if _alpha and _alpha isnt 1 then @setAlpha AlphaSelector.height * (1 - _alpha)
+                when 'rgba' then color.regexMatch[7]
+                when 'hexa' then color.regexMatch[4]
+            # Set the alpha
+            if _alpha = parseFloat _alpha
+                if _alpha isnt 1 then @setAlpha AlphaSelector.height * (1 - _alpha)
             else if not _alpha then @setAlpha 0
 
             @refreshAlphaCanvas()
