@@ -307,20 +307,18 @@
             # Spit the same color type as the input (selected) color
             if preferredColorType
                 # TODO: This is far from optimal
-                if preferredColorType isnt 'hsl'
+                if preferredColorType isnt 'hsl' and preferredColorType isnt 'hsla'
                     _hexRgbFragments = (Convert.hexToRgb _color).join ', '
                 else [_h, _s, _l] = Convert.hsvToHsl Convert.rgbToHsv Convert.hexToRgb _color
 
                 if _alphaValue is 100 then _displayColor = switch preferredColorType
-                    when 'rgb' then "rgb(#{ _hexRgbFragments })"
-                    when 'rgba' then "rgb(#{ _hexRgbFragments })"
-                    when 'hsl' then "hsl(#{ (_h << 0) }, #{ (_s * 100) << 0 }%, #{ (_l * 100) << 0 }%)"
+                    when 'rgb', 'rgba' then "rgb(#{ _hexRgbFragments })"
+                    when 'hsl', 'hsla' then "hsl(#{ (_h << 0) }, #{ (_s * 100) << 0 }%, #{ (_l * 100) << 0 }%)"
                     else _displayColor = _color
                 else _displayColor = switch preferredColorType
-                    when 'rgb' then "rgba(#{ _hexRgbFragments }, " + _alphaValue / 100 + ')'
-                    when 'rgba' then "rgba(#{ _hexRgbFragments }, " + _alphaValue / 100 + ')'
-                    when 'hex' then "rgba(#{ _hexRgbFragments }, " + _alphaValue / 100 + ')'
+                    when 'rgb', 'rgba', 'hex' then "rgba(#{ _hexRgbFragments }, " + _alphaValue / 100 + ')'
                     when 'hexa' then "rgba(#{ _color }, " + _alphaValue / 100 + ')'
+                    when 'hsl', 'hsla' then "hsla(#{ (_h << 0) }, #{ (_s * 100) << 0 }%, #{ (_l * 100) << 0 }%, " + _alphaValue / 100 + ')'
 
             # Translate the color to rgba if an alpha value is set
             if _alphaValue isnt 100
@@ -364,11 +362,10 @@
             # Convert the color to HSV
             # _hsv needs to be an array [h, s, v]
             _hsv = switch color.type
-                when 'hexa' then Convert.rgbToHsv Convert.hexaToRgb _color
-                when 'rgba' then Convert.rgbToHsv _color
-                when 'rgb' then Convert.rgbToHsv _color
                 when 'hex' then Convert.rgbToHsv Convert.hexToRgb _color
-                when 'hsl' then Convert.hslToHsv [
+                when 'hexa' then Convert.rgbToHsv Convert.hexaToRgb _color
+                when 'rgb', 'rgba' then Convert.rgbToHsv _color
+                when 'hsl', 'hsla' then Convert.hslToHsv [
                     parseInt color.regexMatch[1], 10
                     (parseInt color.regexMatch[2], 10) / 100
                     (parseInt color.regexMatch[3], 10) / 100]
@@ -389,6 +386,7 @@
             _alpha = switch color.type
                 when 'rgba' then color.regexMatch[7]
                 when 'hexa' then color.regexMatch[4]
+                when 'hsla' then color.regexMatch[4]
             # Set the alpha
             if _alpha = parseFloat _alpha
                 if _alpha isnt 1 then @setAlpha AlphaSelector.height * (1 - _alpha)
