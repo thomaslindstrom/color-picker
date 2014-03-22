@@ -128,3 +128,27 @@
                 computedS
                 computedV
             ]
+
+    # -------------------------------------
+    #  HSV to HSL
+    # -------------------------------------
+        hsvToHsl: (hsv) ->
+            [h, s, v] = hsv
+            return [
+                h,
+                s * v / (if (h = (2 - s) * v) < 1 then h else 2 - h)
+                h / 2
+            ]
+
+    # -------------------------------------
+    #  HSL to HSV
+    # -------------------------------------
+        hslToHsv: (hsl) ->
+            [h, s, l] = hsl
+            s *= if l < .5 then l else 1 - l
+
+            return [
+                h,
+                2 * s / (l + s)
+                l + s
+            ]

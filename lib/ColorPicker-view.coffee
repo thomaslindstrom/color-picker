@@ -307,11 +307,14 @@
             # Spit the same color type as the input (selected) color
             if preferredColorType
                 # TODO: This is far from optimal
-                _hexRgbFragments = (Convert.hexToRgb _color).join ', '
+                if preferredColorType isnt 'hsl'
+                    _hexRgbFragments = (Convert.hexToRgb _color).join ', '
+                else [_h, _s, _l] = Convert.hsvToHsl Convert.rgbToHsv Convert.hexToRgb _color
 
                 if _alphaValue is 100 then _displayColor = switch preferredColorType
                     when 'rgb' then "rgb(#{ _hexRgbFragments })"
                     when 'rgba' then "rgb(#{ _hexRgbFragments })"
+                    when 'hsl' then "hsl(#{ (_h << 0) }, #{ (_s * 100) << 0 }%, #{ (_l * 100) << 0 }%)"
                     else _displayColor = _color
                 else _displayColor = switch preferredColorType
                     when 'rgb' then "rgba(#{ _hexRgbFragments }, " + _alphaValue / 100 + ')'
@@ -365,6 +368,10 @@
                 when 'rgba' then Convert.rgbToHsv _color
                 when 'rgb' then Convert.rgbToHsv _color
                 when 'hex' then Convert.rgbToHsv Convert.hexToRgb _color
+                when 'hsl' then Convert.hslToHsv [
+                    parseInt color.regexMatch[1], 10
+                    (parseInt color.regexMatch[2], 10) / 100
+                    (parseInt color.regexMatch[3], 10) / 100]
             return unless _hsv
 
             # Set all controls in the right place to reflect the input color

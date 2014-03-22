@@ -11,6 +11,10 @@
         # @color-var
         { type: 'variable:less', regex: /([\@])([\w0-9-_]+)/ig }
 
+        # Matches HSL: eg
+        # hsl(320, 100%, 38%) and hsl(26, 57, 32)
+        { type: 'hsl', regex: /hsl\(([0-9]|[1-9][0-9]|[1|2][0-9][0-9]|3[0-5][0-9]|360),\s*([0-9]|[1-9][0-9]|100)\%?,\s*([0-9]|[1-9][0-9]|100)\%?\)/ig }
+
         # Matches HEX + A: eg
         # rgba(#fff, 0.3) and rgba(#000000, .8)
         { type: 'hexa', regex: /(rgba\(((\#[a-f0-9]{6}|\#[a-f0-9]{3}))\s*,\s*(0|1|0*\.\d+)\))/ig }
