@@ -392,8 +392,7 @@
                 when 'hexa' then color.regexMatch[4]
                 when 'hsla' then color.regexMatch[4]
             # Set the alpha
-            if _alpha = parseFloat _alpha
-                if _alpha isnt 1 then @setAlpha AlphaSelector.height * (1 - _alpha)
+            if _alpha then @setAlpha AlphaSelector.height * (1 - parseFloat _alpha)
             else if not _alpha then @setAlpha 0
 
             @refreshAlphaCanvas()
