@@ -357,6 +357,10 @@
 
         # User selects a new color => reflect the change
         inputColor: (color) ->
+            _hasClass = this[0].className.match /(is\-\-color\_(\w+))\s/
+            this.removeClass _hasClass[1] if _hasClass
+            this.addClass 'is--color_' + color.type
+
             _color = color.color
 
             # Convert the color to HSV
