@@ -39,7 +39,13 @@
 
                     return (atom.project.bufferForPath _pointer.filePath).then (buffer) =>
                         _text = buffer.getTextInRange _pointer.range
-                        _definition.definition = (_text.match _regex)[1]
+                        _match = _text.match _regex
+
+                        unless _match
+                            _definitions[name] = null
+                            return @findDefinition name, type
+
+                        _definition.definition = _match[1]
                         return _definition
 
                 _options = unless _globPatterns[type] then null else {
