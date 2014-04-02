@@ -108,8 +108,8 @@
                     when 'variable:less' then @setVariableDefinitionColor @match, _callback
                     else do => @match.color = @match.match; _callback @match
 
-            # Look up a variable definition, and if the definition is a
-            # color, return it
+            # Set the variable definition by sending it through a
+            # provided callback when found
             # @Object match
             # @Function callback
             setVariableDefinitionColor: (match, callback) ->
@@ -118,13 +118,26 @@
                 _matchRegex = regex for { type, regex } in _regexes when type is match.type
                 _variableName = (match.match.match RegExp _matchRegex.source, 'i')[2] # hahaha
 
-                (VariableInspector.findDefinition _variableName, match.type).then (definition) =>
+                (@findVariableDefinition _variableName, match.type).then ({ color, pointer }) ->
+                    match.color = color.match
+                    match.type = color.type
+                    match.pointer = pointer
+
+                    callback match
+
+            # Find variable definition by searching recursively until a
+            # non-variable (a color) is found
+            # @String name
+            # @String type
+            findVariableDefinition: (name, type, pointer) ->
+                return (VariableInspector.findDefinition name, type).then (definition) =>
+                    pointer ?= definition.pointer # remember the initial pointer
                     _matches = @matchesOnLine definition.definition, 1
 
                     return @view.error() unless _matches and _color = _matches[0]
-                    return @view.error() if (_color.type.split ':')[0] is 'variable'
 
-                    match.color = _color.match
-                    match.type = _color.type
-                    match.pointer = definition.pointer
-                    callback match
+                    # Continue digging for the truth and real definition
+                    if (_color.type.split ':')[0] is 'variable'
+                        return @findVariableDefinition _color.regexMatch[2], _color.type, pointer
+
+                    return { color: _color, pointer: pointer }
