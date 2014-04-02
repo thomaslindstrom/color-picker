@@ -407,6 +407,8 @@
             _color = @storage.selectedColor
             _editor = atom.workspace.getActiveEditor()
 
+            return unless _color
+
             # Clear selections and select the color
             _editor.clearSelections()
             _editor.addSelectionForBufferRange
@@ -421,6 +423,8 @@
             _color = @storage.selectedColor
             _newColor = @storage.pickedColor
             _editor = atom.workspace.getActiveEditor()
+
+            return unless _color
 
             @selectColor()
 
