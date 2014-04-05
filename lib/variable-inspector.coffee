@@ -8,8 +8,8 @@
     #  Variable patterns
     # -------------------------------------
         _variablePatterns = {
-            'variable:sass': '\\$__VARIABLE__\\:[\\s?](.+)[\\;|\\n]'
-            'variable:less': '\\@__VARIABLE__\\:[\\s?](.+)[\\;|\\n]'
+            'variable:sass': '\\${{ VARIABLE }}[\\s]*\\:[\\s]*(.+)[\\;|\\n]'
+            'variable:less': '\\@{{ VARIABLE }}[\\s]*\\:[\\s]*(.+)[\\;|\\n]'
         }
 
     # -------------------------------------
@@ -29,7 +29,7 @@
             # @String type
             findDefinition: (name, type) ->
                 return unless _regexString = _variablePatterns[type]
-                _regex = RegExp (_regexString.replace '__VARIABLE__', name)
+                _regex = RegExp (_regexString.replace '{{ VARIABLE }}', name)
 
                 _results = []
 
