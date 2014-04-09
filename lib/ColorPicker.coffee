@@ -43,7 +43,7 @@
             # @String line
             # @Number cursorRow
             matchesOnLine: (line, cursorRow) ->
-                return unless line and cursorRow
+                return unless line and typeof cursorRow is 'number'
 
                 _filteredMatches = []; for { type, regex } in _regexes
                     continue unless _matches = line.match regex
