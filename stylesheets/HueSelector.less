@@ -5,7 +5,7 @@
 
     .ColorPicker-hueSelectorWrapper {
         position: absolute;
-        bottom: 10px; right: 10px;
+        bottom: @controls-margin; right: @controls-margin;
         pointer-events: none;
 
         &:after {
@@ -38,7 +38,7 @@
     //  Selector bar
     // -------------------------------------
         .ColorPicker-hueSelector {
-            width: 20px; height: 180px;
+            width: 20px; height: @controls-height;
             display: block;
             cursor: -webkit-grab;
             pointer-events: all;

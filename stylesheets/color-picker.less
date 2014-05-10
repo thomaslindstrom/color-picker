@@ -2,20 +2,27 @@
 //
 // See https://github.com/atom/atom-dark-ui/blob/master/stylesheets/ui-variables.less
 // for a full listing of what's available.
-@import "ui-variables";
+    @import "ui-variables";
 
 // ---------------------------------------------------------------------------
 //  Color picker: style
 // ---------------------------------------------------------------------------
     @color-ui: #ebebeb;
 
+    @picker-width: 260px;
+    @picker-height: 300px;
+    @picker-height--pointer: 100px;
+
+    @controls-height: 180px;
+    @controls-margin: 10px;
+
     @image-transparency: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAAECAYAAACp8Z5+AAAAJElEQVQIW2PcvXv3fwYg6OzsBFEMjBgCLi4uYBXl5eUQFegCAIYVD/syLxKnAAAAAElFTkSuQmCC);
 
     .ColorPicker {
         background: #fff;
-        width: 260px; height: 300px;
+        width: @picker-width; height: @picker-height;
         border-radius: 3px 3px 2px 2px;
-        box-shadow: 0 10px 30px 10px rgba(0, 0, 0, .2);
+        box-shadow: 0 10px 30px 10px rgba(0, 0, 0, .3);
         position: absolute;
         top: 50%; bottom: 0;
         z-index: 40;
@@ -43,7 +50,7 @@
                 opacity           .2s;
             -webkit-transform: scale(1); }
 
-        &.is--pointer { height: 100px; }
+        &.is--pointer { height: @picker-height--pointer; }
     }
 
     // -------------------------------------
@@ -51,11 +58,12 @@
     // -------------------------------------
         .ColorPicker-picker {
             background: @color-ui;
-            width: 100%; height: 200px;
+            width: 100%; height: @controls-height + (@controls-margin * 2);
             box-shadow: 0 -1px rgba(0, 0, 0, .2);
             position: absolute;
             bottom: 0;
             z-index: 1;
+            border-radius: 0 0 3px 3px;
 
             .is--pointer & { display: none; }
         }

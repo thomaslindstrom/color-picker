@@ -5,7 +5,7 @@
 
     .ColorPicker-alphaSelectorWrapper {
         position: absolute;
-        bottom: 10px; right: 40px;
+        bottom: @controls-margin; right: 20px + (@controls-margin * 2);
         pointer-events: none;
 
         &:before {
@@ -47,10 +47,13 @@
     //  Selector bar
     // -------------------------------------
         .ColorPicker-alphaSelector {
-            width: 20px; height: 180px;
+            width: 20px; height: @controls-height;
             display: block;
             cursor: -webkit-grab;
+            cursor:         grab;
             pointer-events: all;
 
-            &:active { cursor: -webkit-grabbing; }
+            &:active {
+                cursor: -webkit-grabbing;
+                cursor:         grabbing; }
         }

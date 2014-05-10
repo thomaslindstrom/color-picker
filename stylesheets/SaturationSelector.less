@@ -5,7 +5,7 @@
 
     .ColorPicker-saturationSelectorWrapper {
         position: absolute;
-        bottom: 10px; left: 10px;
+        bottom: @controls-margin; left: @controls-margin;
         pointer-events: none;
 
         &:after {
@@ -38,7 +38,7 @@
     //  Selector area
     // -------------------------------------
         .ColorPicker-saturationSelector {
-            width: 180px; height: 180px;
+            width: @controls-height; height: @controls-height;
             cursor: crosshair;
             display: block;
             pointer-events: all; }
