@@ -349,7 +349,7 @@
             if _setInitialColor
                 (this.find '#ColorPicker-initial')
                     .css 'background-color', _color
-                    .html _color
+                    .html _displayColor
 
             # The color is a variable
             if color.hasOwnProperty 'pointer'
