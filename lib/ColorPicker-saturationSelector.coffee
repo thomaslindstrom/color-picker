@@ -20,9 +20,8 @@
 
             # Draw the saturation selector
             render: (hex) ->
-                _context.clearRect 0, 0, _width, _height
-
                 _hsl = Convert.hexToHsl hex
+                _context.clearRect 0, 0, _width, _height
 
                 # Draw the hue channel
                 _gradient = _context.createLinearGradient 0, 0, _width, 1

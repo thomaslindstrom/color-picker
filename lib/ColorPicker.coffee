@@ -29,8 +29,7 @@
 
             # Get a match at the current cursor position
             getMatchAtCursor: ->
-                _editor = atom.workspace.getActiveEditor()
-                return unless _editor
+                return unless _editor = atom.workspace.getActiveEditor()
 
                 _line = _editor.getCursor().getCurrentBufferLine()
                 _cursorBuffer = _editor.getCursorBufferPosition()

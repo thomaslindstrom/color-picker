@@ -1,40 +1,40 @@
 # ----------------------------------------------------------------------------
 #  ColorPicker: View
 # ----------------------------------------------------------------------------
-    {View} = require 'atom'
+    { View } = require 'atom'
     Convert = require './ColorPicker-convert'
 
-    ColorPicker = undefined
-    SaturationSelector = undefined
-    HueSelector = undefined
-    AlphaSelector = undefined
+    ColorPicker = null
+    SaturationSelector = null
+    HueSelector = null
+    AlphaSelector = null
 
     module.exports = class ColorPickerView extends View
         @content: ->
             c = 'ColorPicker-'
 
             @div id: 'ColorPicker', class: 'ColorPicker', =>
-                @div id: c + 'loader', class: c + 'loader', =>
-                    @div class: c + 'loaderDot'
-                    @div class: c + 'loaderDot'
-                    @div class: c + 'loaderDot'
+                @div id: "#{ c }loader", class: "#{ c }loader", =>
+                    @div class: "#{ c }loaderDot"
+                    @div class: "#{ c }loaderDot"
+                    @div class: "#{ c }loaderDot"
 
-                @div id: c + 'color', class: c + 'color', =>
-                    @div id: c + 'value', class: c + 'value'
+                @div id: "#{ c }color", class: "#{ c }color", =>
+                    @div id: "#{ c }value", class: "#{ c }value"
 
-                @div id: c + 'initialWrapper', class: c + 'initialWrapper', =>
-                    @div id: c + 'initial', class: c + 'initial'
+                @div id: "#{ c }initialWrapper", class: "#{ c }initialWrapper", =>
+                    @div id: "#{ c }initial", class: "#{ c }initial"
 
-                @div id: c + 'picker', class: c + 'picker', =>
-                    @div id: c + 'saturationSelectorWrapper', class: c + 'saturationSelectorWrapper', =>
-                        @div id: c + 'saturationSelection', class: c + 'saturationSelection'
-                        @canvas id: c + 'saturationSelector', class: c + 'saturationSelector', width: '180px', height: '180px'
-                    @div id: c + 'alphaSelectorWrapper', class: c + 'alphaSelectorWrapper', =>
-                        @div id: c + 'alphaSelection', class: c + 'alphaSelection'
-                        @canvas id: c + 'alphaSelector', class: c + 'alphaSelector', width: '20px', height: '180px'
-                    @div id: c + 'hueSelectorWrapper', class: c + 'hueSelectorWrapper', =>
-                        @div id: c + 'hueSelection', class: c + 'hueSelection'
-                        @canvas id: c + 'hueSelector', class: c + 'hueSelector', width: '20px', height: '180px'
+                @div id: "#{ c }picker", class: "#{ c }picker", =>
+                    @div id: "#{ c }saturationSelectorWrapper", class: "#{ c }saturationSelectorWrapper", =>
+                        @div id: "#{ c }saturationSelection", class: "#{ c }saturationSelection"
+                        @canvas id: "#{ c }saturationSelector", class: "#{ c }saturationSelector", width: '180px', height: '180px'
+                    @div id: "#{ c }alphaSelectorWrapper", class: "#{ c }alphaSelectorWrapper", =>
+                        @div id: "#{ c }alphaSelection", class: "#{ c }alphaSelection"
+                        @canvas id: "#{ c }alphaSelector", class: "#{ c }alphaSelector", width: '20px', height: '180px'
+                    @div id: "#{ c }hueSelectorWrapper", class: "#{ c }hueSelectorWrapper", =>
+                        @div id: "#{ c }hueSelection", class: "#{ c }hueSelection"
+                        @canvas id: "#{ c }hueSelector", class: "#{ c }hueSelector", width: '20px', height: '180px'
 
         initialize: ->
             (atom.workspaceView.find '.vertical').append this
@@ -76,19 +76,20 @@
             this.addClass 'is--visible is--initial'
             this.removeClass 'no--arrow is--pointer is--searching'
 
-            (this.find '#ColorPicker-value').html ''
             (this.find '#ColorPicker-color')
                 .css 'background-color', ''
                 .css 'border-bottom-color', ''
-            (this.find '#ColorPicker-value').attr 'data-variable', ''
+            (this.find '#ColorPicker-value')
+                .attr 'data-variable', ''
+                .html ''
 
         open: ->
             @isOpen = true
-
             _selectedColor = @storage.selectedColor
-            if not _selectedColor then this.addClass 'is--searching'
+
             if not _selectedColor or _selectedColor.hasOwnProperty 'pointer'
                 this.addClass 'is--pointer'
+            if not _selectedColor then this.addClass 'is--searching'
 
             _colorPickerWidth = this.width()
             _colorPickerHeight = this.height()
@@ -109,11 +110,12 @@
             _top = 15 + _position.top - _scroll.top + _view.lineHeight + _tabBarHeight
             _left = _position.left - _scroll.left + _gutterWidth
 
-            # Make adjustments based on view size: don't let the
-            # color picker disappear or overflow
+            # Make adjustments based on view size: don't let the color picker
+            # disappear or overflow
             _viewWidth = _view.width()
             _viewHeight = _view.height()
 
+            # Remove 15 to ignore the arrow on top of the color picker
             if _top + _colorPickerHeight - 15 > _viewHeight
                 _top = _viewHeight + _tabBarHeight - _colorPickerHeight - 20
                 this.addClass 'no--arrow'
@@ -150,6 +152,7 @@
         bind: ->
             window.onresize = => if @isOpen then @close()
             atom.workspaceView.on 'pane:active-item-changed', => @close()
+
             $body = this.parents 'body'
 
             do => # Bind the color output control
@@ -157,6 +160,8 @@
                     _target = e.target
                     _className = _target.className
 
+                    # Close unless the click target is something related to
+                    # the color picker
                     return @close() unless /ColorPicker/.test _className
 
                     _color = @storage.selectedColor
@@ -177,6 +182,7 @@
                 .on 'keydown', (e) =>
                     return unless @isOpen
                     return @close() unless e.which is 13
+
                     e.preventDefault()
                     e.stopPropagation()
 
@@ -303,22 +309,25 @@
             _color = _displayColor = color.color
 
             _alphaValue = 100 - (((@storage.alpha / AlphaSelector.height) * 100) << 0)
+            _alphaFactor = _alphaValue / 100
 
             # Spit the same color type as the input (selected) color
             if preferredColorType
-                # TODO: This is far from optimal
-                if preferredColorType isnt 'hsl' and preferredColorType isnt 'hsla'
-                    _hexRgbFragments = (Convert.hexToRgb _color).join ', '
-                else [_h, _s, _l] = Convert.hsvToHsl Convert.rgbToHsv Convert.hexToRgb _color
+                if preferredColorType is 'hsl' or preferredColorType is 'hsla'
+                    _hsl = Convert.hsvToHsl Convert.rgbToHsv Convert.hexToRgb _color
+                    _h = (_hsl[0]) << 0
+                    _s = (_hsl[1] * 100) << 0
+                    _l = (_hsl[2] * 100) << 0
+                else _hexRgbFragments = (Convert.hexToRgb _color).join ', '
 
                 if _alphaValue is 100 then _displayColor = switch preferredColorType
                     when 'rgb', 'rgba' then "rgb(#{ _hexRgbFragments })"
-                    when 'hsl', 'hsla' then "hsl(#{ (_h << 0) }, #{ (_s * 100) << 0 }%, #{ (_l * 100) << 0 }%)"
-                    else _displayColor = _color
+                    when 'hsl', 'hsla' then "hsl(#{ _h }, #{ _s }%, #{ _l }%)"
+                    else _color
                 else _displayColor = switch preferredColorType
-                    when 'rgb', 'rgba', 'hex' then "rgba(#{ _hexRgbFragments }, " + _alphaValue / 100 + ')'
-                    when 'hexa' then "rgba(#{ _color }, " + _alphaValue / 100 + ')'
-                    when 'hsl', 'hsla' then "hsla(#{ (_h << 0) }, #{ (_s * 100) << 0 }%, #{ (_l * 100) << 0 }%, " + _alphaValue / 100 + ')'
+                    when 'rgb', 'rgba', 'hex' then "rgba(#{ _hexRgbFragments }, #{ _alphaFactor })"
+                    when 'hexa' then "rgba(#{ _color }, #{ _alphaFactor })"
+                    when 'hsl', 'hsla' then "hsla(#{ _h }, #{ _s }%, #{ _l }%, #{ _alphaFactor })"
 
             # Translate the color to rgba if an alpha value is set
             if _alphaValue isnt 100
@@ -326,15 +335,15 @@
                     when 'hexa' then Convert.hexaToRgb _color
                     when 'hex' then Convert.hexToRgb _color
                     when 'rgb' then _color
-                if _rgb then _color = "rgba(#{ _rgb.join ', ' }, #{ _alphaValue / 100 })"
+                if _rgb then _color = "rgba(#{ _rgb.join ', ' }, #{ _alphaFactor })"
 
             @storage.pickedColor = _displayColor
 
             # Set the color
-            (this.find '#ColorPicker-value').html _displayColor
             (this.find '#ColorPicker-color')
                 .css 'background-color', _color
                 .css 'border-bottom-color', _color
+            (this.find '#ColorPicker-value').html _displayColor
 
             # Save the initial color this function is given it
             if _setInitialColor
@@ -355,11 +364,12 @@
             # Send the preferred color type as well
             @setColor undefined, @storage.selectedColor.type
 
-        # User selects a new color => reflect the change
+        # User selects a new color, reflect the change
         inputColor: (color) ->
             _hasClass = this[0].className.match /(is\-\-color\_(\w+))\s/
+
             this.removeClass _hasClass[1] if _hasClass
-            this.addClass 'is--color_' + color.type
+            this.addClass "is--color_#{ color.type }"
 
             _color = color.color
 
@@ -370,7 +380,7 @@
                 when 'hexa' then Convert.rgbToHsv Convert.hexaToRgb _color
                 when 'rgb', 'rgba' then Convert.rgbToHsv _color
                 when 'hsl', 'hsla' then Convert.hslToHsv [
-                    parseInt color.regexMatch[1], 10
+                    (parseInt color.regexMatch[1], 10)
                     (parseInt color.regexMatch[2], 10) / 100
                     (parseInt color.regexMatch[3], 10) / 100]
             return unless _hsv
@@ -429,8 +439,7 @@
             @selectColor()
 
             # Replace the text
-            _editor.replaceSelectedText null, =>
-                return _newColor
+            _editor.replaceSelectedText null, => return _newColor
 
             # Clear selections and select the color
             _editor.clearSelections()
