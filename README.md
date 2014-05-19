@@ -1,10 +1,10 @@
 # A Color Picker for Atom
 
-A color picker for Atom. Either right click a color and select `Color picker`, or hit `CMD-SHIFT-C` anywhere. Currently reads HEX, HEXA, RGB, RGBA, HSL and HSLA.
+A color picker for Atom. Either right click a color and select `Color picker`, or hit `CMD-SHIFT-C`/`CTRL-ALT-C` anywhere. Currently reads HEX, HEXA, RGB, RGBA, HSL and HSLA.
 
 Inspects Sass/LESS variables! [Take a look here.](http://t.hom.as/colorpicker4.mov)
 
-**NEW:** You can now open the color picker whenever, without input, using `CMD-SHIFT-C`!
+**NEW:** You can now open the color picker whenever, without input, using `CMD-SHIFT-C`/`CTRL-ALT-C`!
 
 ## Preview
 
