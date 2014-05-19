@@ -104,7 +104,8 @@
             _gutterWidth = (_view.find '.gutter').width()
 
             _scroll = top: _view.scrollTop(), left: _view.scrollLeft()
-            _view.verticalScrollbar.on 'scroll.color-picker', => @scroll()
+            _scrollbar = _view.verticalScrollbar
+            if _scrollbar then _scrollbar.on 'scroll.color-picker', => @scroll()
 
             # Add 15 to account for the arrow on top of the color picker
             _top = 15 + _position.top - _scroll.top + _view.lineHeight + _tabBarHeight
@@ -134,7 +135,7 @@
             @isOpen = false
             this.removeClass 'is--visible is--initial is--searching is--error'
 
-            return unless @storage.activeView
+            return unless @storage.activeView and @storage.activeView.verticalScrollbar
             @storage.activeView.verticalScrollbar.off 'scroll.color-picker'
 
         error: ->
