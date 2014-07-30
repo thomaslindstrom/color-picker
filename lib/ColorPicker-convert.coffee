@@ -38,8 +38,8 @@
                 return if _hex.length is 1 then "0#{ _hex }" else _hex
 
             return [
-                (_componentToHex rgb[0]),
-                (_componentToHex rgb[1]),
+                (_componentToHex rgb[0])
+                (_componentToHex rgb[1])
                 (_componentToHex rgb[2])
             ].join ''
 
@@ -117,6 +117,7 @@
             # Colors other than black-gray-white:
             d = (if (r is minRGB) then g - b else ((if (b is minRGB) then r - g else b - r)))
             h = (if (r is minRGB) then 3 else ((if (b is minRGB) then 1 else 5)))
+
             computedH = 60 * (h - d / (maxRGB - minRGB))
             computedS = (maxRGB - minRGB) / maxRGB
             computedV = maxRGB
@@ -132,7 +133,7 @@
     # -------------------------------------
         hsvToHsl: ([h, s, v]) ->
             return [
-                h,
+                h
                 s * v / (if (h = (2 - s) * v) < 1 then h else 2 - h)
                 h / 2
             ]
@@ -144,7 +145,7 @@
             s *= if l < .5 then l else 1 - l
 
             return [
-                h,
+                h
                 2 * s / (l + s)
                 l + s
             ]

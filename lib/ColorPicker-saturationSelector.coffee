@@ -44,6 +44,6 @@
                 _data = (_context.getImageData (positionX - 1), (positionY - 1), 1, 1).data
 
                 return {
-                    color: ('#' + Convert.rgbToHex _data),
+                    color: '#' + Convert.rgbToHex _data
                     type: 'hex'
                 }
