@@ -2,7 +2,7 @@
 #  ColorPicker: Hue selector
 # ----------------------------------------------------------------------------
         Convert = require './ColorPicker-convert'
-        _hexes = ['FF0000', 'FFFF00', '00FF00', '00FFFF', '0000FF', 'FF00FF', 'FF0000']
+        _hexes = ['#FF0000', '#FFFF00', '#00FF00', '#00FFFF', '#0000FF', '#FF00FF', '#FF0000']
 
         $el = atom.workspaceView.find '#ColorPicker-hueSelector'
         $selection = atom.workspaceView.find '#ColorPicker-hueSelection'
