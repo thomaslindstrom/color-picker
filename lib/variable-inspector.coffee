@@ -58,7 +58,7 @@
                 .then =>
                     # Figure out what file is holding the definition
                     # Assume it's the one closest to the current path
-                    _targetPath = atom.workspaceView.getActivePaneItem().getPath()
+                    _targetPath = atom.workspace.getActivePaneItem().getPath()
                     _targetFragments = _targetPath.split '/'
 
                     _bestMatch = null
