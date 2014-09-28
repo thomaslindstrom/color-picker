@@ -103,7 +103,7 @@
             _gutterWidth = (_view.find '.gutter').width()
 
             _scroll = top: _view.scrollTop(), left: _view.scrollLeft()
-            _scrollbar = _view.verticalScrollbar
+            _scrollbar = _view.find '.vertical-scrollbar'
             if _scrollbar then _scrollbar.on 'scroll.color-picker', => @scroll()
 
             # Add 15 to account for the arrow on top of the color picker
