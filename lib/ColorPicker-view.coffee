@@ -95,8 +95,9 @@
             _colorPickerHeight = @height()
             _halfColorPickerWidth = _colorPickerWidth / 2
 
-            _pane = atom.workspace.getActivePane()._view
-            _paneOffset = top: _pane[0].offsetTop, left: _pane[0].offsetLeft
+            _pane = atom.workspaceView.getActivePane()
+            _paneZero = (_pane and _pane[0]) or {offsetTop:0, offsetLeft:0}
+            _paneOffset = top: _paneZero.offsetTop, left: _paneZero.offsetLeft
             _tabBarHeight = (_pane.find '.tab-bar').height()
 
             @storage.activeView = _view = _pane.activeView
@@ -367,6 +368,7 @@
 
         # User selects a new color, reflect the change
         inputColor: (color) ->
+            return unless this
             _hasClass = this[0].className.match /(is\-\-color\_(\w+))\s/
 
             @removeClass _hasClass[1] if _hasClass
