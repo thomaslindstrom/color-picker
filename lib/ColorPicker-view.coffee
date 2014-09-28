@@ -1,10 +1,9 @@
 # ----------------------------------------------------------------------------
 #  ColorPicker: View
 # ----------------------------------------------------------------------------
-    { View } = require 'atom'
+    {View} = require 'atom'
     Convert = require './ColorPicker-convert'
 
-    ColorPicker = null
     SaturationSelector = null
     HueSelector = null
     AlphaSelector = null
@@ -39,7 +38,6 @@
         initialize: ->
             (atom.workspaceView.find '.vertical').append this
 
-            ColorPicker = require './ColorPicker'
             SaturationSelector = require './ColorPicker-saturationSelector'
             AlphaSelector = require './ColorPicker-alphaSelector'
             HueSelector = require './ColorPicker-hueSelector'
