@@ -93,7 +93,7 @@
             _colorPickerHeight = @height()
             _halfColorPickerWidth = _colorPickerWidth / 2
 
-            _pane = atom.workspaceView.getActivePane()
+            _pane = atom.workspaceView.getActivePaneView()
             _paneZero = (_pane and _pane[0]) or {offsetTop:0, offsetLeft:0}
             _paneOffset = top: _paneZero.offsetTop, left: _paneZero.offsetLeft
             _tabBarHeight = (_pane.find '.tab-bar').height()
