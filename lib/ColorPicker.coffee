@@ -19,8 +19,7 @@
                 atom.contextMenu.add '.editor': [{
                     label: 'Color picker'
                     command: 'color-picker:open',
-                    shouldDisplay: ->
-                      return true if self.match = self.getMatchAtCursor()
+                    shouldDisplay: => return true if @match = @getMatchAtCursor()
                 }]
 
                 ColorPickerView = require './ColorPicker-view'
