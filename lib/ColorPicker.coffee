@@ -2,7 +2,6 @@
 #  ColorPicker
 # ----------------------------------------------------------------------------
 
-        ConditionalContextMenu = require './conditional-contextmenu'
         VariableInspector = require './variable-inspector'
 
         _regexes = require './ColorPicker-regexes.coffee'
@@ -16,11 +15,13 @@
 
             activate: ->
                 atom.workspaceView.command "color-picker:open", => @open true
-
-                ConditionalContextMenu.item {
+                self = this
+                atom.contextMenu.add '.editor': [{
                     label: 'Color picker'
                     command: 'color-picker:open',
-                }, => return true if @match = @getMatchAtCursor()
+                    shouldDisplay: ->
+                      return true if self.match = self.getMatchAtCursor()
+                }]
 
                 ColorPickerView = require './ColorPicker-view'
                 @view = new ColorPickerView
