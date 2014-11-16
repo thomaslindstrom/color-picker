@@ -81,13 +81,15 @@
                 return _match
 
             open: (getMatch = false) ->
+                _editor = atom.workspace.getActiveEditor()
+                return unless _editor
                 if getMatch then @match = @getMatchAtCursor()
 
                 if not @match
                     randomRGBFragment = -> (Math.random() * 255) << 0
 
                     _line = '#' + Convert.rgbToHex [randomRGBFragment(), randomRGBFragment(), randomRGBFragment()]
-                    _cursorBuffer = atom.workspace.getActiveEditor().getCursorBufferPosition()
+                    _cursorBuffer = _editor.getCursorBufferPosition()
                     _cursorRow = _cursorBuffer.row
                     _cursorColumn = _cursorBuffer.column
 
