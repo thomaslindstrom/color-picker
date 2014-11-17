@@ -81,9 +81,8 @@
                 return _match
 
             open: (getMatch = false) ->
-                _editor = atom.workspace.getActiveEditor()
-                return unless _editor
-                if getMatch then @match = @getMatchAtCursor()
+                return unless _editor = atom.workspace.getActiveEditor()
+                @match = @getMatchAtCursor() if getMatch
 
                 if not @match
                     randomRGBFragment = -> (Math.random() * 255) << 0
