@@ -18,7 +18,8 @@
             width: _width
             height: _height
 
-            # Draw the saturation selector
+        #  Draw the saturation selector
+        # ---------------------------
             render: (hex) ->
                 _hsl = Convert.hexToHsl hex
                 _context.clearRect 0, 0, _width, _height
@@ -39,7 +40,8 @@
                 _context.fillStyle = _gradient
                 _context.fillRect 0, 0, _width, _height
 
-            # Returns a color from a position on the canvas
+        #  Returns a color from a position on the canvas
+        # ---------------------------
             getColorAtPosition: (positionX, positionY) ->
                 _data = (_context.getImageData (positionX - 1), (positionY - 1), 1, 1).data
 

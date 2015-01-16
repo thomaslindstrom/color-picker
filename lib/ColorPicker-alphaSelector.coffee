@@ -18,7 +18,8 @@
             width: _width
             height: _height
 
-            # Draw the alpha selector gradient
+        #  Draw the alpha selector gradient
+        # ---------------------------
             render: (color) ->
                 _gradient = _context.createLinearGradient 0, 0, 1, _height
                 _context.clearRect 0, 0, _width, _height

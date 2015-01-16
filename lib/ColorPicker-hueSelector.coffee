@@ -19,7 +19,8 @@
             width: _width
             height: _height
 
-            # Draw the hue selector gradient
+        #  Draw the hue selector gradient
+        # ---------------------------
             render: ->
                 _gradient = _context.createLinearGradient 0, 0, 1, _height
                 _step = 1 / (_hexes.length - 1)
@@ -28,7 +29,8 @@
                 _context.fillStyle = _gradient
                 _context.fillRect 0, 0, _width, _height
 
-            # Returns a color from a position on the canvas
+        #  Returns a color from a position on the canvas
+        # ---------------------------
             getColorAtPosition: (positionY) ->
                 _data = (_context.getImageData 1, (positionY - 1), 1, 1).data
 
