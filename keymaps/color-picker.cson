@@ -7,8 +7,8 @@
 
 # For more detailed documentation see
 # https://atom.io/docs/latest/advanced/keymaps
-'.platform-darwin .workspace':
+'.platform-darwin atom-workspace':
   'cmd-C': 'color-picker:open'
 
-'.platform-win32 .workspace, .platform-linux .workspace':
+'.platform-win32 atom-workspace, .platform-linux atom-workspace':
   'ctrl-alt-c': 'color-picker:open'
