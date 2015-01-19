@@ -117,6 +117,9 @@
                 _left = _viewWidth + _offset.left - _colorPickerWidth - 20
                 @addClass 'no--arrow'
 
+            @addClass 'no--arrow' if _top < 20
+            @addClass 'no--arrow' if _left < 20
+
             this # Place the color picker
                 .css 'top', Math.max 20, _top
                 .css 'left', Math.max 20, _left
