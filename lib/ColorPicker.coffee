@@ -15,7 +15,8 @@
             match: null
 
             activate: ->
-                atom.workspaceView.command "color-picker:open", => @open true
+                atom.commands.add 'atom-text-editor',
+                    'color-picker:open': => @open true
 
                 atom.contextMenu.add '.editor': [{
                     label: 'Color picker'

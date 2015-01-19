@@ -3,18 +3,17 @@
 # ----------------------------------------------------------------------------
         Convert = require './ColorPicker-convert'
 
-        $el = atom.workspaceView.find '#ColorPicker-saturationSelector'
-        $selection = atom.workspaceView.find '#ColorPicker-saturationSelection'
-        _context = $el[0].getContext '2d'
-        _width = $el.width()
-        _height = $el.height()
+        _el = document.querySelector '#ColorPicker-saturationSelector'
+        _selection = document.querySelector '#ColorPicker-saturationSelection'
+        _context = _el.getContext '2d'
+        _width = _el.offsetWidth
+        _height = _el.offsetHeight
 
     # -------------------------------------
     #  Public functionality
     # -------------------------------------
         module.exports =
-            $el: $el
-            $selection: $selection
+            el: _el
             width: _width
             height: _height
 
@@ -39,6 +38,12 @@
 
                 _context.fillStyle = _gradient
                 _context.fillRect 0, 0, _width, _height
+
+        #  Set the selector position
+        # ---------------------------
+            setPosition: ({top, left}) ->
+                _selection.style['top'] = (top / _height) * 100 + '%'
+                _selection.style['left'] = (left / _width) * 100 + '%'
 
         #  Returns a color from a position on the canvas
         # ---------------------------

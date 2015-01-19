@@ -36,7 +36,7 @@
                         @canvas id: "#{ c }hueSelector", class: "#{ c }hueSelector", width: '20px', height: '180px'
 
         initialize: ->
-            (atom.workspaceView.find '.vertical').append this
+            (document.querySelector '.vertical').appendChild @element
 
             SaturationSelector = require './ColorPicker-saturationSelector'
             AlphaSelector = require './ColorPicker-alphaSelector'
@@ -93,38 +93,29 @@
             _colorPickerHeight = @height()
             _halfColorPickerWidth = _colorPickerWidth / 2
 
-            _pane = atom.workspaceView.getActivePaneView()
-            _paneZero = (_pane and _pane[0]) or {offsetTop:0, offsetLeft:0}
-            _paneOffset = top: _paneZero.offsetTop, left: _paneZero.offsetLeft
-            _tabBarHeight = (_pane.find '.tab-bar').height()
-
-            @storage.activeView = _view = _pane.activeView
-            _position = _view.pixelPositionForScreenPosition _view.getEditor().getCursorScreenPosition()
-            _gutterWidth = (_view.find '.gutter').width()
-
-            _scroll = top: _view.scrollTop(), left: _view.scrollLeft()
-            _scrollbar = _view.find '.vertical-scrollbar'
-            if _scrollbar then _scrollbar.on 'scroll.color-picker', => @scroll()
+            _Editor = atom.workspace.getActiveTextEditor()
+            _ScrollView = (atom.views.getView _Editor).shadowRoot.querySelector '.scroll-view'
+            _position = _Editor.pixelPositionForScreenPosition _Editor.getCursorScreenPosition()
+            _offset = @getOffsetWith (atom.views.getView atom.workspace.getActivePane()), _ScrollView
 
             # Add 15 to account for the arrow on top of the color picker
-            _top = 15 + _position.top - _scroll.top + _view.lineHeight + _tabBarHeight
-            _left = _position.left - _scroll.left + _gutterWidth
+            _top = 15 + _position.top - _Editor.$scrollTop.value + _Editor.$lineHeightInPixels.value + _offset.top
+            # Remove half the color picker width to center it
+            _left = _position.left - _Editor.$scrollLeft.value + _offset.left - _halfColorPickerWidth
 
             # Make adjustments based on view size: don't let the color picker
             # disappear or overflow
-            _viewWidth = _view.width()
-            _viewHeight = _view.height()
+            _viewWidth = _Editor.$width.value
+            _viewHeight = _Editor.$height.value
 
             # Remove 15 to ignore the arrow on top of the color picker
             if _top + _colorPickerHeight - 15 > _viewHeight
-                _top = _viewHeight + _tabBarHeight - _colorPickerHeight - 20
+                _top = _viewHeight + _offset.top - _colorPickerHeight - 20
                 @addClass 'no--arrow'
-            _top += _paneOffset.top
 
-            if _left + _halfColorPickerWidth > _viewWidth
-                _left = _viewWidth - _halfColorPickerWidth - 20
+            if _left + _colorPickerWidth > _viewWidth
+                _left = _viewWidth + _offset.left - _colorPickerWidth - 20
                 @addClass 'no--arrow'
-            _left += _paneOffset.left - _halfColorPickerWidth
 
             this # Place the color picker
                 .css 'top', Math.max 20, _top
@@ -133,9 +124,6 @@
         close: ->
             @isOpen = false
             @removeClass 'is--visible is--initial is--searching is--error'
-
-            return unless @storage.activeView and @storage.activeView.verticalScrollbar
-            @storage.activeView.verticalScrollbar.off 'scroll.color-picker'
 
         error: ->
             @storage.selectedColor = null
@@ -146,17 +134,29 @@
 
         scroll: -> if @isOpen then @close()
 
+        getOffsetWith: (target, element) ->
+            _el = element
+            _offset = top: 0, left: 0
+
+            until (_el is target) or not _el
+                _offset.top += _el.offsetTop
+                _offset.left += _el.offsetLeft
+                _el = _el.offsetParent
+            _offset.top += target.offsetTop
+            _offset.left += target.offsetLeft
+
+            return _offset
+
     # -------------------------------------
     #  Bind controls
     # -------------------------------------
         bind: ->
-            window.onresize = => if @isOpen then @close()
-            atom.workspaceView.on 'pane:active-item-changed', => @close()
-
-            $body = @parents 'body'
+            window.onresize = => @close()
+            atom.workspace.getActiveTextEditor().onDidChangeCursorPosition => @close()
+            atom.workspace.getActivePane().onDidChangeActiveItem => @close()
 
             do => # Bind the color output control
-                $body.on 'mousedown', (e) =>
+                window.addEventListener 'mousedown', (e) =>
                     _target = e.target
                     _className = _target.className
 
@@ -179,7 +179,8 @@
                         when 'ColorPicker-initialWrapper'
                             @inputColor _color
                             @addClass 'is--initial'
-                .on 'keydown', (e) =>
+
+                atom.views.getView(atom.workspace).addEventListener 'keydown', (e) =>
                     return unless @isOpen
                     return @close() unless e.which is 13
 
@@ -192,8 +193,10 @@
             do => # Bind the saturation selector controls
                 _isGrabbingSaturationSelection = false
 
-                $body.on 'mousedown mousemove mouseup', (e) =>
-                    _offset = SaturationSelector.$el.offset()
+                updateSaturationSelection = (e) =>
+                    return unless @isOpen
+
+                    _offset = @getOffsetWith @element.offsetParent, SaturationSelector.el
                     _offsetY = Math.max 1, (Math.min SaturationSelector.height, (e.pageY - _offset.top))
                     _offsetX = Math.max 1, (Math.min SaturationSelector.width, (e.pageX - _offset.left))
 
@@ -212,11 +215,17 @@
                     @setSaturation _offsetX, _offsetY
                     @refreshColor 'saturation'
 
+                window.addEventListener 'mousedown', updateSaturationSelection
+                window.addEventListener 'mousemove', updateSaturationSelection
+                window.addEventListener 'mouseup', updateSaturationSelection
+
             do => # Bind the alpha selector controls
                 _isGrabbingAlphaSelection = false
 
-                $body.on 'mousedown mousemove mouseup', (e) =>
-                    _offsetTop = AlphaSelector.$el.offset().top
+                updateAlphaSelector = (e) =>
+                    return unless @isOpen
+
+                    _offsetTop = (@getOffsetWith @element.offsetParent, AlphaSelector.el).top
                     _offsetY = Math.max 1, (Math.min AlphaSelector.height, (e.pageY - _offsetTop))
 
                     switch e.type
@@ -234,11 +243,17 @@
                     @setAlpha _offsetY
                     @refreshColor 'alpha'
 
+                window.addEventListener 'mousedown', updateAlphaSelector
+                window.addEventListener 'mousemove', updateAlphaSelector
+                window.addEventListener 'mouseup', updateAlphaSelector
+
             do => # Bind the hue selector controls
                 _isGrabbingHueSelection = false
 
-                $body.on 'mousedown mousemove mouseup', (e) =>
-                    _offsetTop = HueSelector.$el.offset().top
+                updateHueControls = (e) =>
+                    return unless @isOpen
+
+                    _offsetTop = (@getOffsetWith @element.offsetParent, HueSelector.el).top
                     _offsetY = Math.max 1, (Math.min HueSelector.height, (e.pageY - _offsetTop))
 
                     switch e.type
@@ -256,19 +271,17 @@
                     @setHue _offsetY
                     @refreshColor 'hue'
 
+                window.addEventListener 'mousedown', updateHueControls
+                window.addEventListener 'mousemove', updateHueControls
+                window.addEventListener 'mouseup', updateHueControls
+
     # -------------------------------------
     #  Saturation
     # -------------------------------------
         setSaturation: (positionX, positionY) ->
             @storage.saturation.x = positionX
             @storage.saturation.y = positionY
-
-            _percentageTop = (positionY / SaturationSelector.height) * 100
-            _percentageLeft = (positionX / SaturationSelector.width) * 100
-
-            SaturationSelector.$selection
-                .css 'top', _percentageTop + '%'
-                .css 'left', _percentageLeft + '%'
+            SaturationSelector.setPosition top: positionY, left: positionX
 
         refreshSaturationCanvas: ->
             _color = HueSelector.getColorAtPosition @storage.hue
@@ -279,8 +292,7 @@
     # -------------------------------------
         setAlpha: (positionY) ->
             @storage.alpha = positionY
-            AlphaSelector.$selection
-                .css 'top', (positionY / AlphaSelector.height) * 100 + '%'
+            AlphaSelector.setPosition top: positionY
 
         refreshAlphaCanvas: ->
             _saturation = @storage.saturation
@@ -292,8 +304,7 @@
     # -------------------------------------
         setHue: (positionY) ->
             @storage.hue = positionY
-            HueSelector.$selection
-                .css 'top', (positionY / HueSelector.height) * 100 + '%'
+            HueSelector.setPosition top: positionY
 
     # -------------------------------------
     #  Color
