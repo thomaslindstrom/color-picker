@@ -3,8 +3,6 @@
 # ----------------------------------------------------------------------------
 
     module.exports = (picker) ->
-        Convert = require './ColorPicker-convert'
-
         _el = picker.querySelector '#ColorPicker-alphaSelector'
         _selection = picker.querySelector '#ColorPicker-alphaSelection'
         _context = _el.getContext '2d'
