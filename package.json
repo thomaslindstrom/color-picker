@@ -3,7 +3,7 @@
   "main": "./lib/ColorPicker",
   "version": "1.3.0",
   "private": true,
-  "description": "A Color Picker for the Atom Editor. Right click a color and select color picker to open it.",
+  "description": "Right click or press CMD-SHIFT-C/CTRL-ALT-C to open it.",
   "repository": {
     "type": "git",
     "url": "https://github.com/thomaslindstrom/color-picker"
