@@ -1,6 +1,7 @@
 # ----------------------------------------------------------------------------
 #  ColorPicker: View
 # ----------------------------------------------------------------------------
+
     {View} = require 'atom'
     Convert = require './ColorPicker-convert'
 
@@ -10,9 +11,10 @@
 
     module.exports = class ColorPickerView extends View
         @content: ->
-            c = 'ColorPicker-'
+            i = 'ColorPicker'
+            c = "#{ i }-"
 
-            @div id: 'ColorPicker', class: 'ColorPicker', =>
+            @div id: i, class: i, =>
                 @div id: "#{ c }loader", class: "#{ c }loader", =>
                     @div class: "#{ c }loaderDot"
                     @div class: "#{ c }loaderDot"
