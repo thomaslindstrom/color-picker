@@ -1,10 +1,12 @@
 # ----------------------------------------------------------------------------
 #  ColorPicker: Saturation selector
 # ----------------------------------------------------------------------------
+
+    module.exports = (picker) ->
         Convert = require './ColorPicker-convert'
 
-        _el = document.querySelector '#ColorPicker-saturationSelector'
-        _selection = document.querySelector '#ColorPicker-saturationSelection'
+        _el = picker.querySelector '#ColorPicker-saturationSelector'
+        _selection = picker.querySelector '#ColorPicker-saturationSelection'
         _context = _el.getContext '2d'
         _width = _el.offsetWidth
         _height = _el.offsetHeight
@@ -12,7 +14,7 @@
     # -------------------------------------
     #  Public functionality
     # -------------------------------------
-        module.exports =
+        return {
             el: _el
             width: _width
             height: _height
@@ -54,3 +56,4 @@
                     color: '#' + Convert.rgbToHex _data
                     type: 'hex'
                 }
+        }

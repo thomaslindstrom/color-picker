@@ -1,10 +1,12 @@
 # ----------------------------------------------------------------------------
 #  ColorPicker: Alpha selector
 # ----------------------------------------------------------------------------
+
+    module.exports = (picker) ->
         Convert = require './ColorPicker-convert'
 
-        _el = document.querySelector '#ColorPicker-alphaSelector'
-        _selection = document.querySelector '#ColorPicker-alphaSelection'
+        _el = picker.querySelector '#ColorPicker-alphaSelector'
+        _selection = picker.querySelector '#ColorPicker-alphaSelection'
         _context = _el.getContext '2d'
         _width = _el.offsetWidth
         _height = _el.offsetHeight
@@ -12,7 +14,7 @@
     # -------------------------------------
     #  Public functionality
     # -------------------------------------
-        module.exports =
+        return {
             el: _el
             width: _width
             height: _height
@@ -34,3 +36,4 @@
         # ---------------------------
             setPosition: ({top}) ->
                 _selection.style['top'] = (top / _height) * 100 + '%'
+        }

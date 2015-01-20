@@ -36,14 +36,15 @@
                         @canvas id: "#{ c }hueSelector", class: "#{ c }hueSelector", width: '20px', height: '180px'
 
         initialize: ->
-            (document.querySelector '.vertical').appendChild @element
+            atom.views.getView(atom.workspace)
+                .querySelector '.vertical'
+                .appendChild @element
 
-            SaturationSelector = require './ColorPicker-saturationSelector'
-            AlphaSelector = require './ColorPicker-alphaSelector'
-            HueSelector = require './ColorPicker-hueSelector'
+            SaturationSelector = (require './ColorPicker-saturationSelector')(@element)
+            AlphaSelector = (require './ColorPicker-alphaSelector')(@element)
+            HueSelector = (require './ColorPicker-hueSelector')(@element)
 
             HueSelector.render()
-
             @bind()
 
         # Tear down any state and detach

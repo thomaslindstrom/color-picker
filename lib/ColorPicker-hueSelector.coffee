@@ -1,11 +1,13 @@
 # ----------------------------------------------------------------------------
 #  ColorPicker: Hue selector
 # ----------------------------------------------------------------------------
+
+    module.exports = (picker) ->
         Convert = require './ColorPicker-convert'
         _hexes = ['#FF0000', '#FFFF00', '#00FF00', '#00FFFF', '#0000FF', '#FF00FF', '#FF0000']
 
-        _el = document.querySelector '#ColorPicker-hueSelector'
-        _selection = document.querySelector '#ColorPicker-hueSelection'
+        _el = picker.querySelector '#ColorPicker-hueSelector'
+        _selection = picker.querySelector '#ColorPicker-hueSelection'
         _context = _el.getContext '2d'
         _width = _el.offsetWidth
         _height = _el.offsetHeight
@@ -13,7 +15,7 @@
     # -------------------------------------
     #  Public functionality
     # -------------------------------------
-        module.exports =
+        return {
             el: _el
             width: _width
             height: _height
@@ -42,3 +44,4 @@
                     color: '#' + Convert.rgbToHex _data
                     type: 'hex'
                 }
+        }
