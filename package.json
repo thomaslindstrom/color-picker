@@ -1,7 +1,7 @@
 {
   "name": "color-picker",
   "main": "./lib/ColorPicker",
-  "version": "1.4.2",
+  "version": "1.4.3",
   "private": true,
   "description": "Right click or press CMD-SHIFT-C/CTRL-ALT-C to open it.",
   "repository": {
@@ -24,6 +24,5 @@
   },
   "_resolved": "/var/folders/xs/wnz22zbx1_34gklb182dps4c0000gn/T/d-114731-2481-j8a7xd/package.tgz",
   "_from": "/var/folders/xs/wnz22zbx1_34gklb182dps4c0000gn/T/d-114731-2481-j8a7xd/package.tgz",
-  "dependencies": {
-  }
+  "dependencies": {}
 }
