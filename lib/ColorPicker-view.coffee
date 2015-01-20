@@ -206,7 +206,7 @@
 
                     # Close unless the click target is something related to
                     # the color picker
-                    return @close() unless /ColorPicker/.test _className
+                    return @close() unless (_className.split '-')[0] is 'ColorPicker'
 
                     _color = @storage.selectedColor
 
