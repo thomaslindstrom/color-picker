@@ -228,6 +228,7 @@
 
                     @replaceColor()
                     @close()
+                return
 
         #  Bind the saturation selector controls
         # ---------------------------
@@ -260,6 +261,8 @@
                 Emitter.onMouseMove updateSaturationSelection
                 Emitter.onMouseUp updateSaturationSelection
 
+                return
+
         #  Bind the alpha selector controls
         # ---------------------------
             do =>
@@ -289,6 +292,8 @@
                 Emitter.onMouseDown updateAlphaSelector
                 Emitter.onMouseMove updateAlphaSelector
                 Emitter.onMouseUp updateAlphaSelector
+
+                return
 
         #  Bind the hue selector controls
         # ---------------------------
@@ -320,6 +325,7 @@
                 Emitter.onMouseMove updateHueControls
                 Emitter.onMouseUp updateHueControls
 
+                return
             return
 
     # -------------------------------------
@@ -329,10 +335,12 @@
             @storage.saturation.x = positionX
             @storage.saturation.y = positionY
             SaturationSelector.setPosition top: positionY, left: positionX
+            return
 
         refreshSaturationCanvas: ->
             _color = HueSelector.getColorAtPosition @storage.hue
             SaturationSelector.render _color.color
+            return
 
     # -------------------------------------
     #  Alpha
@@ -340,11 +348,13 @@
         setAlpha: (positionY) ->
             @storage.alpha = positionY
             AlphaSelector.setPosition top: positionY
+            return
 
         refreshAlphaCanvas: ->
             _saturation = @storage.saturation
             _color = SaturationSelector.getColorAtPosition _saturation.x, _saturation.y
             AlphaSelector.render Convert.hexToRgb _color.color
+            return
 
     # -------------------------------------
     #  Hue
@@ -352,6 +362,7 @@
         setHue: (positionY) ->
             @storage.hue = positionY
             HueSelector.setPosition top: positionY
+            return
 
     # -------------------------------------
     #  Color
@@ -414,6 +425,7 @@
                 @removeClass 'is--searching'
                     .find '#ColorPicker-value'
                     .attr 'data-variable', color.match
+            return
 
         refreshColor: (trigger) ->
             if trigger is 'hue' then @refreshSaturationCanvas()
@@ -421,10 +433,12 @@
 
             # Send the preferred color type as well
             @setColor undefined, @storage.selectedColor.type
+            return
 
         # User selects a new color, reflect the change
         inputColor: (color) ->
             return unless this
+
             _hasClass = this[0].className.match /(is\-\-color\_(\w+))\s/
 
             @removeClass _hasClass[1] if _hasClass
@@ -466,6 +480,7 @@
 
             @refreshAlphaCanvas()
             @setColor color
+            return
 
     # -------------------------------------
     #  Selection
@@ -487,6 +502,7 @@
                 end:
                     column: _color.end
                     row: _color.row
+            return
 
         replaceColor: ->
             _color = @storage.selectedColor
@@ -509,3 +525,4 @@
                 end:
                     column: _color.index + _newColor.length
                     row: _color.row
+            return
