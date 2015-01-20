@@ -23,5 +23,8 @@
     "shasum": "e5644c3cff6e144bde7202d3a96c5bfa10045574"
   },
   "_resolved": "/var/folders/xs/wnz22zbx1_34gklb182dps4c0000gn/T/d-114731-2481-j8a7xd/package.tgz",
-  "_from": "/var/folders/xs/wnz22zbx1_34gklb182dps4c0000gn/T/d-114731-2481-j8a7xd/package.tgz"
+  "_from": "/var/folders/xs/wnz22zbx1_34gklb182dps4c0000gn/T/d-114731-2481-j8a7xd/package.tgz",
+  "dependencies": {
+    "event-kit": "^1.0.1"
+  }
 }

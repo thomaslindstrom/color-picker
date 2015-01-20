@@ -154,11 +154,20 @@
     #  Bind controls
     # -------------------------------------
         bind: ->
+            Emitter = new (require 'event-kit').Emitter
+            Emitter.onMouseDown = (callback) -> Emitter.on 'mousedown', callback
+            Emitter.onMouseMove = (callback) -> Emitter.on 'mousemove', callback
+            Emitter.onMouseUp = (callback) -> Emitter.on 'mouseup', callback
+
+            window.addEventListener 'mousedown', (e) -> Emitter.emit 'mousedown', e
+            window.addEventListener 'mousemove', (e) -> Emitter.emit 'mousemove', e
+            window.addEventListener 'mouseup', (e) -> Emitter.emit 'mouseup', e
+
             window.onresize = => @close()
             atom.workspace.getActivePane().onDidChangeActiveItem => @close()
 
             do => # Bind the color output control
-                window.addEventListener 'mousedown', (e) =>
+                Emitter.onMouseDown (e) =>
                     _target = e.target
                     _className = _target.className
 
@@ -217,9 +226,9 @@
                     @setSaturation _offsetX, _offsetY
                     @refreshColor 'saturation'
 
-                window.addEventListener 'mousedown', updateSaturationSelection
-                window.addEventListener 'mousemove', updateSaturationSelection
-                window.addEventListener 'mouseup', updateSaturationSelection
+                Emitter.onMouseDown updateSaturationSelection
+                Emitter.onMouseMove updateSaturationSelection
+                Emitter.onMouseUp updateSaturationSelection
 
             do => # Bind the alpha selector controls
                 _isGrabbingAlphaSelection = false
@@ -245,9 +254,9 @@
                     @setAlpha _offsetY
                     @refreshColor 'alpha'
 
-                window.addEventListener 'mousedown', updateAlphaSelector
-                window.addEventListener 'mousemove', updateAlphaSelector
-                window.addEventListener 'mouseup', updateAlphaSelector
+                Emitter.onMouseDown updateAlphaSelector
+                Emitter.onMouseMove updateAlphaSelector
+                Emitter.onMouseUp updateAlphaSelector
 
             do => # Bind the hue selector controls
                 _isGrabbingHueSelection = false
@@ -273,9 +282,9 @@
                     @setHue _offsetY
                     @refreshColor 'hue'
 
-                window.addEventListener 'mousedown', updateHueControls
-                window.addEventListener 'mousemove', updateHueControls
-                window.addEventListener 'mouseup', updateHueControls
+                Emitter.onMouseDown updateHueControls
+                Emitter.onMouseMove updateHueControls
+                Emitter.onMouseUp updateHueControls
 
     # -------------------------------------
     #  Saturation
