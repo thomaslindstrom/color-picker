@@ -159,9 +159,11 @@
     # -------------------------------------
     #  Bind controls
     # -------------------------------------
-        bindScroll: (editor) -> editor.onDidChangeScrollTop => @close()
-
         bind: ->
+            _workspace = atom.workspace
+
+        #  Set up an emitter that allows us to avoid adding a lot of listeners
+        # ---------------------------
             Emitter = {
                 bindings: {}
 
@@ -184,13 +186,16 @@
             window.addEventListener 'mousemove', (e) -> Emitter.emit 'mousemove', e
             window.addEventListener 'mouseup', (e) -> Emitter.emit 'mouseup', e
 
+        #  Close the color picker on resize and pane change
+        # ---------------------------
             window.onresize = => @close()
-
-            _workspace = atom.workspace
             _workspace.getActivePane().onDidChangeActiveItem => @close()
 
-            @bindScroll _editor for _editor in atom.workspace.getTextEditors()
-            _workspace.onDidAddTextEditor ({textEditor}) => @bindScroll textEditor
+        #  Close the color picker on scroll
+        # ---------------------------
+            bindScroll = (editor) => editor.onDidChangeScrollTop => @close()
+            bindScroll _editor for _editor in atom.workspace.getTextEditors()
+            _workspace.onDidAddTextEditor ({textEditor}) => bindScroll textEditor
 
         #  Bind the color output control
         # ---------------------------
