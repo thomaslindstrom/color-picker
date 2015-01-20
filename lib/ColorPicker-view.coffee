@@ -159,10 +159,23 @@
         bindScroll: (editor) -> editor.onDidChangeScrollTop => @close()
 
         bind: ->
-            Emitter = new (require 'event-kit').Emitter
-            Emitter.onMouseDown = (callback) -> Emitter.on 'mousedown', callback
-            Emitter.onMouseMove = (callback) -> Emitter.on 'mousemove', callback
-            Emitter.onMouseUp = (callback) -> Emitter.on 'mouseup', callback
+            Emitter = {
+                bindings: {}
+
+                emit: (event, args...) ->
+                    return unless _bindings = @bindings[event]
+                    _callback.apply null, args for _callback in _bindings
+                    return
+
+                on: (event, callback) ->
+                    @bindings[event] = [] unless @bindings[event]
+                    @bindings[event].push callback
+                    return
+
+                onMouseDown: (callback) -> @on 'mousedown', callback
+                onMouseMove: (callback) -> @on 'mousemove', callback
+                onMouseUp: (callback) -> @on 'mouseup', callback
+            }
 
             window.addEventListener 'mousedown', (e) -> Emitter.emit 'mousedown', e
             window.addEventListener 'mousemove', (e) -> Emitter.emit 'mousemove', e
