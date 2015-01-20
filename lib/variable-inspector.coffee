@@ -32,8 +32,8 @@
         # ---------------------------
             findDefinition: (name, type) ->
                 return unless _regexString = _variablePatterns[type]
-                _regex = RegExp (_regexString.replace '{{ VARIABLE }}', name)
 
+                _regex = RegExp _regexString.replace '{{ VARIABLE }}', name
                 _results = []
 
                 # We already know where the definition is

@@ -5,6 +5,7 @@
     module.exports = (picker) ->
         Convert = require './ColorPicker-convert'
         _hexes = ['#FF0000', '#FFFF00', '#00FF00', '#00FFFF', '#0000FF', '#FF00FF', '#FF0000']
+        _hexesLength = _hexes.length
 
         _el = picker.querySelector '#ColorPicker-hueSelector'
         _selection = picker.querySelector '#ColorPicker-hueSelection'
@@ -24,16 +25,18 @@
         # ---------------------------
             render: ->
                 _gradient = _context.createLinearGradient 0, 0, 1, _height
-                _step = 1 / (_hexes.length - 1)
+                _step = 1 / (_hexesLength - 1)
 
                 _gradient.addColorStop (_step * i), hex for hex, i in _hexes
                 _context.fillStyle = _gradient
                 _context.fillRect 0, 0, _width, _height
+                return
 
         #  Set the selector position
         # ---------------------------
             setPosition: ({top}) ->
                 _selection.style['top'] = (top / _height) * 100 + '%'
+                return
 
         #  Returns a color from a position on the canvas
         # ---------------------------

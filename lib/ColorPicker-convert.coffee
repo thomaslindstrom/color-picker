@@ -8,12 +8,12 @@
     # -------------------------------------
         hexToRgb: (hex) ->
             hex = hex.replace '#', ''
-            if hex.length is 3 then hex = hex.replace /(.)(.)(.)/, "$1$1$2$2$3$3"
+            hex = hex.replace /(.)(.)(.)/, "$1$1$2$2$3$3" if hex.length is 3
 
             return [
-                (parseInt (hex.substr 0, 2), 16),
-                (parseInt (hex.substr 2, 2), 16),
-                (parseInt (hex.substr 4, 2), 16)
+                parseInt (hex.substr 0, 2), 16
+                parseInt (hex.substr 2, 2), 16
+                parseInt (hex.substr 4, 2), 16
             ]
 
     # -------------------------------------
@@ -26,8 +26,7 @@
     #  HEX to HSL
     # -------------------------------------
         hexToHsl: (hex) ->
-            hex = hex.replace '#', ''
-            return @rgbToHsl @hexToRgb hex
+            return @rgbToHsl @hexToRgb hex.replace '#', ''
 
     # -------------------------------------
     #  RGB to HEX
@@ -78,7 +77,7 @@
     #  RGB to HSV
     # -------------------------------------
         rgbToHsv: (rgb) ->
-            if typeof rgb is 'string' then rgb = rgb.match /(\d+)/g
+            rgb = rgb.match /(\d+)/g if typeof rgb is 'string'
 
             [r, g, b] = rgb
 
@@ -86,7 +85,7 @@
             computedS = 0
             computedV = 0
 
-            #remove spaces from input RGB values, convert to int
+            # Remove spaces from input RGB values, convert to int
             r = parseInt(("" + r).replace(/\s/g, ""), 10)
             g = parseInt(("" + g).replace(/\s/g, ""), 10)
             b = parseInt(("" + b).replace(/\s/g, ""), 10)

@@ -26,7 +26,7 @@
                     shouldDisplay: => return true if @match = @getMatchAtCursor()
                 }]
 
-                @view = new (require './ColorPicker-view')
+                return @view = new (require './ColorPicker-view')
 
             deactivate: -> @view.destroy()
 
@@ -124,10 +124,11 @@
 
                 _callback = => @setMatchColor()
 
-                return switch @match.type
+                switch @match.type
                     when 'variable:sass' then @setVariableDefinitionColor @match, _callback
                     when 'variable:less' then @setVariableDefinitionColor @match, _callback
                     else do => @match.color = @match.match; _callback @match
+                return
 
         #  Set the variable definition by sending it through a
         #  provided callback when found
@@ -146,6 +147,7 @@
                     match.pointer = pointer
 
                     callback match
+                return
 
         #  Find variable definition by searching recursively until a
         #  non-variable (a color) is found

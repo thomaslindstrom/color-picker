@@ -38,7 +38,7 @@
                         @canvas id: "#{ c }hueSelector", class: "#{ c }hueSelector", width: '20px', height: '180px'
 
         initialize: ->
-            atom.views.getView(atom.workspace)
+            atom.views.getView atom.workspace
                 .querySelector '.vertical'
                 .appendChild @element
 
@@ -127,6 +127,7 @@
             this # Place the color picker
                 .css 'top', Math.max 20, _top
                 .css 'left', Math.max 20, _left
+            return
 
         close: ->
             @isOpen = false
@@ -138,6 +139,7 @@
             this
                 .removeClass 'is--searching'
                 .addClass 'is--error'
+            return
 
         scroll: -> if @isOpen then @close()
 
@@ -190,7 +192,9 @@
             @bindScroll _editor for _editor in atom.workspace.getTextEditors()
             _workspace.onDidAddTextEditor ({textEditor}) => @bindScroll textEditor
 
-            do => # Bind the color output control
+        #  Bind the color output control
+        # ---------------------------
+            do =>
                 Emitter.onMouseDown (e) =>
                     _target = e.target
                     _className = _target.className
@@ -225,7 +229,9 @@
                     @replaceColor()
                     @close()
 
-            do => # Bind the saturation selector controls
+        #  Bind the saturation selector controls
+        # ---------------------------
+            do =>
                 _isGrabbingSaturationSelection = false
 
                 updateSaturationSelection = (e) =>
@@ -254,7 +260,9 @@
                 Emitter.onMouseMove updateSaturationSelection
                 Emitter.onMouseUp updateSaturationSelection
 
-            do => # Bind the alpha selector controls
+        #  Bind the alpha selector controls
+        # ---------------------------
+            do =>
                 _isGrabbingAlphaSelection = false
 
                 updateAlphaSelector = (e) =>
@@ -282,7 +290,9 @@
                 Emitter.onMouseMove updateAlphaSelector
                 Emitter.onMouseUp updateAlphaSelector
 
-            do => # Bind the hue selector controls
+        #  Bind the hue selector controls
+        # ---------------------------
+            do =>
                 _isGrabbingHueSelection = false
 
                 updateHueControls = (e) =>
@@ -309,6 +319,8 @@
                 Emitter.onMouseDown updateHueControls
                 Emitter.onMouseMove updateHueControls
                 Emitter.onMouseUp updateHueControls
+
+            return
 
     # -------------------------------------
     #  Saturation

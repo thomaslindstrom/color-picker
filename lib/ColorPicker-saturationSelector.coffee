@@ -40,12 +40,14 @@
 
                 _context.fillStyle = _gradient
                 _context.fillRect 0, 0, _width, _height
+                return
 
         #  Set the selector position
         # ---------------------------
             setPosition: ({top, left}) ->
                 _selection.style['top'] = (top / _height) * 100 + '%'
                 _selection.style['left'] = (left / _width) * 100 + '%'
+                return
 
         #  Returns a color from a position on the canvas
         # ---------------------------
