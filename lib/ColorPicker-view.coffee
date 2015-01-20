@@ -165,7 +165,9 @@
             window.addEventListener 'mouseup', (e) -> Emitter.emit 'mouseup', e
 
             window.onresize = => @close()
-            atom.workspace.getActivePane().onDidChangeActiveItem => @close()
+
+            _workspace = atom.workspace
+            _workspace.getActivePane().onDidChangeActiveItem => @close()
 
             do => # Bind the color output control
                 Emitter.onMouseDown (e) =>
@@ -192,7 +194,7 @@
                             @inputColor _color
                             @addClass 'is--initial'
 
-                atom.views.getView(atom.workspace).addEventListener 'keydown', (e) =>
+                atom.views.getView(_workspace).addEventListener 'keydown', (e) =>
                     return unless @isOpen
                     return @close() unless e.which is 13
 
