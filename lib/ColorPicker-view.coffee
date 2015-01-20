@@ -155,7 +155,6 @@
     # -------------------------------------
         bind: ->
             window.onresize = => @close()
-            atom.workspace.getActiveTextEditor().onDidChangeCursorPosition => @close()
             atom.workspace.getActivePane().onDidChangeActiveItem => @close()
 
             do => # Bind the color output control
