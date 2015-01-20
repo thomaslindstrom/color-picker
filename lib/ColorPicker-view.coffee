@@ -156,6 +156,8 @@
     # -------------------------------------
     #  Bind controls
     # -------------------------------------
+        bindScroll: (editor) -> editor.onDidChangeScrollTop => @close()
+
         bind: ->
             Emitter = new (require 'event-kit').Emitter
             Emitter.onMouseDown = (callback) -> Emitter.on 'mousedown', callback
@@ -170,6 +172,9 @@
 
             _workspace = atom.workspace
             _workspace.getActivePane().onDidChangeActiveItem => @close()
+
+            @bindScroll _editor for _editor in atom.workspace.getTextEditors()
+            _workspace.onDidAddTextEditor ({textEditor}) => @bindScroll textEditor
 
             do => # Bind the color output control
                 Emitter.onMouseDown (e) =>
