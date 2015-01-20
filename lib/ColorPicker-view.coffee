@@ -83,6 +83,7 @@
             (@find '#ColorPicker-value')
                 .attr 'data-variable', ''
                 .html ''
+            return
 
         open: ->
             @isOpen = true

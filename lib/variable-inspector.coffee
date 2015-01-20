@@ -27,10 +27,9 @@
         module.exports =
 
         #  Find a variable definition in the project
-        #
-        #  @String name
-        #  @String type
-        # ---------------------------    
+        #  - name {String}
+        #  - type {String}
+        # ---------------------------
             findDefinition: (name, type) ->
                 return unless _regexString = _variablePatterns[type]
                 _regex = RegExp (_regexString.replace '{{ VARIABLE }}', name)
