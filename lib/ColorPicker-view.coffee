@@ -71,8 +71,6 @@
     # -------------------------------------
     #  Show or hide color picker
     # -------------------------------------
-        isOpen: false
-
         reset: ->
             @addClass 'is--visible is--initial'
             @removeClass 'no--arrow is--pointer is--searching'
@@ -84,6 +82,8 @@
                 .attr 'data-variable', ''
                 .html ''
             return
+
+        isOpen: false
 
         open: ->
             @isOpen = true
@@ -217,6 +217,7 @@
                                     _editor = atom.workspace.activePaneItem
                                     _editor.clearSelections()
                                     _editor.setSelectedBufferRange _pointer.range
+                                    _editor.scrollToCursorPosition()
                             else @replaceColor()
 
                             @close()
