@@ -2,7 +2,7 @@
 #  ColorPicker: View
 # ----------------------------------------------------------------------------
 
-    {View} = require 'atom'
+    {View} = require 'atom-space-pen-views'
     Convert = require './ColorPicker-convert'
 
     SaturationSelector = null

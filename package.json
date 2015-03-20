@@ -24,5 +24,7 @@
   },
   "_resolved": "/var/folders/xs/wnz22zbx1_34gklb182dps4c0000gn/T/d-114731-2481-j8a7xd/package.tgz",
   "_from": "/var/folders/xs/wnz22zbx1_34gklb182dps4c0000gn/T/d-114731-2481-j8a7xd/package.tgz",
-  "dependencies": {}
+  "dependencies": {
+    "atom-space-pen-views": "^2.0.3"
+  }
 }
