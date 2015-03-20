@@ -2,6 +2,10 @@
 
 https://github.com/thomaslindstrom/color-picker
 
+## v1.5.0
+- Move stylesheets to `/styles` directory
+- Replace deprecated `Atom View`, add dependency
+
 ## v1.4.4
 - Fix a bug where clicking a color pointer that lead to the active file didn't scroll to the definition
 
