@@ -33,9 +33,9 @@
         #  Get a match at the current cursor position
         # ---------------------------
             getMatchAtCursor: ->
-                return unless _editor = atom.workspace.getActiveEditor()
+                return unless _editor = atom.workspace.getActiveTextEditor()
 
-                _line = _editor.getCursor().getCurrentBufferLine()
+                _line = _editor.getLastCursor().getCurrentBufferLine()
                 _cursorBuffer = _editor.getCursorBufferPosition()
                 _cursorRow = _cursorBuffer.row
                 _cursorColumn = _cursorBuffer.column
@@ -85,7 +85,7 @@
                 return _match
 
             open: (getMatch = false) ->
-                return unless _editor = atom.workspace.getActiveEditor()
+                return unless _editor = atom.workspace.getActiveTextEditor()
                 @match = @getMatchAtCursor() if getMatch
 
                 if not @match

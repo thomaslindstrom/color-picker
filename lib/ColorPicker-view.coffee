@@ -99,7 +99,7 @@
 
             _Editor = atom.workspace.getActiveTextEditor()
             _ScrollView = (atom.views.getView _Editor).shadowRoot.querySelector '.scroll-view'
-            _position = _Editor.pixelPositionForScreenPosition _Editor.getCursorScreenPosition()
+            _position = _Editor.displayBuffer.pixelPositionForScreenPosition _Editor.getCursorScreenPosition()
             _offset = @getOffsetWith (atom.views.getView atom.workspace.getActivePane()), _ScrollView
 
             # Add 15 to account for the arrow on top of the color picker
@@ -495,7 +495,7 @@
         # Select the color in the editor
         selectColor: ->
             _color = @storage.selectedColor
-            _editor = atom.workspace.getActiveEditor()
+            _editor = atom.workspace.getActiveTextEditor()
 
             return unless _color
 
@@ -513,7 +513,7 @@
         replaceColor: ->
             _color = @storage.selectedColor
             _newColor = @storage.pickedColor
-            _editor = atom.workspace.getActiveEditor()
+            _editor = atom.workspace.getActiveTextEditor()
 
             return unless _color
 

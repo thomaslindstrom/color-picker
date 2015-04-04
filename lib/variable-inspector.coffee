@@ -56,7 +56,7 @@
                 }
 
                 # We don't know where the definition is, look it up
-                atom.project.scan _regex, _options, (result) ->
+                atom.workspace.scan _regex, _options, (result) ->
                     _results.push result
                 .then =>
                     # Figure out what file is holding the definition
