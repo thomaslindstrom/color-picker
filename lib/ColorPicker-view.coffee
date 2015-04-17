@@ -14,6 +14,16 @@
             i = 'ColorPicker'
             c = "#{ i }-"
 
+            formatButtonClass =
+                same: 'btn'
+                hex: 'btn'
+                rgba: 'btn'
+                hsla: 'btn'
+
+            formatMode = 'same'
+              # atom.config.get('ColorPicker.formatMode')
+            formatButtonClass[formatMode] += ' selected'
+
             @div id: i, class: i, =>
                 @div id: "#{ c }loader", class: "#{ c }loader", =>
                     @div class: "#{ c }loaderDot"
@@ -36,6 +46,11 @@
                     @div id: "#{ c }hueSelectorWrapper", class: "#{ c }hueSelectorWrapper", =>
                         @div id: "#{ c }hueSelection", class: "#{ c }hueSelection"
                         @canvas id: "#{ c }hueSelector", class: "#{ c }hueSelector", width: '20px', height: '180px'
+                    @div id: "#{ c }formatSelectorWrapper", class: "#{ c }formatSelectorWrapper inline-block btn-group", =>
+                        @button outlet: "sameSwitch", class: formatButtonClass.same, 'Same'
+                        @button outlet: "hexSwitch", class: formatButtonClass.hex, 'Hex'
+                        @button outlet: "hslaSwitch", class: formatButtonClass.hsla, 'HSLa'
+                        @button outlet: "rgbaSwitch", class: formatButtonClass.rgba, 'RGBa'
 
         initialize: ->
             atom.views.getView atom.workspace

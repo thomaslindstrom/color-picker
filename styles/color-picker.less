@@ -10,7 +10,7 @@
     @color-ui: #ebebeb;
 
     @picker-width: 260px;
-    @picker-height: 300px;
+    @picker-height: 334px;
     @picker-height--pointer: 100px;
 
     @controls-height: 180px;
@@ -58,7 +58,8 @@
     // -------------------------------------
         .ColorPicker-picker {
             background: @color-ui;
-            width: 100%; height: @controls-height + (@controls-margin * 2);
+            width: 100%;
+            height: @controls-height + (@controls-margin * 3) + 24px;
             box-shadow: 0 -1px rgba(0, 0, 0, .2);
             position: absolute;
             bottom: 0;

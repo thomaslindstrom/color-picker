@@ -1,0 +1,27 @@
+// ---------------------------------------------------------------------------
+//  Format selector
+// ---------------------------------------------------------------------------
+    @import (reference) "color-picker.less";
+
+    .ColorPicker-formatSelectorWrapper {
+        position: absolute;
+        bottom: @controls-margin;
+        left: @controls-margin; right: @controls-margin;
+
+        > .btn {
+            width: 25%;
+            background: @color-ui;
+            color: hsl(0, 0%, 50%);
+            border-color: hsl(0, 0%, 75%) !important;
+
+            &.selected {
+                background: darken(@color-ui, 42%);
+                pointer-events: none;
+            }
+
+            &:hover {
+                color: darken(hsl(0, 0%, 50%), 24%);
+                background: darken(@color-ui, 12%);
+            }
+        }
+    }
