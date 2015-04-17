@@ -19,7 +19,7 @@
                 atom.commands.add 'atom-text-editor',
                     'color-picker:open': => @open true
 
-                atom.contextMenu.add '.editor': [{
+                atom.contextMenu.add 'atom-text-editor': [{
                     label: 'Color picker'
                     command: 'color-picker:open'
 
