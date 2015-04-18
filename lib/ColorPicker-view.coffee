@@ -15,13 +15,12 @@
             c = "#{ i }-"
 
             formatButtonClass =
-                same: 'btn'
-                hex: 'btn'
-                rgba: 'btn'
-                hsla: 'btn'
+                same: "#{ c }formatSelectorButton btn"
+                hex: "#{ c }formatSelectorButton btn"
+                rgba: "#{ c }formatSelectorButton btn"
+                hsla: "#{ c }formatSelectorButton btn"
 
-            formatMode = 'same'
-              # atom.config.get('ColorPicker.formatMode')
+            formatMode = atom.config.get('color-picker.formatMode')
             formatButtonClass[formatMode] += ' selected'
 
             @div id: i, class: i, =>
@@ -47,10 +46,10 @@
                         @div id: "#{ c }hueSelection", class: "#{ c }hueSelection"
                         @canvas id: "#{ c }hueSelector", class: "#{ c }hueSelector", width: '20px', height: '180px'
                     @div id: "#{ c }formatSelectorWrapper", class: "#{ c }formatSelectorWrapper inline-block btn-group", =>
-                        @button outlet: "sameSwitch", class: formatButtonClass.same, 'Same'
-                        @button outlet: "hexSwitch", class: formatButtonClass.hex, 'Hex'
-                        @button outlet: "hslaSwitch", class: formatButtonClass.hsla, 'HSLa'
-                        @button outlet: "rgbaSwitch", class: formatButtonClass.rgba, 'RGBa'
+                        @button class: formatButtonClass.same, outlet: "formatSame", click: "switchFormat", "Same"
+                        @button class: formatButtonClass.hex, outlet: "formatHex", click: "switchFormat", "Hex"
+                        @button class: formatButtonClass.hsla, outlet: "formatHSLA", click: "switchFormat", "HSLa"
+                        @button class: formatButtonClass.rgba, outlet: "formatRGBA", click: "switchFormat", "RGBa"
 
         initialize: ->
             atom.views.getView atom.workspace
@@ -383,6 +382,28 @@
         setHue: (positionY) ->
             @storage.hue = positionY
             HueSelector.setPosition top: positionY
+            return
+
+    # -------------------------------------
+    #  Format
+    # -------------------------------------
+        switchFormat: (event, element) ->
+            _oldFormat = atom.config.get('color-picker.formatMode')
+            _newFormat = element[0].innerText.toLowerCase()
+
+            switch _oldFormat
+                when 'same' then @formatSame.removeClass 'selected'
+                when 'hex' then @formatHex.removeClass 'selected'
+                when 'hsla' then @formatHSLA.removeClass 'selected'
+                when 'rgba' then @formatRGBA.removeClass 'selected'
+
+            switch _newFormat
+                when 'same' then @formatSame.addClass 'selected'
+                when 'hex' then @formatHex.addClass 'selected'
+                when 'hsla' then @formatHSLA.addClass 'selected'
+                when 'rgba' then @formatRGBA.addClass 'selected'
+
+            atom.config.set('color-picker.formatMode', _newFormat)
             return
 
     # -------------------------------------

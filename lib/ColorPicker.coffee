@@ -13,10 +13,11 @@
             view: null
             match: null
 
-            formatMode:
-                type: 'string'
-                default: 'same'
-                enum: ['same', 'hex', 'hsla', 'rgba']
+            config:
+                formatMode:
+                    type: 'string'
+                    default: 'same'
+                    enum: ['same', 'hex', 'hsla', 'rgba']
 
         #  Activate package
         # ---------------------------
