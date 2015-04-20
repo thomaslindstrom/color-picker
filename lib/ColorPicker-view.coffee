@@ -394,6 +394,7 @@
                 when 'hsla' then @formatHSL.removeClass 'selected'
                 when 'rgba' then @formatRGB.removeClass 'selected'
 
+            # If clicked again, untoggle and match color type
             if _oldFormat is _newFormat then _newFormat = 'match'
 
             switch _newFormat
@@ -401,12 +402,16 @@
                 when 'hsla' then @formatHSL.addClass 'selected'
                 when 'rgba' then @formatRGB.addClass 'selected'
 
+            # Write new setting
             atom.config.set('color-picker.formatMode', _newFormat)
 
-            _type = switch _newFormat
+            # Set preferred color type
+            _type = switch atom.config.get('color-picker.formatMode')
+                # Match current color type
                 when 'match' then @storage.selectedColor.type
+                # Force to follow setting
                 when 'hex' then 'hexa'
-                else _newFormat
+                else atom.config.get('color-picker.formatMode')
 
             @setColor undefined, _type
             return
@@ -478,8 +483,11 @@
             if trigger is 'hue' then @refreshSaturationCanvas()
             if trigger is 'hue' or trigger is 'saturation' then @refreshAlphaCanvas()
 
+            # Set preferred color type
             _type = switch atom.config.get('color-picker.formatMode')
+                # Match current color type
                 when 'match' then @storage.selectedColor.type
+                # Force to follow setting
                 when 'hex' then 'hexa'
                 else atom.config.get('color-picker.formatMode')
 
