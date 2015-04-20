@@ -404,9 +404,9 @@
             atom.config.set('color-picker.formatMode', _newFormat)
 
             _type = switch _newFormat
-              when 'match' then @storage.selectedColor.type
-              when 'hex' then 'hexa'
-              else _newFormat
+                when 'match' then @storage.selectedColor.type
+                when 'hex' then 'hexa'
+                else _newFormat
 
             @setColor undefined, _type
             return
@@ -479,9 +479,9 @@
             if trigger is 'hue' or trigger is 'saturation' then @refreshAlphaCanvas()
 
             _type = switch atom.config.get('color-picker.formatMode')
-              when 'match' then @storage.selectedColor.type
-              when 'hex' then 'hexa'
-              else atom.config.get('color-picker.formatMode')
+                when 'match' then @storage.selectedColor.type
+                when 'hex' then 'hexa'
+                else atom.config.get('color-picker.formatMode')
 
             # Send the preferred color type as well
             @setColor undefined, _type
