@@ -13,6 +13,12 @@
             view: null
             match: null
 
+            config:
+                formatMode:
+                    type: 'string'
+                    default: 'match'
+                    enum: ['match', 'hex', 'hsla', 'rgba']
+
         #  Activate package
         # ---------------------------
             activate: ->

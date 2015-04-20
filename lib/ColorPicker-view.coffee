@@ -14,6 +14,14 @@
             i = 'ColorPicker'
             c = "#{ i }-"
 
+            formatButtonClass =
+                hex: "#{ c }formatSelectorButton btn"
+                rgb: "#{ c }formatSelectorButton btn"
+                hsl: "#{ c }formatSelectorButton btn"
+
+            formatMode = atom.config.get('color-picker.formatMode')
+            formatButtonClass[formatMode] += ' selected'
+
             @div id: i, class: i, =>
                 @div id: "#{ c }loader", class: "#{ c }loader", =>
                     @div class: "#{ c }loaderDot"
@@ -36,6 +44,10 @@
                     @div id: "#{ c }hueSelectorWrapper", class: "#{ c }hueSelectorWrapper", =>
                         @div id: "#{ c }hueSelection", class: "#{ c }hueSelection"
                         @canvas id: "#{ c }hueSelector", class: "#{ c }hueSelector", width: '20px', height: '180px'
+                    @div id: "#{ c }formatSelectorWrapper", class: "#{ c }formatSelectorWrapper inline-block btn-group", =>
+                        @button class: formatButtonClass.hex, outlet: "formatHex", click: "switchFormat", "Hex"
+                        @button class: formatButtonClass.hsl, outlet: "formatHSL", click: "switchFormat", "HSLa"
+                        @button class: formatButtonClass.rgb, outlet: "formatRGB", click: "switchFormat", "RGBa"
 
         initialize: ->
             atom.views.getView atom.workspace
@@ -371,6 +383,40 @@
             return
 
     # -------------------------------------
+    #  Format
+    # -------------------------------------
+        switchFormat: (event, element) ->
+            _oldFormat = atom.config.get('color-picker.formatMode')
+            _newFormat = element[0].innerText.toLowerCase()
+
+            switch _oldFormat
+                when 'hex' then @formatHex.removeClass 'selected'
+                when 'hsla' then @formatHSL.removeClass 'selected'
+                when 'rgba' then @formatRGB.removeClass 'selected'
+
+            # If clicked again, untoggle and match color type
+            if _oldFormat is _newFormat then _newFormat = 'match'
+
+            switch _newFormat
+                when 'hex' then @formatHex.addClass 'selected'
+                when 'hsla' then @formatHSL.addClass 'selected'
+                when 'rgba' then @formatRGB.addClass 'selected'
+
+            # Write new setting
+            atom.config.set('color-picker.formatMode', _newFormat)
+
+            # Set preferred color type
+            _type = switch atom.config.get('color-picker.formatMode')
+                # Match current color type
+                when 'match' then @storage.selectedColor.type
+                # Force to follow setting
+                when 'hex' then 'hexa'
+                else atom.config.get('color-picker.formatMode')
+
+            @setColor undefined, _type
+            return
+
+    # -------------------------------------
     #  Color
     # -------------------------------------
 
@@ -437,8 +483,16 @@
             if trigger is 'hue' then @refreshSaturationCanvas()
             if trigger is 'hue' or trigger is 'saturation' then @refreshAlphaCanvas()
 
+            # Set preferred color type
+            _type = switch atom.config.get('color-picker.formatMode')
+                # Match current color type
+                when 'match' then @storage.selectedColor.type
+                # Force to follow setting
+                when 'hex' then 'hexa'
+                else atom.config.get('color-picker.formatMode')
+
             # Send the preferred color type as well
-            @setColor undefined, @storage.selectedColor.type
+            @setColor undefined, _type
             return
 
         # User selects a new color, reflect the change
