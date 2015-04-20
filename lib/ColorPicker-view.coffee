@@ -15,8 +15,8 @@
             c = "#{ i }-"
 
             formatButtonClass =
-                same: "#{ c }formatSelectorButton btn"
-                hex: "#{ c }formatSelectorButton btn"
+                match: "#{ c }formatSelectorButton btn"
+                hexa: "#{ c }formatSelectorButton btn"
                 rgba: "#{ c }formatSelectorButton btn"
                 hsla: "#{ c }formatSelectorButton btn"
 
@@ -46,10 +46,10 @@
                         @div id: "#{ c }hueSelection", class: "#{ c }hueSelection"
                         @canvas id: "#{ c }hueSelector", class: "#{ c }hueSelector", width: '20px', height: '180px'
                     @div id: "#{ c }formatSelectorWrapper", class: "#{ c }formatSelectorWrapper inline-block btn-group", =>
-                        @button class: formatButtonClass.same, outlet: "formatSame", click: "switchFormat", "Same"
-                        @button class: formatButtonClass.hex, outlet: "formatHex", click: "switchFormat", "Hex"
-                        @button class: formatButtonClass.hsla, outlet: "formatHSLA", click: "switchFormat", "HSLa"
-                        @button class: formatButtonClass.rgba, outlet: "formatRGBA", click: "switchFormat", "RGBa"
+                        @button class: formatButtonClass.match, outlet: "formatMatch", click: "switchFormat", "Match"
+                        @button class: formatButtonClass.hexa, outlet: "formatHex", click: "switchFormat", "Hex"
+                        @button class: formatButtonClass.hsla, outlet: "formatHSL", click: "switchFormat", "HSLa"
+                        @button class: formatButtonClass.rgba, outlet: "formatRGB", click: "switchFormat", "RGBa"
 
         initialize: ->
             atom.views.getView atom.workspace
@@ -392,18 +392,25 @@
             _newFormat = element[0].innerText.toLowerCase()
 
             switch _oldFormat
-                when 'same' then @formatSame.removeClass 'selected'
+                when 'match' then @formatMatch.removeClass 'selected'
                 when 'hex' then @formatHex.removeClass 'selected'
-                when 'hsla' then @formatHSLA.removeClass 'selected'
-                when 'rgba' then @formatRGBA.removeClass 'selected'
+                when 'hsla' then @formatHSL.removeClass 'selected'
+                when 'rgba' then @formatRGB.removeClass 'selected'
 
             switch _newFormat
-                when 'same' then @formatSame.addClass 'selected'
+                when 'match' then @formatMatch.addClass 'selected'
                 when 'hex' then @formatHex.addClass 'selected'
-                when 'hsla' then @formatHSLA.addClass 'selected'
-                when 'rgba' then @formatRGBA.addClass 'selected'
+                when 'hsla' then @formatHSL.addClass 'selected'
+                when 'rgba' then @formatRGB.addClass 'selected'
 
             atom.config.set('color-picker.formatMode', _newFormat)
+
+            _type = switch _newFormat
+              when 'match' then @storage.selectedColor.type
+              when 'hex' then 'hexa'
+              else _newFormat
+
+            @setColor undefined, _type
             return
 
     # -------------------------------------
@@ -473,8 +480,13 @@
             if trigger is 'hue' then @refreshSaturationCanvas()
             if trigger is 'hue' or trigger is 'saturation' then @refreshAlphaCanvas()
 
+            _type = switch atom.config.get('color-picker.formatMode')
+              when 'match' then @storage.selectedColor.type
+              when 'hex' then 'hexa'
+              else atom.config.get('color-picker.formatMode')
+
             # Send the preferred color type as well
-            @setColor undefined, @storage.selectedColor.type
+            @setColor undefined, _type
             return
 
         # User selects a new color, reflect the change

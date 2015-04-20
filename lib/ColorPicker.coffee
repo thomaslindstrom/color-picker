@@ -16,8 +16,8 @@
             config:
                 formatMode:
                     type: 'string'
-                    default: 'same'
-                    enum: ['same', 'hex', 'hsla', 'rgba']
+                    default: 'match'
+                    enum: ['match', 'hex', 'hsla', 'rgba']
 
         #  Activate package
         # ---------------------------
