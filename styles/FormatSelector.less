@@ -8,17 +8,22 @@
         bottom: @controls-margin;
         left: @controls-margin; right: @controls-margin;
 
-        > .btn {
-            width: 25%;
+        > .btn, & > .btn:focus {
+            width: 33%;
             background: @color-ui;
             color: hsl(0, 0%, 50%);
             border-color: hsl(0, 0%, 75%) !important;
+
+            &:first-child {
+              width: 34%;
+            }
 
             &.selected {
                 background: darken(@color-ui, 42%);
                 box-shadow: inset 0 0 2px hsla(0, 0%, 0%, 0.2);
 
-                &:hover, &:focus {
+                &:hover {
+                    color: white;
                     background: darken(@color-ui, 42%);
                 }
             }

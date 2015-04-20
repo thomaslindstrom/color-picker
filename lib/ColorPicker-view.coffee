@@ -15,10 +15,9 @@
             c = "#{ i }-"
 
             formatButtonClass =
-                match: "#{ c }formatSelectorButton btn"
-                hexa: "#{ c }formatSelectorButton btn"
-                rgba: "#{ c }formatSelectorButton btn"
-                hsla: "#{ c }formatSelectorButton btn"
+                hex: "#{ c }formatSelectorButton btn"
+                rgb: "#{ c }formatSelectorButton btn"
+                hsl: "#{ c }formatSelectorButton btn"
 
             formatMode = atom.config.get('color-picker.formatMode')
             formatButtonClass[formatMode] += ' selected'
@@ -46,10 +45,9 @@
                         @div id: "#{ c }hueSelection", class: "#{ c }hueSelection"
                         @canvas id: "#{ c }hueSelector", class: "#{ c }hueSelector", width: '20px', height: '180px'
                     @div id: "#{ c }formatSelectorWrapper", class: "#{ c }formatSelectorWrapper inline-block btn-group", =>
-                        @button class: formatButtonClass.match, outlet: "formatMatch", click: "switchFormat", "Match"
-                        @button class: formatButtonClass.hexa, outlet: "formatHex", click: "switchFormat", "Hex"
-                        @button class: formatButtonClass.hsla, outlet: "formatHSL", click: "switchFormat", "HSLa"
-                        @button class: formatButtonClass.rgba, outlet: "formatRGB", click: "switchFormat", "RGBa"
+                        @button class: formatButtonClass.hex, outlet: "formatHex", click: "switchFormat", "Hex"
+                        @button class: formatButtonClass.hsl, outlet: "formatHSL", click: "switchFormat", "HSLa"
+                        @button class: formatButtonClass.rgb, outlet: "formatRGB", click: "switchFormat", "RGBa"
 
         initialize: ->
             atom.views.getView atom.workspace
@@ -392,13 +390,13 @@
             _newFormat = element[0].innerText.toLowerCase()
 
             switch _oldFormat
-                when 'match' then @formatMatch.removeClass 'selected'
                 when 'hex' then @formatHex.removeClass 'selected'
                 when 'hsla' then @formatHSL.removeClass 'selected'
                 when 'rgba' then @formatRGB.removeClass 'selected'
 
+            if _oldFormat is _newFormat then _newFormat = 'match'
+
             switch _newFormat
-                when 'match' then @formatMatch.addClass 'selected'
                 when 'hex' then @formatHex.addClass 'selected'
                 when 'hsla' then @formatHSL.addClass 'selected'
                 when 'rgba' then @formatRGB.addClass 'selected'
