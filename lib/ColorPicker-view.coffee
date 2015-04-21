@@ -414,6 +414,9 @@
 
             @storage.pickedColor = _displayColor
 
+            # Update the editor with the current color
+            @replaceColor()
+
             # Set the color
             (@find '#ColorPicker-color')
                 .css 'background-color', _color
@@ -531,4 +534,8 @@
                 end:
                     column: _color.index + _newColor.length
                     row: _color.row
+
+            # Update buffer selection stats, since the new
+            # color may have a different length.
+            _color.end = _color.index + _newColor.length
             return
