@@ -6,10 +6,9 @@ It also inspects `Sass` and `LESS` color variables. Just open the `Color Picker`
 
 ## Preview
 
-![Color Picker in action](http://f.cl.ly/items/3g3T401o0o0F2m2O1z1K/output.gif)
+![Color Picker in action](preview.gif)
 
 ## To do
 
-- Update GIF
 - Look into doing custom key maps [pros, cons, ref.](https://atom.io/docs/api/v0.201.0/KeymapManager)
 - Selectable list of the current project color variables
