@@ -1,0 +1,46 @@
+// ---------------------------------------------------------------------------
+//  Color Picker
+// ---------------------------------------------------------------------------
+
+    .ColorPicker {
+        height: 0; // Height is computed
+        position: absolute;
+        visibility: hidden;
+        opacity: 0;
+        pointer-events: none;
+        user-select: none;
+        z-index: 100;
+
+        transition:
+            opacity             .15s,
+            visibility        0 .15s;
+        backface-visibility: hidden;
+        transform-style: preserve-3d;
+
+    // -------------------------------------
+    //  : `is open` modifier
+    // -------------------------------------
+        &.is--open {
+            visibility: visible;
+            opacity: 1;
+            pointer-events: all;
+
+            transition: opacity .037s; }
+
+    // -------------------------------------
+    //  @variables
+    // -------------------------------------
+        @image-transparency: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAAECAYAAACp8Z5+AAAAJElEQVQIW2PcvXv3fwYg6OzsBFEMjBgCLi4uYBXl5eUQFegCAIYVD/syLxKnAAAAAElFTkSuQmCC);
+
+        @color-base: #ebebeb;
+
+    // -------------------------------------
+    //  @imports
+    // -------------------------------------
+        @import "extensions/Arrow.less";
+        @import "extensions/Color.less";
+        @import "extensions/Return.less";
+        @import "extensions/Definition.less";
+        @import "extensions/Body.less";
+        @import "extensions/Format.less";
+    }

@@ -1,0 +1,47 @@
+// ---------------------------------------------------------------------------
+//  Color Picker/extensions: Arrow
+// ---------------------------------------------------------------------------
+
+    @size-arrow: 10px;
+
+    &-arrow {
+        // TODO: should have the transparency background
+        width: @size-arrow * 2; height: @size-arrow;
+        border-top-color: #ff0000;
+        border-bottom-color: #ff0000;
+        position: absolute;
+        top: 0; bottom: 0;
+
+        &:before, &:after {
+            content: '';
+            width: 0; height: 0;
+            border-left: @size-arrow solid transparent;
+            border-right: @size-arrow solid transparent;
+            border-bottom: @size-arrow solid transparent;
+            position: absolute;
+
+            // center the arrow
+            transform: translate(-50%, 0); }
+
+        &:before {
+            border-bottom-color: #fff;
+            opacity: .89; }
+        &:after {
+            border-bottom-color: #ff0000;
+            border-bottom-color: inherit; }
+
+    // -------------------------------------
+    //  : `is flipped` modifier
+    // -------------------------------------
+        .is--flipped & {
+            top: auto; bottom: 0;
+
+            &:before {
+                border-bottom: none;
+                border-top: @size-arrow solid #fff; }
+            &:after {
+                border-bottom: none;
+                border-top: @size-arrow solid #ff0000;
+                border-top-color: inherit; }
+        }
+    }

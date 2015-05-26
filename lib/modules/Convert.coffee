@@ -1,8 +1,10 @@
 # ----------------------------------------------------------------------------
-#  ColorPicker: Convert
+#  Convert
 # ----------------------------------------------------------------------------
 
-    module.exports =
+    module.exports = ->
+        # TODO: I don't like this file. It's ugly and feels weird
+
     # -------------------------------------
     #  HEX to RGB
     # -------------------------------------
@@ -13,8 +15,7 @@
             return [
                 parseInt (hex.substr 0, 2), 16
                 parseInt (hex.substr 2, 2), 16
-                parseInt (hex.substr 4, 2), 16
-            ]
+                parseInt (hex.substr 4, 2), 16]
 
     # -------------------------------------
     #  HEXA to RGB
@@ -70,31 +71,19 @@
             return [
                 Math.floor _h * 360
                 Math.floor _s * 100
-                Math.floor _l * 100
-            ]
+                Math.floor _l * 100]
 
     # -------------------------------------
     #  RGB to HSV
     # -------------------------------------
-        rgbToHsv: (rgb) ->
-            rgb = rgb.match /(\d+)/g if typeof rgb is 'string'
-
-            [r, g, b] = rgb
-
+        rgbToHsv: ([r, g, b]) ->
             computedH = 0
             computedS = 0
             computedV = 0
 
-            # Remove spaces from input RGB values, convert to int
-            r = parseInt(("" + r).replace(/\s/g, ""), 10)
-            g = parseInt(("" + g).replace(/\s/g, ""), 10)
-            b = parseInt(("" + b).replace(/\s/g, ""), 10)
-
             if not r? or not g? or not b? or isNaN(r) or isNaN(g) or isNaN(b)
-                alert "Please enter numeric RGB values!"
                 return
             if r < 0 or g < 0 or b < 0 or r > 255 or g > 255 or b > 255
-                alert "RGB values must be in the range 0 to 255."
                 return
 
             r = r / 255
@@ -107,11 +96,11 @@
             # Black-gray-white
             if minRGB is maxRGB
                 computedV = minRGB
+
                 return [
                     0
                     0
-                    computedV
-                ]
+                    computedV]
 
             # Colors other than black-gray-white:
             d = (if (r is minRGB) then g - b else ((if (b is minRGB) then r - g else b - r)))
@@ -124,27 +113,83 @@
             return [
                 computedH
                 computedS
-                computedV
-            ]
+                computedV]
 
     # -------------------------------------
     #  HSV to HSL
     # -------------------------------------
-        hsvToHsl: ([h, s, v]) ->
+        hsvToHsl: ([h, s, v]) -> [
+            h
+            s * v / (if (h = (2 - s) * v) < 1 then h else 2 - h)
+            h / 2]
+
+    # -------------------------------------
+    #  HSV to RGB
+    # -------------------------------------
+        hsvToRgb: ([h, s, v]) ->
+            h /= 60 # 0 to 5
+            s /= 100
+            v /= 100
+
+            # Achromatic grayscale
+            if s is 0 then return [
+                Math.round v * 255
+                Math.round v * 255
+                Math.round v * 255]
+
+            _i = Math.floor h
+            _f = h - _i
+            _p = v * (1 - s)
+            _q = v * (1 - s * _f)
+            _t = v * (1 - s * (1 - _f))
+
+            _result = switch _i
+                when 0 then [v, _t, _p]
+                when 1 then [_q, v, _p]
+                when 2 then [_p, v, _t]
+                when 3 then [_p, _q, v]
+                when 4 then [_t, _p, v]
+                when 5 then [v, _p, _q]
+                else [v, _t, _p]
+
             return [
-                h
-                s * v / (if (h = (2 - s) * v) < 1 then h else 2 - h)
-                h / 2
-            ]
+                Math.round _result[0] * 255
+                Math.round _result[1] * 255
+                Math.round _result[2] * 255]
 
     # -------------------------------------
     #  HSL to HSV
     # -------------------------------------
         hslToHsv: ([h, s, l]) ->
+            s /= 100
+            l /= 100
+
             s *= if l < .5 then l else 1 - l
 
             return [
                 h
-                2 * s / (l + s)
-                l + s
-            ]
+                (2 * s / (l + s)) or 0
+                l + s]
+
+    # -------------------------------------
+    #  HSL to RGB
+    # -------------------------------------
+        hslToRgb: (input) ->
+            [h, s, v] = @hslToHsv input
+            return @hsvToRgb [h, (s * 100), (v * 100)]
+
+    # -------------------------------------
+    #  VEC to RGB
+    # -------------------------------------
+        vecToRgb: (input) -> return [
+            (input[0] * 255) << 0
+            (input[1] * 255) << 0
+            (input[2] * 255) << 0]
+
+    # -------------------------------------
+    #  RGB to VEC
+    # -------------------------------------
+        rgbToVec: (input) -> return [
+            (input[0] / 255).toFixed 2
+            (input[1] / 255).toFixed 2
+            (input[2] / 255).toFixed 2]

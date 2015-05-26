@@ -1,8 +1,8 @@
 # A Color Picker for Atom
 
-A color picker for Atom. Either right click a color and select `Color picker`, or hit `CMD-SHIFT-C`/`CTRL-ALT-C` anywhere. Currently reads HEX, HEXA, RGB, RGBA, HSL and HSLA. You can also open the color picker whenever, without input.
+Right click and select `Color Picker`, or hit `CMD-SHIFT-C`/`CTRL-ALT-C` to open it. Currently reads `HEX`, `HEXa`, `RGB`, `RGBa`, `HSL`, `HSLa`, `HSV`, `HSVa`, `VEC3` and `VEC4` colors – and is able to convert between the formats.
 
-Inspects Sass/LESS variables! [Take a look here.](http://t.hom.as/colorpicker4.mov)
+It also inspects `Sass` and `LESS` color variables. Just open the `Color Picker` with the cursor at a variable and it'll look up the definition for you. From there, you can click the definition and go directly to where it's defined.
 
 ## Preview
 
@@ -11,9 +11,3 @@ Inspects Sass/LESS variables! [Take a look here.](http://t.hom.as/colorpicker4.m
 ## To do
 
 - Selectable list of the current project color variables
-- Abbreviated color values [(#43)](https://github.com/thomaslindstrom/color-picker/issues/43)
-- Uppercase HEX result [(#34)](https://github.com/thomaslindstrom/color-picker/issues/34)
-- Improve activation performance [(#42)](https://github.com/thomaslindstrom/color-picker/issues/42)
-- Stylus variable lookup [(#4)](https://github.com/thomaslindstrom/color-picker/issues/4)
-- Context menu conversions [(#3)](https://github.com/thomaslindstrom/color-picker/issues/3)
-- Preview color manipulation functions (lighten, darken) [(#21)](https://github.com/thomaslindstrom/color-picker/issues/21)

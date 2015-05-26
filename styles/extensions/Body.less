@@ -1,0 +1,46 @@
+// ---------------------------------------------------------------------------
+//  Color Picker/extensions: Body
+// ---------------------------------------------------------------------------
+
+    &-body {
+        @padding-body: 7px;
+
+        background: @color-base;
+        padding: @padding-body;
+        border-radius: 0 0 1px 1px;
+        box-shadow:
+            0 -1px 5px rgba(0, 0, 0, .14),
+            0 -1px 0 rgba(0, 0, 0, .09);
+        position: relative;
+        top: @size-arrow + @size-color;
+        z-index: 30;
+        display: flex;
+
+        transform: translateZ(2px); // push layer forward
+
+        & > div { margin-left: @padding-body - 1; }
+        & > div:first-child { margin-left: 0; }
+
+    // -------------------------------------
+    //  : `is flipped` modifier
+    // -------------------------------------
+        .is--flipped & {
+            border-radius: 1px 1px 0 0;
+            box-shadow:
+                0 1px 5px rgba(0, 0, 0, .14),
+                0 1px 0 rgba(0, 0, 0, .09);
+            top: auto; }
+
+    // -------------------------------------
+    //  : `view definition` modifier
+    // -------------------------------------
+        .view--definition & {
+            display: none; }
+
+    // -------------------------------------
+    //  @imports
+    // -------------------------------------
+        @import "./Hue.less";
+        @import "./Alpha.less";
+        @import "./Saturation.less";
+    }

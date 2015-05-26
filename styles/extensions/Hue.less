@@ -1,0 +1,50 @@
+// ---------------------------------------------------------------------------
+//  Color Picker/extensions: Hue
+// ---------------------------------------------------------------------------
+
+    &-hue {
+        @radius-border: 2px;
+
+        width: 20px; height: @size-saturation;
+        cursor: -webkit-grab;
+        cursor:         grab;
+        border: 1px solid #f2f2f2;
+        border-radius: @radius-border;
+        box-shadow: 0 0 1px rgba(0, 0, 0, .07);
+        position: relative;
+
+        &:active {
+            cursor: -webkit-grabbing;
+            cursor:         grabbing; }
+
+        &:after {
+            content: '';
+            border-radius: @radius-border - 1;
+            box-shadow:
+                inset 0 0 0 1px rgba(0, 0, 0, .07),
+                inset 0 0 18px rgba(0, 0, 0, .2);
+            position: absolute;
+            top: 0; right: 0; bottom: 0; left: 0; }
+
+    // -------------------------------------
+    //  canvas
+    // -------------------------------------
+        &-canvas {
+            width: 100%; height: 100%;
+            border-radius: @radius-border - 1; }
+
+    // -------------------------------------
+    //  controls
+    // -------------------------------------
+        &-control {
+            height: 5px;
+            margin-top: -2px;
+            border: 2px solid #fff;
+            border-radius: 1px;
+            box-shadow:
+                0 0 1px rgba(0, 0, 0, .3),
+                0 1px 1px rgba(0, 0, 0, .2);
+            position: absolute;
+            top: 50%; right: 1px; left: 1px;
+            z-index: 1; }
+    }
