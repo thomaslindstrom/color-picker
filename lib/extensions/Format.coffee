@@ -50,7 +50,7 @@
 
                 # On Color element output format, activate applicable button
                 Color.onOutputFormat (format) -> for _button in _buttons
-                    if format is _button.format
+                    if format is _button.format or format is "#{ _button.format }A"
                         _button.activate()
                     else _button.deactivate()
 
