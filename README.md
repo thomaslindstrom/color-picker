@@ -10,4 +10,6 @@ It also inspects `Sass` and `LESS` color variables. Just open the `Color Picker`
 
 ## To do
 
+- Update GIF
+- Look into doing custom key maps [pros, cons, ref.](https://atom.io/docs/api/v0.201.0/KeymapManager)
 - Selectable list of the current project color variables
