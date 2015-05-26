@@ -50,6 +50,9 @@
 
                 # On Color element output format, activate applicable button
                 Color.onOutputFormat (format) -> for _button in _buttons
+                    # TODO this is inefficient. There should be a way to easily
+                    # check if `format` is in `_button.format`, including the
+                    # alpha channel
                     if format is _button.format or format is "#{ _button.format }A"
                         _button.activate()
                     else _button.deactivate()
