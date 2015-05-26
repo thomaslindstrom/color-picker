@@ -129,7 +129,7 @@
                     # show the inital value not to confuse the user, but only
                     # if the input color format is still the same
                     _outputColor = do ->
-                        if _inputColor.type is _format or _inputColor.type is "#{ _format }A"
+                        if _inputColor and (_inputColor.type is _format or _inputColor.type is "#{ _format }A")
                             if smartColor.equals _inputColor
                                 return _inputColor.value
                         return _function.call smartColor
