@@ -8,6 +8,7 @@ https://github.com/thomaslindstrom/color-picker
 - Improved speed, performance and precision
 - Improved design: Now properly handles awkward positions
 - Add setting for preferred color format
+- Add setting for deciding what trigger key should open the Color Picker
 - Add setting for whether or not to serve a random color on open
 - Add setting for, if possible, abbreviating color values
 - Add setting for uppercasing color values

@@ -4,11 +4,44 @@
 
     module.exports =
         activate: ->
-            atom.commands.add 'atom-text-editor',
-                'color-picker:open': => @view?.open()
+            _command = 'color-picker:open'
+
+        #  Set key bindings
+        # ---------------------------
+            _triggerKey = (atom.config.get 'color-picker.triggerKey').toLowerCase()
+            _TriggerKey = _triggerKey.toUpperCase()
+
+            # TODO this doesn't look too good
+            _macSelector = '.platform-darwin atom-workspace'
+            _windowsSelector = '.platform-win32 atom-workspace'
+            _linuxSelector = '.platform-linux atom-workspace'
+
+            _keymap = {}
+
+            # Mac OS X
+            _keymap["#{ _macSelector }"] = {}
+            _keymap["#{ _macSelector }"]["cmd-#{ _TriggerKey }"] = _command
+            # Windows
+            _keymap["#{ _windowsSelector }"] = {}
+            _keymap["#{ _windowsSelector }"]["ctrl-alt-#{ _triggerKey }"] = _command
+            # Linux
+            _keymap["#{ _linuxSelector }"] = {}
+            _keymap["#{ _linuxSelector }"]["ctrl-alt-#{ _triggerKey }"] = _command
+
+            # Add the keymap
+            atom.keymap.add 'color-picker:trigger', _keymap
+
+        #  Add context menu command
+        # ---------------------------
             atom.contextMenu.add 'atom-text-editor': [
                 label: 'Color Picker'
-                command: 'color-picker:open']
+                command: _command]
+
+        #  Add color-picker:open command
+        # ---------------------------
+            _commands = {}; _commands["#{ _command }"] = => @view?.open()
+            atom.commands.add 'atom-text-editor', _commands
+
             return @view.activate()
 
         deactivate: -> @view?.destroy()
@@ -47,5 +80,13 @@
                 type: 'string'
                 enum: ['RGB', 'HEX', 'HSL', 'HSV', 'VEC']
                 default: 'RGB'
+            # Trigger key: Set what trigger key opens the color picker
+            # TODO more options?
+            triggerKey:
+                title: 'Trigger key'
+                description: 'Decide what trigger key should open the Color Picker. `CMD-SHIFT-{TRIGGER_KEY}` and `CTRL-ALT-{TRIGGER_KEY}`. Requires a restart.'
+                type: 'string'
+                enum: ['C', 'E', 'H', 'K']
+                default: 'C'
 
         view: (require './ColorPicker-view')()
