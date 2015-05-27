@@ -138,13 +138,8 @@
                     selection:
                         y: 0
                         color: null
-<<<<<<< HEAD
-                    setSelection: (e, y=null) ->
-                        return unless Hue.canvas and _rect = Hue.element.getRect()
-=======
                     setSelection: (e, y=null, offset=null) ->
                         return unless _rect = Hue.element.getRect()
->>>>>>> pr/95
 
                         if e then _y = e.pageY - _rect.top
                         # Set the y directly
