@@ -115,9 +115,17 @@
                 return @close()
 
             # Close it on scroll also
-            bindScroll = (editor) => editor.onDidChangeScrollTop => @close()
-            bindScroll _editor for _editor in atom.workspace.getTextEditors()
-            _workspace.onDidAddTextEditor ({textEditor}) => bindScroll textEditor
+            atom.workspace.observeTextEditors (editor) =>
+                _subscriptionTop = editor.onDidChangeScrollTop => @close()
+                _subscriptionLeft = editor.onDidChangeScrollLeft => @close()
+
+                editor.onDidDestroy ->
+                    _subscriptionTop.dispose()
+                    _subscriptionLeft.dispose()
+                @onBeforeDestroy ->
+                    _subscriptionTop.dispose()
+                    _subscriptionLeft.dispose()
+                return
 
             # Close it when the window resizes
             @listeners.push ['resize', onResize = =>
@@ -141,6 +149,8 @@
     #  Destroy the view and unbind events
     # -------------------------------------
         destroy: ->
+            @emitBeforeDestroy()
+
             for [_event, _listener] in @listeners
                 window.removeEventListener _event, _listener
             @element.remove()
@@ -210,6 +220,12 @@
             @Emitter.emit 'close'
         onClose: (callback) ->
             @Emitter.on 'close', callback
+
+        # Before destroying
+        emitBeforeDestroy: ->
+            @Emitter.emit 'beforeDestroy'
+        onBeforeDestroy: (callback) ->
+            @Emitter.on 'beforeDestroy', callback
 
         # Input Color
         emitInputColor: (smartColor, wasFound=true) ->
