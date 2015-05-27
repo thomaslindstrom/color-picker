@@ -6,7 +6,7 @@ It also inspects `Sass` and `LESS` color variables. Just open the `Color Picker`
 
 ## Preview
 
-![Color Picker in action](preview.gif)
+![Color Picker in action](https://github.com/thomaslindstrom/color-picker/raw/master/preview.gif)
 
 ## Settings
 
