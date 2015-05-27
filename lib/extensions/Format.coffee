@@ -87,6 +87,12 @@
                             _button.activate()
 
                     # Change color format on click
+                    hasChild = (element, child) ->
+                        if child and _parent = child.parentNode
+                            if child is element
+                                return true
+                            else return hasChild element, _parent
+                        return false
                     _isClicking = no
 
                     colorPicker.onMouseDown (e, isOnPicker) =>
@@ -108,34 +114,4 @@
 
                     # Add button to the parent Format element
                     @element.add _button.el
-
-                # Change format button when scrolling over the list of buttons
-                colorPicker.onMouseWheel (e, isOnPicker) =>
-                    return unless isOnPicker and hasChild @element.el, e.target
-                    e.preventDefault()
-                        
-                    direction = if e.deltaY > 0 then 1 else -1;
-                    newButtonIndex = _buttons.indexOf(_activeButton) + direction;
-                    if newButtonIndex >= _buttons.length
-                        newButtonIndex = 0
-                    else if newButtonIndex < 0
-                        newButtonIndex = _buttons.length - 1
-
-                    newButton = _buttons[newButtonIndex]
-                    
-                    if newButton
-                        _activeButton.deactivate() if _activeButton
-                        newButton.activate()
-                        _activeButton = newButton
-
-                        @emitFormatChanged newButton.format
-                return
             return this
-
-    # Utility function to determine whether the elmenet has a the specified child.
-    hasChild = (element, child) ->
-        if child and _parent = child.parentNode
-            if child is element
-                return true
-            else return hasChild element, _parent
-        return false
