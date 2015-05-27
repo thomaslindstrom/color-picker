@@ -1,0 +1,106 @@
+// ---------------------------------------------------------------------------
+//  Color Picker/extensions: Color
+// ---------------------------------------------------------------------------
+
+    @size-color: 90px;
+
+    &-color {
+        background: red;
+        width: 100%; height: @size-color;
+        cursor: pointer;
+        margin-top: @size-arrow;
+        border-radius: 2px 2px 0 0;
+        position: absolute;
+        top: 0; bottom: auto;
+
+        &:before, &:after {
+            content: '';
+            border-radius: 2px 2px 0 0;
+            position: absolute;
+            top: 0; right: 0; bottom: 0; left: 0;
+            z-index: -1; }
+
+        &:before {
+            background: #fff;
+            opacity: .92; }
+        &:after {
+            background: @image-transparency;
+            background-size: 9px 9px;
+            image-rendering: pixelated;
+            opacity: .1; }
+
+    // -------------------------------------
+    //  : `is flipped` modifier
+    // -------------------------------------
+        .is--flipped & {
+            margin-top: 0;
+            margin-bottom: @size-arrow;
+            border-radius: 0 0 2px 2px;
+            top: auto; bottom: 0;
+
+            &:before, &:after {
+                border-radius: 0 0 2px 2px; }
+        }
+
+    // -------------------------------------
+    //  : `view definition` modifier
+    // -------------------------------------
+        .view--definition & {
+            display: none; }
+
+    // -------------------------------------
+    //  text
+    //  TODO text is overflowing onto multiple lines
+    // -------------------------------------
+        &-text {
+            font-family: 'Source Code Pro', monospace, serif;
+            font-weight: 600;
+            font-size: 16px;
+            -webkit-font-smoothing: antialiased;
+            color: #fff;
+            margin: 0;
+            text-align: center;
+            text-shadow:
+                0 1px 55px rgba(0, 0, 0, 1),
+                0 0 18px rgba(0, 0, 0, 0.36),
+                7px 0 30px rgba(0, 0, 0, 0.25),
+                -7px 0 30px rgba(0, 0, 0, 0.21),
+                0 1px 1px rgba(0, 0, 0, 0.15),
+                0 1px 0 rgba(0, 0, 0, 0.03),
+                0 -1px 1px rgba(0, 0, 0, 0.04),
+                26px 1px 31px rgba(0, 0, 0, 0.43),
+                -26px 1px 31px rgba(0, 0, 0, 0.47),
+                0 1px 0 rgba(0, 0, 0, 0.04),
+                0 -1px 0 rgba(0, 0, 0, 0.04),
+                0 2px 1px rgba(0, 0, 0, 0.06);
+            position: absolute;
+            top: 50%; right: 0; left: 0;
+
+            transition: transform .2s;
+            transform: translate(0, -50%);
+
+            backface-visibility: hidden;
+            transform-style: preserve-3d; }
+        &:hover &-text {
+            transition: transform .067s;
+            transform: translate(0, -60%); }
+
+    // -------------------------------------
+    //  : `is flipped` modifier
+    // -------------------------------------
+        .is--flipped &:hover &-text {
+            transform: translate(0, -40%); }
+
+    // -------------------------------------
+    //  : `is return visible` modifier
+    // -------------------------------------
+        &.is--returnVisible &-text {
+            transform: translate(0, -95%); }
+        &.is--returnVisible:hover &-text {
+            transform: translate(0, -105%); }
+
+        .is--flipped &.is--returnVisible &-text {
+            transform: translate(0, -5%); }
+        .is--flipped &.is--returnVisible:hover &-text {
+            transform: translate(0, 5%); }
+    }

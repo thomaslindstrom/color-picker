@@ -1,19 +1,24 @@
 # A Color Picker for Atom
 
-A color picker for Atom. Either right click a color and select `Color picker`, or hit `CMD-SHIFT-C`/`CTRL-ALT-C` anywhere. Currently reads HEX, HEXA, RGB, RGBA, HSL and HSLA. You can also open the color picker whenever, without input.
+Right click and select `Color Picker`, or hit `CMD-SHIFT-C`/`CTRL-ALT-C` to open it. Currently reads `HEX`, `HEXa`, `RGB`, `RGBa`, `HSL`, `HSLa`, `HSV`, `HSVa`, `VEC3` and `VEC4` colors – and is able to convert between the formats.
 
-Inspects Sass/LESS variables! [Take a look here.](http://t.hom.as/colorpicker4.mov)
+It also inspects `Sass` and `LESS` color variables. Just open the `Color Picker` with the cursor at a variable and it'll look up the definition for you. From there, you can click the definition and go directly to where it's defined.
 
 ## Preview
 
-![Color Picker in action](http://f.cl.ly/items/3g3T401o0o0F2m2O1z1K/output.gif)
+![Color Picker in action](preview.gif)
+
+## Settings
+
+Open `Atom Settings`, go to `Packages` in the left hand sidebar, and press `Settings` on `color-picker` to open the list of settings available for the Color Picker.
+
+- **Abbreviate Color Values:** If possible, abbreviate color values, like for example “0.3” to “.3” and “#ffffff” to “#fff”.
+- **Automatically Replace Color:** Replace selected color automatically on change. Works well with as-you-type CSS reloaders.
+- **Preferred Color Format:** On open, the Color Picker will show a color in this format.
+- **Serve a random color on open:** If the Color Picker doesn't get an input color, it serves a completely random color.
+- **Trigger key:** Decide what trigger key should open the Color Picker. `CMD-SHIFT-{TRIGGER_KEY}` and `CTRL-ALT-{TRIGGER_KEY}`. Requires a restart.
+- **Uppercase Color Values:** If sensible, uppercase the color value. For example, “#aaa” becomes “#AAA”.
 
 ## To do
 
 - Selectable list of the current project color variables
-- Abbreviated color values [(#43)](https://github.com/thomaslindstrom/color-picker/issues/43)
-- Uppercase HEX result [(#34)](https://github.com/thomaslindstrom/color-picker/issues/34)
-- Improve activation performance [(#42)](https://github.com/thomaslindstrom/color-picker/issues/42)
-- Stylus variable lookup [(#4)](https://github.com/thomaslindstrom/color-picker/issues/4)
-- Context menu conversions [(#3)](https://github.com/thomaslindstrom/color-picker/issues/3)
-- Preview color manipulation functions (lighten, darken) [(#21)](https://github.com/thomaslindstrom/color-picker/issues/21)

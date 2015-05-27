@@ -1,168 +1,92 @@
 # ----------------------------------------------------------------------------
-#  ColorPicker
+#  Color Picker
 # ----------------------------------------------------------------------------
 
-        Convert = require './ColorPicker-convert'
-        VariableInspector = require './variable-inspector'
-        _regexes = require './ColorPicker-regexes'
+    module.exports =
+        activate: ->
+            _command = 'color-picker:open'
 
-    # -------------------------------------
-    #  Public functionality
-    # -------------------------------------
-        module.exports =
-            view: null
-            match: null
-
-        #  Activate package
+        #  Set key bindings
         # ---------------------------
-            activate: ->
-                atom.commands.add 'atom-text-editor',
-                    'color-picker:open': => @open true
+            _triggerKey = (atom.config.get 'color-picker.triggerKey').toLowerCase()
+            _TriggerKey = _triggerKey.toUpperCase()
 
-                atom.contextMenu.add 'atom-text-editor': [{
-                    label: 'Color picker'
-                    command: 'color-picker:open'
+            # TODO this doesn't look too good
+            _macSelector = '.platform-darwin atom-workspace'
+            _windowsSelector = '.platform-win32 atom-workspace'
+            _linuxSelector = '.platform-linux atom-workspace'
 
-                    shouldDisplay: => return true if @match = @getMatchAtCursor()
-                }]
+            _keymap = {}
 
-                return @view = new (require './ColorPicker-view')
+            # Mac OS X
+            _keymap["#{ _macSelector }"] = {}
+            _keymap["#{ _macSelector }"]["cmd-#{ _TriggerKey }"] = _command
+            # Windows
+            _keymap["#{ _windowsSelector }"] = {}
+            _keymap["#{ _windowsSelector }"]["ctrl-alt-#{ _triggerKey }"] = _command
+            # Linux
+            _keymap["#{ _linuxSelector }"] = {}
+            _keymap["#{ _linuxSelector }"]["ctrl-alt-#{ _triggerKey }"] = _command
 
-            deactivate: -> @view.destroy()
+            # Add the keymap
+            atom.keymap.add 'color-picker:trigger', _keymap
 
-        #  Get a match at the current cursor position
+        #  Add context menu command
         # ---------------------------
-            getMatchAtCursor: ->
-                return unless _editor = atom.workspace.getActiveTextEditor()
+            atom.contextMenu.add 'atom-text-editor': [
+                label: 'Color Picker'
+                command: _command]
 
-                _line = _editor.getLastCursor().getCurrentBufferLine()
-                _cursorBuffer = _editor.getCursorBufferPosition()
-                _cursorRow = _cursorBuffer.row
-                _cursorColumn = _cursorBuffer.column
-
-                return @matchAtPosition _cursorColumn, (@matchesOnLine _line, _cursorRow)
-
-        #  Match the current line against the regexes
-        #  - line {String}
-        #  - cursorRow {Number}
+        #  Add color-picker:open command
         # ---------------------------
-            matchesOnLine: (line, cursorRow) ->
-                return unless line and typeof cursorRow is 'number'
+            _commands = {}; _commands["#{ _command }"] = => @view?.open()
+            atom.commands.add 'atom-text-editor', _commands
 
-                _filteredMatches = []; for { type, regex } in _regexes
-                    continue unless _matches = line.match regex
+            return @view.activate()
 
-                    for match in _matches
-                        # Skip if the match has “been used” already
-                        continue if (_index = line.indexOf match) is -1
+        deactivate: -> @view?.destroy()
 
-                        _filteredMatches.push
-                            match: match
-                            regexMatch: match.match RegExp regex.source, 'i'
-                            type: type
-                            index: _index
-                            end: _index + match.length
-                            row: cursorRow
+        config:
+            # Random color configuration: On Color Picker open, show a random color
+            randomColor:
+                title: 'Serve a random color on open'
+                description: 'If the Color Picker doesn\'t get an input color, it serves a completely random color.'
+                type: 'boolean'
+                default: true
+            # TODO Automatic Replace configuration: Replace color value on change
+            automaticReplace:
+                title: 'Automatically Replace Color'
+                description: 'Replace selected color automatically on change. Works well with as-you-type CSS reloaders.'
+                type: 'boolean'
+                default: false
+            # Abbreviate values configuration: If possible, abbreviate color values. Eg. “0.3” to “.3”
+            # TODO: Can we abbreviate something else?
+            abbreviateValues:
+                title: 'Abbreviate Color Values'
+                description: 'If possible, abbreviate color values, like for example “0.3” to “.3” and “#ffffff” to “#fff”.'
+                type: 'boolean'
+                default: false
+            # Uppercase color value configuration: Uppercase for example HEX color values
+            # TODO: Does it make sense to uppercase anything other than HEX colors?
+            uppercaseColorValues:
+                title: 'Uppercase Color Values'
+                description: 'If sensible, uppercase the color value. For example, “#aaa” becomes “#AAA”.'
+                type: 'boolean'
+                default: false
+            # Preferred color format configuration: Set what color format the color picker should display initially
+            preferredFormat:
+                title: 'Preferred Color Format'
+                description: 'On open, the Color Picker will show a color in this format.'
+                type: 'string'
+                enum: ['RGB', 'HEX', 'HSL', 'HSV', 'VEC']
+                default: 'RGB'
+            # Trigger key: Set what trigger key opens the color picker
+            # TODO more options?
+            triggerKey:
+                title: 'Trigger key'
+                description: 'Decide what trigger key should open the Color Picker. `CMD-SHIFT-{TRIGGER_KEY}` and `CTRL-ALT-{TRIGGER_KEY}`. Requires a restart.'
+                type: 'string'
+                enum: ['C', 'E', 'H', 'K']
+                default: 'C'
 
-                        # Make sure the indices are correct by removing
-                        # the instances from the string after use
-                        line = line.replace match, (Array match.length + 1).join ' '
-                return unless _filteredMatches.length > 0
-
-                return _filteredMatches
-
-        #  Get a single match on a position based on a match array
-        #  as seen in matchesOnLine
-        #  - column {Number}
-        #  - matches {Array}
-        # ---------------------------
-            matchAtPosition: (column, matches) ->
-                return unless column and matches
-
-                _match = do -> for match in matches
-                    if match.index <= column and match.end >= column
-                        return match
-                return _match
-
-            open: (getMatch = false) ->
-                return unless _editor = atom.workspace.getActiveTextEditor()
-                @match = @getMatchAtCursor() if getMatch
-
-                if not @match
-                    randomRGBFragment = -> (Math.random() * 255) << 0
-
-                    _line = '#' + Convert.rgbToHex [randomRGBFragment(), randomRGBFragment(), randomRGBFragment()]
-                    _cursorBuffer = _editor.getCursorBufferPosition()
-                    _cursorRow = _cursorBuffer.row
-                    _cursorColumn = _cursorBuffer.column
-
-                    _match = (@matchesOnLine _line, _cursorRow)[0]
-                    _match.index = _cursorColumn
-                    _match.end = _cursorColumn
-
-                    @match = _match
-                return unless @match
-
-                @view.reset()
-                @setMatchColor()
-                @view.open()
-
-        #  Set the color of a match to its object, and then send it
-        #  to the color picker view
-        #  - match {Object}
-        #  - callback {Function}
-        # ---------------------------
-            setMatchColor: ->
-                return unless @match
-
-                @view.storage.selectedColor = null
-
-                if @match.hasOwnProperty 'color'
-                    @view.storage.selectedColor = @match
-                    @view.inputColor @match
-                    return
-
-                _callback = => @setMatchColor()
-
-                switch @match.type
-                    when 'variable:sass' then @setVariableDefinitionColor @match, _callback
-                    when 'variable:less' then @setVariableDefinitionColor @match, _callback
-                    else do => @match.color = @match.match; _callback @match
-                return
-
-        #  Set the variable definition by sending it through a
-        #  provided callback when found
-        #  - match {Object}
-        #  - callback {Function}
-        # ---------------------------
-            setVariableDefinitionColor: (match, callback) ->
-                return unless match and callback
-
-                _matchRegex = regex for { type, regex } in _regexes when type is match.type
-                _variableName = (match.match.match RegExp _matchRegex.source, 'i')[2] # hahaha
-
-                (@findVariableDefinition _variableName, match.type).then ({ color, pointer }) ->
-                    match.color = color.match
-                    match.type = color.type
-                    match.pointer = pointer
-
-                    callback match
-                return
-
-        #  Find variable definition by searching recursively until a
-        #  non-variable (a color) is found
-        #  - name {String}
-        #  - type {String}
-        # ---------------------------
-            findVariableDefinition: (name, type, pointer) ->
-                return (VariableInspector.findDefinition name, type).then (definition) =>
-                    pointer ?= definition.pointer # remember the initial pointer
-                    _matches = @matchesOnLine definition.definition, 1
-
-                    return @view.error() unless _matches and _color = _matches[0]
-
-                    # Continue digging for the truth and real definition
-                    if (_color.type.split ':')[0] is 'variable'
-                        return @findVariableDefinition _color.regexMatch[2], _color.type, pointer
-
-                    return { color: _color, pointer: pointer }
+        view: (require './ColorPicker-view')()
