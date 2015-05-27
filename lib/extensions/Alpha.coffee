@@ -143,9 +143,10 @@
                         # Set the alpha directly
                         else if (typeof alpha is 'number')
                             _y = _rect.height - (alpha * _rect.height) # reversed, 1 is top
-                        # Default to previous values
+                        # Handle scroll
                         else if (typeof offset is 'number')
-                            _y = @selection.y+offset
+                            _y = @selection.y + offset
+                        # Default to previous values
                         else _y = @selection.y
 
                         _y = @selection.y = Math.max 0, (Math.min _rect.height, _y)
@@ -182,7 +183,6 @@
                 colorPicker.onClose => @control.isGrabbing = no
 
                 # Bind controller events
-                # TODO: Add scroll handling?
                 Saturation.onColorChanged (smartColor) =>
                     @control.selection.color = smartColor
                     @control.refreshSelection()
@@ -201,13 +201,11 @@
                     return unless @control.isGrabbing
                     @control.isGrabbing = no
                     @control.setSelection e
-                    
+
                 colorPicker.onMouseWheel (e, isOnPicker) =>
                     return unless isOnPicker and hasChild Alpha.element.el, e.target
                     e.preventDefault()
-                    
-                    direction = if e.deltaY > 0 then 1 else -1;
-                    @control.setSelection null, null, direction
+                    @control.setSelection null, null, (e.wheelDeltaY * .33) # make it a bit softer
 
                 # Add to Alpha element
                 @element.add @control.el
