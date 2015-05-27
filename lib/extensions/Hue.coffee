@@ -138,12 +138,21 @@
                     selection:
                         y: 0
                         color: null
+<<<<<<< HEAD
                     setSelection: (e, y=null) ->
                         return unless Hue.canvas and _rect = Hue.element.getRect()
+=======
+                    setSelection: (e, y=null, offset=null) ->
+                        return unless _rect = Hue.element.getRect()
+>>>>>>> pr/95
 
                         if e then _y = e.pageY - _rect.top
                         # Set the y directly
-                        else if (typeof y is 'number') then _y = y
+                        else if (typeof y is 'number')
+                            _y = y
+                        # Handle scroll
+                        else if (typeof offset is 'number')
+                            _y = @selection.y + offset
                         # Default to top
                         else _y = @selection.y
 
@@ -173,7 +182,6 @@
                 colorPicker.onClose => @control.isGrabbing = no
 
                 # Bind controller events
-                # TODO: Add scroll handling?
                 colorPicker.onMouseDown (e, isOnPicker) =>
                     return unless isOnPicker and hasChild Hue.element.el, e.target
                     e.preventDefault()
@@ -188,6 +196,11 @@
                     return unless @control.isGrabbing
                     @control.isGrabbing = no
                     @control.setSelection e
+
+                colorPicker.onMouseWheel (e, isOnPicker) =>
+                    return unless isOnPicker and hasChild Hue.element.el, e.target
+                    e.preventDefault()
+                    @control.setSelection null, null, (e.wheelDeltaY * .33) # make it a bit softer
 
                 # Add to Hue element
                 @element.add @control.el

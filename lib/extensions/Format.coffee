@@ -55,6 +55,7 @@
                     # alpha channel
                     if format is _button.format or format is "#{ _button.format }A"
                         _button.activate()
+                        _activeButton = _button
                     else _button.deactivate()
 
                 # Create formatting buttons
@@ -92,7 +93,6 @@
                                 return true
                             else return hasChild element, _parent
                         return false
-
                     _isClicking = no
 
                     colorPicker.onMouseDown (e, isOnPicker) =>
@@ -114,5 +114,4 @@
 
                     # Add button to the parent Format element
                     @element.add _button.el
-                return
             return this
