@@ -29,7 +29,7 @@
             _keymap["#{ _linuxSelector }"]["ctrl-alt-#{ _triggerKey }"] = _command
 
             # Add the keymap
-            atom.keymap.add 'color-picker:trigger', _keymap
+            atom.keymaps.add 'color-picker:trigger', _keymap
 
         #  Add context menu command
         # ---------------------------
