@@ -154,7 +154,7 @@
                         y: 0
                         color: null
                     setSelection: (e, saturation=null, key=null) ->
-                        return unless _rect = Saturation.element.getRect()
+                        return unless Saturation.canvas and _rect = Saturation.element.getRect()
 
                         if e
                             _x = e.pageX - _rect.left
