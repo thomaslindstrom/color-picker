@@ -136,7 +136,7 @@
                         y: 0
                         color: null
                         alpha: null
-                    setSelection: (e, alpha=null) ->
+                    setSelection: (e, alpha=null, offset=null) ->
                         _rect = Alpha.element.getRect()
 
                         if e then _y = e.pageY - _rect.top
@@ -144,6 +144,8 @@
                         else if (typeof alpha is 'number')
                             _y = _rect.height - (alpha * _rect.height) # reversed, 1 is top
                         # Default to previous values
+                        else if (typeof offset is 'number')
+                            _y = @selection.y+offset
                         else _y = @selection.y
 
                         _y = @selection.y = Math.max 0, (Math.min _rect.height, _y)
@@ -199,6 +201,13 @@
                     return unless @control.isGrabbing
                     @control.isGrabbing = no
                     @control.setSelection e
+                    
+                colorPicker.onMouseWheel (e, isOnPicker) =>
+                    return unless isOnPicker and hasChild Alpha.element.el, e.target
+                    e.preventDefault()
+                    
+                    direction = if e.deltaY > 0 then 1 else -1;
+                    @control.setSelection null, null, direction
 
                 # Add to Alpha element
                 @element.add @control.el

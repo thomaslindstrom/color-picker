@@ -99,6 +99,12 @@
                 _isPickerEvent = @element.hasChild e.target
                 @emitMouseUp e, _isPickerEvent]
             window.addEventListener 'mouseup', onMouseUp
+            
+            @listeners.push ['mousewheel', onMouseWheel = (e) =>
+                return unless @element.isOpen();
+                _isPickerEvent = @element.hasChild e.target
+                @emitMouseWheel e, _isPickerEvent]
+            window.addEventListener 'mousewheel', onMouseWheel
 
             _workspaceView.addEventListener 'keydown', (e) =>
                 return unless @element.isOpen()
@@ -168,6 +174,11 @@
             @Emitter.emit 'mouseUp', e, isOnPicker
         onMouseUp: (callback) ->
             @Emitter.on 'mouseUp', callback
+        
+        emitMouseWheel: (e, isOnPicker) ->
+            @Emitter.emit 'mouseWheel', e, isOnPicker
+        onMouseWheel: (callback) ->
+            @Emitter.on 'mouseWheel', callback
 
         # Key events
         emitKeyDown: (e, isOnPicker) ->

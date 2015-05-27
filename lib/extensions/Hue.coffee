@@ -188,6 +188,13 @@
                     return unless @control.isGrabbing
                     @control.isGrabbing = no
                     @control.setSelection e
+                
+                colorPicker.onMouseWheel (e, isOnPicker) =>
+                    return unless isOnPicker and hasChild Hue.element.el, e.target
+                    e.preventDefault()
+                    
+                    direction = if e.deltaY > 0 then 1 else -1
+                    @control.setSelection null, @control.selection.y+direction
 
                 # Add to Hue element
                 @element.add @control.el
