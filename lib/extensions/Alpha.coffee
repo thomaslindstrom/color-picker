@@ -83,11 +83,11 @@
 
                     # Render Alpha canvas
                     render: (smartColor) ->
-                        _rgb = do ->
+                        _rgb = ( do ->
                             unless smartColor
-                                return (colorPicker.SmartColor.HEX '#ff0000').toRGBArray()
-                            else return smartColor.toRGBArray()
-                        _rgbFragmentString = _rgb.join ', '
+                                return colorPicker.SmartColor.HEX '#ff0000'
+                            else return smartColor
+                        ).toRGBArray().join ', '
 
                         # Get context and clear it
                         _context = @getContext()
@@ -95,8 +95,8 @@
 
                         # Draw alpha channel
                         _gradient = _context.createLinearGradient 0, 0, 1, _elementHeight
-                        _gradient.addColorStop .01, "rgba(#{ _rgbFragmentString }, 1)"
-                        _gradient.addColorStop .99, "rgba(#{ _rgbFragmentString }, 0)"
+                        _gradient.addColorStop .01, "rgba(#{ _rgb }, 1)"
+                        _gradient.addColorStop .99, "rgba(#{ _rgb }, 0)"
 
                         _context.fillStyle = _gradient
                         _context.fillRect 0, 0, _elementWidth, _elementHeight
