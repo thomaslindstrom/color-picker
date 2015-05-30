@@ -14,6 +14,17 @@ https://github.com/thomaslindstrom/color-picker
 - Add setting for uppercasing color values
 - Add setting for automatically updating the color value in editor on change
 
+### v2.0.1
+- Fix missing preview image
+
+### v2.0.2
+- Fix `keymap` deprecation
+- Improve editor scroll binding
+
+### v2.0.3
+- `Return` element was being unnecessarily rendered
+- Prevent sporadic `Format` element flicker
+
 ## v1.7.0
 - Fix deprecations
 
