@@ -24,6 +24,7 @@ https://github.com/thomaslindstrom/color-picker
 ### v2.0.3
 - `Return` element was being unnecessarily rendered
 - Prevent sporadic `Format` element flicker
+- Better output abbreviation
 
 ## v1.7.0
 - Fix deprecations
