@@ -23,7 +23,7 @@
                 else if (parseFloat number, 10) is 1
                     return '1'
             return number
-        nvec = (number) ->
+        f = (number) ->
             number = "#{ number }"
 
             if number[3] and number[3] is '0'
@@ -101,13 +101,13 @@
             # ---------------------------
                 toVEC: ->
                     _vecArray = @toVECArray()
-                    return s "vec3(#{ nvec _vecArray[0] }, #{ nvec _vecArray[1] }, #{ nvec _vecArray[2] })"
+                    return s "vec3(#{ f _vecArray[0] }, #{ f _vecArray[1] }, #{ f _vecArray[2] })"
                 toVECArray: -> Convert.rgbToVec @toRGBArray()
 
                 # VECA
                 toVECA: ->
                     _vecaArray = @toVECAArray()
-                    return s "vec4(#{ nvec _vecaArray[0] }, #{ nvec _vecaArray[1] }, #{ nvec _vecaArray[2] }, #{ nvec _vecaArray[3] })"
+                    return s "vec4(#{ f _vecaArray[0] }, #{ f _vecaArray[1] }, #{ f _vecaArray[2] }, #{ f _vecaArray[3] })"
                 toVECAArray: -> @toVECArray().concat [@getAlpha()]
 
             #  HEX
