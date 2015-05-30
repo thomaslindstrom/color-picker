@@ -10,16 +10,34 @@
 
         Convert = (require './Convert')()
 
-        # Function to prepare number values that can be abbreviated
+    # -------------------------------------
+    #  Abbreviation functions
+    # -------------------------------------
         n = (number) ->
             number = "#{ number }"
 
             # Abbreviate if `abbreviateValues` option is true
             if atom.config.get 'color-picker.abbreviateValues'
                 if number[0] is '0' and number[1] is '.'
-                    number = number.substring 1 # TODO or `substr`?
+                    return number.substring 1 # TODO or `substr`?
+                else if (parseFloat number, 10) is 1
+                    return '1'
+            return number
+        nvec = (number) ->
+            number = "#{ number }"
+
+            if number[3] and number[3] is '0'
+                return number.substring 0, 3 # TODO or `substr`?
             return number
 
+        s = (string) ->
+            if atom.config.get 'color-picker.abbreviateValues'
+                return string.replace /\s/g, ''
+            return string
+
+    # -------------------------------------
+    #  Public functionality
+    # -------------------------------------
         return {
         # -------------------------------------
         #  Base color object, all colors are versions of this object
@@ -44,52 +62,52 @@
 
             #  RGB
             # ---------------------------
-                toRGB: -> "rgb(#{ @toRGBArray().join ', ' })"
+                toRGB: -> return s "rgb(#{ @toRGBArray().join ', ' })"
                 toRGBArray: -> [@RGBAArray[0], @RGBAArray[1], @RGBAArray[2]]
 
                 # RGBA
                 toRGBA: ->
                     _rgbaArray = @toRGBAArray()
-                    "rgba(#{ _rgbaArray[0] }, #{ _rgbaArray[1] }, #{ _rgbaArray[2] }, #{ n _rgbaArray[3] })"
+                    return s "rgba(#{ _rgbaArray[0] }, #{ _rgbaArray[1] }, #{ _rgbaArray[2] }, #{ n _rgbaArray[3] })"
                 toRGBAArray: -> @RGBAArray
 
             #  HSL
             # ---------------------------
                 toHSL: ->
                     _hslArray = @toHSLArray()
-                    return "hsl(#{ _hslArray[0] }, #{ _hslArray[1] }%, #{ _hslArray[2] }%)"
+                    return s "hsl(#{ _hslArray[0] }, #{ _hslArray[1] }%, #{ _hslArray[2] }%)"
                 toHSLArray: -> Convert.rgbToHsl @toRGBArray()
 
                 # HSLA
                 toHSLA: ->
                     _hslaArray = @toHSLAArray()
-                    return "hsla(#{ _hslaArray[0] }, #{ _hslaArray[1] }%, #{ _hslaArray[2] }%, #{ n _hslaArray[3] })"
+                    return s "hsla(#{ _hslaArray[0] }, #{ _hslaArray[1] }%, #{ _hslaArray[2] }%, #{ n _hslaArray[3] })"
                 toHSLAArray: -> @toHSLArray().concat [@getAlpha()]
 
             #  HSV
             # ---------------------------
                 toHSV: ->
                     _hsvArray = @toHSVArray()
-                    return "hsv(#{ Math.round _hsvArray[0] }, #{ (_hsvArray[1] * 100) << 0 }%, #{ (_hsvArray[2] * 100) << 0 }%)"
+                    return s "hsv(#{ Math.round _hsvArray[0] }, #{ (_hsvArray[1] * 100) << 0 }%, #{ (_hsvArray[2] * 100) << 0 }%)"
                 toHSVArray: -> Convert.rgbToHsv @toRGBArray()
 
                 # HSVA
                 toHSVA: ->
                     _hsvaArray = @toHSVAArray()
-                    return "hsva(#{ Math.round _hsvaArray[0] }, #{ (_hsvaArray[1] * 100) << 0 }%, #{ (_hsvaArray[2] * 100) << 0 }%, #{ n _hsvaArray[3] })"
+                    return s "hsva(#{ Math.round _hsvaArray[0] }, #{ (_hsvaArray[1] * 100) << 0 }%, #{ (_hsvaArray[2] * 100) << 0 }%, #{ n _hsvaArray[3] })"
                 toHSVAArray: -> @toHSVArray().concat [@getAlpha()]
 
             #  VEC
             # ---------------------------
                 toVEC: ->
                     _vecArray = @toVECArray()
-                    return "vec3(#{ _vecArray[0] }, #{ _vecArray[1] }, #{ _vecArray[2] })"
+                    return s "vec3(#{ nvec _vecArray[0] }, #{ nvec _vecArray[1] }, #{ nvec _vecArray[2] })"
                 toVECArray: -> Convert.rgbToVec @toRGBArray()
 
                 # VECA
                 toVECA: ->
                     _vecaArray = @toVECAArray()
-                    return "vec4(#{ _vecaArray[0] }, #{ _vecaArray[1] }, #{ _vecaArray[2] }, #{ n _vecaArray[3] })"
+                    return s "vec4(#{ nvec _vecaArray[0] }, #{ nvec _vecaArray[1] }, #{ nvec _vecaArray[2] }, #{ nvec _vecaArray[3] })"
                 toVECAArray: -> @toVECArray().concat [@getAlpha()]
 
             #  HEX
@@ -109,7 +127,7 @@
                     return '#' + _hex
 
                 # HEXA
-                toHEXA: -> "rgba(#{ @toHEX() }, #{ n @getAlpha() })"
+                toHEXA: -> s "rgba(#{ @toHEX() }, #{ n @getAlpha() })"
 
         # -------------------------------------
         #  Color input formats...

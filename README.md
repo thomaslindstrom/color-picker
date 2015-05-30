@@ -12,7 +12,7 @@ It also inspects `Sass` and `LESS` color variables. Just open the `Color Picker`
 
 Open `Atom Settings`, go to `Packages` in the left hand sidebar, and press `Settings` on `color-picker` to open the list of settings available for the Color Picker.
 
-- **Abbreviate Color Values:** If possible, abbreviate color values, like for example “0.3” to “.3” and “#ffffff” to “#fff”.
+- **Abbreviate Color Values:** If possible, abbreviate color values, like for example “0.3” to “.3”,  “#ffffff” to “#fff” and “rgb(0, 0, 0)” to “rgb(0,0,0)”.
 - **Automatically Replace Color:** Replace selected color automatically on change. Works well with as-you-type CSS reloaders.
 - **Preferred Color Format:** On open, the Color Picker will show a color in this format.
 - **Serve a random color on open:** If the Color Picker doesn't get an input color, it serves a completely random color.
