@@ -279,6 +279,9 @@
                             when 'vec4' then View.SmartColor.VECA _match
                             when 'hsv' then View.SmartColor.HSV _match
                             when 'hsva' then View.SmartColor.HSVA _match
+
+                        # Function to check if the match is a variable or not
+                        isVariable: -> type in ['variable:sass', 'variable:less']
                     _colors.push _matchColor
 
                     # Remove the match from the line content string to
@@ -338,8 +341,7 @@
         #  Emit
         # ---------------------------
             if _match
-                # TODO: Fragile. Should be _match.isVariable() or something cool
-                if _match.type in ['variable:sass', 'variable:less']
+                if _match.isVariable()
                     @emitInputVariable _match
 
                     # TODO: Add loading animation
@@ -360,7 +362,7 @@
 
                             # Look deeper and continue digging if the
                             # definition is a variable
-                            if _colorMatch.type in ['variable:sass', 'variable:less']
+                            if _colorMatch.isVariable()
                                 return getDefinition _colorMatch.match, _colorMatch.type, pointer
                             _colorMatch.pointer = pointer
 
