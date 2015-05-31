@@ -1,14 +1,55 @@
 # ----------------------------------------------------------------------------
 #  SmartColor
-#  Easily convert between color types
+#  Easily find colors, and convert between color types
 # ----------------------------------------------------------------------------
 
     module.exports = ->
-        # Make ColorRegexes a more “this module” friendly object
-        # TODO: Ugly.
-        ColorRegexes = {}; ColorRegexes[value.type] = value.regex for value in (require './ColorRegexes')
-
         Convert = (require './Convert')()
+
+    # -------------------------------------
+    #  Color Regexes
+    # -------------------------------------
+        COLOR_REGEXES =
+            # Matches HSL: eg
+            # hsl(320, 100%, 100%) and hsl(26, 57, 32) and hsl(      36   ,    67   ,   16 )
+            HSL: /hsl\s*?\(\s*([0-9]|[1-9][0-9]|[1|2][0-9][0-9]|3[0-5][0-9]|360)\s*?,\s*?([0-9]|[1-9][0-9]|100)\%?\s*?,\s*?([0-9]|[1-9][0-9]|100)\%?\s*\)/i
+
+            # Matches HSL + A: eg
+            # hsla(320, 100%, 38%, 0.3) and hsla(26, 57, 32, .3) and hsla(      36 ,    67   ,   16   , 0.3 ) and hsla(0, 0%, 0%, 0.42)
+            HSLA: /hsla\s*?\(\s*([0-9]|[1-9][0-9]|[1|2][0-9][0-9]|3[0-5][0-9]|360)\s*?,\s*?([0-9]|[1-9][0-9]|100)\%?\s*?,\s*?([0-9]|[1-9][0-9]|100)\%?\s*?,\s*?(0|1|0*\.\d+)\s*?\)/i
+
+            # Matches HSV: eg
+            # hsv(320, 100%, 100%) and hsv(26, 57, 32) and hsv(      36   ,    67   ,   16 )
+            HSV: /hsv\s*?\(\s*([0-9]|[1-9][0-9]|[1|2][0-9][0-9]|3[0-5][0-9]|360)\s*?,\s*?([0-9]|[1-9][0-9]|100)\%?\s*?,\s*?([0-9]|[1-9][0-9]|100)\%?\s*\)/i
+
+            # Matches HSV + A: eg
+            # hsva(320, 100%, 38%, 0.3) and hsva(26, 57, 32, .3) and hsva(      36 ,    67   ,   16   , 0.3 ) and hsva(0, 0%, 0%, 0.42)
+            HSVA: /hsva\s*?\(\s*([0-9]|[1-9][0-9]|[1|2][0-9][0-9]|3[0-5][0-9]|360)\s*?,\s*?([0-9]|[1-9][0-9]|100)\%?\s*?,\s*?([0-9]|[1-9][0-9]|100)\%?\s*?,\s*?(0|1|0*\.\d+)\s*?\)/i
+
+            # Matches VEC3: eg
+            # vec3(0.44f, 0.3, 0) and vec3(1.0, 0.42, .4) and vec3(      1f  ,    0.4   ,   1.0 )
+            VEC3: /vec3\s*?\(\s*?([0]?\.[0-9]*|1\.0|1|0)[f]?\s*?\,\s*?([0]?\.[0-9]*|1\.0|1|0)[f]?\s*?\,\s*?([0]?\.[0-9]*|1\.0|1|0)[f]?\s*?\)/i
+
+            # Matches VEC4: eg
+            # vec4(0.4, 0.33, 0f, 0.5) and vec4(1.0, 0.4121231f, .4, 1.0f) and vec4(      1f   ,    0.4   ,   1.0, 0 )
+            VEC4: /vec4\s*?\(\s*?([0]?\.[0-9]*|1\.0|1|0)[f]?\s*?\,\s*?([0]?\.[0-9]*|1\.0|1|0)[f]?\s*?\,\s*?([0]?\.[0-9]*|1\.0|1|0)[f]?\s*?\,\s*?([0]?\.[0-9]*|1\.0|1|0)[f]?\s*?\)/i
+
+            # Matches RGB: eg.
+            # rgb(0, 99, 199) and rgb ( 255   , 180   , 255 )
+            RGB:  /rgb\s*?\(\s*?([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\s*?,\s*?([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\s*?,\s*?([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\s*?\)/i
+
+            # Matches RGB + A: eg.
+            # rgba(0, 99, 199, 0.3) and rgba ( 82   ,    121,    0,     .68  )
+            RGBA: /rgba\s*?\(\s*?([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][<0-9]|25[0-5])\s*?,\s*?([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\s*?,\s*?([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\s*?,\s*?(0|1|0*\.\d+)\s*?\)/i
+
+            # Matches HEX:
+            # eg. #000 and #ffffff
+            HEX: /(\#[a-f0-9]{6}|\#[a-f0-9]{3})/i
+
+            # Matches HEX + A: eg
+            # rgba(#fff, 0.3) and rgba(#000000, .8) and rgba ( #000    , .8)
+            HEXA: /rgba\s*?\(\s*(\#[a-f0-9]{6}|\#[a-f0-9]{3})\s*?,\s*?(0|1|0*\.\d+)\s*?\)/i
+        MATCH_ORDER = ['HSL', 'HSLA', 'HSV', 'HSVA', 'VEC3', 'VEC4', 'RGB', 'RGBA', 'HEXA', 'HEX']
 
     # -------------------------------------
     #  Abbreviation functions
@@ -39,6 +80,39 @@
     #  Public functionality
     # -------------------------------------
         return {
+        # -------------------------------------
+        #  Find colors in string
+        #  - string {String}
+        #
+        #  @return String
+        # -------------------------------------
+            find: (string) ->
+                SmartColor = this
+                _colors = []
+
+                for _format in MATCH_ORDER when _regExp = COLOR_REGEXES[_format]
+                    _matches = string.match (new RegExp _regExp.source, 'ig')
+                    continue unless _matches
+
+                    for _match in _matches then do (_format, _match) ->
+                        return if (_index = string.indexOf _match) is -1
+
+                        _colors.push
+                            match: _match
+                            format: _format
+                            start: _index
+                            end: _index + _match.length
+
+                            getSmartColor: -> SmartColor[_format](_match)
+                            isColor: true
+
+                        # Remove the match from the line content string to
+                        # “mark it” as having been “spent”. Be careful to keep the
+                        # correct amount of characters in the string as this is
+                        # later used to see which match fits best, if any
+                        string = string.replace _match, (new Array _match.length + 1).join ' '
+                return _colors
+
         # -------------------------------------
         #  Base color object, all colors are versions of this object
         #  - type {String}: an identifier
@@ -134,7 +208,7 @@
         # -------------------------------------
             # RGB
             RGB: (value) -> @color 'RGB', value, do ->
-                _match = value.match new RegExp ColorRegexes['rgb'].source, 'i'
+                _match = value.match COLOR_REGEXES.RGB
 
                 return ([
                     parseInt _match[1], 10
@@ -146,7 +220,7 @@
 
             # RGBA
             RGBA: (value) -> @color 'RGBA', value, do ->
-                _match = value.match new RegExp ColorRegexes['rgba'].source, 'i'
+                _match = value.match COLOR_REGEXES.RGBA
 
                 return ([
                     parseInt _match[1], 10
@@ -157,7 +231,7 @@
 
             # HSL
             HSL: (value) -> @color 'HSL', value, do ->
-                _match = value.match new RegExp ColorRegexes['hsl'].source, 'i'
+                _match = value.match COLOR_REGEXES.HSL
 
                 return (Convert.hslToRgb [
                     parseInt _match[1], 10
@@ -169,7 +243,7 @@
 
             # HSLA
             HSLA: (value) -> @color 'HSLA', value, do ->
-                _match = value.match new RegExp ColorRegexes['hsla'].source, 'i'
+                _match = value.match COLOR_REGEXES.HSLA
 
                 return (Convert.hslToRgb [
                     parseInt _match[1], 10
@@ -181,7 +255,7 @@
 
             # HSV
             HSV: (value) -> @color 'HSV', value, do ->
-                _match = value.match new RegExp ColorRegexes['hsv'].source, 'i'
+                _match = value.match COLOR_REGEXES.HSV
 
                 return (Convert.hsvToRgb [
                     parseInt _match[1], 10
@@ -193,7 +267,7 @@
 
             # HSVA
             HSVA: (value) -> @color 'HSVA', value, do ->
-                _match = value.match new RegExp ColorRegexes['hsva'].source, 'i'
+                _match = value.match COLOR_REGEXES.HSVA
 
                 return (Convert.hsvToRgb [
                     parseInt _match[1], 10
@@ -205,7 +279,7 @@
 
             # VEC
             VEC: (value) -> @color 'VEC', value, do ->
-                _match = value.match new RegExp ColorRegexes['vec3'].source, 'i'
+                _match = value.match COLOR_REGEXES.VEC3
 
                 return (Convert.vecToRgb [
                     (parseFloat _match[1], 10).toFixed 2
@@ -217,7 +291,7 @@
 
             # VECA
             VECA: (value) -> @color 'VECA', value, do ->
-                _match = value.match new RegExp ColorRegexes['vec4'].source, 'i'
+                _match = value.match COLOR_REGEXES.VEC4
 
                 return (Convert.vecToRgb [
                     (parseFloat _match[1], 10).toFixed 2
@@ -233,6 +307,6 @@
 
             # HEXA
             HEXA: (value) -> @color 'HEXA', value, do ->
-                _match = value.match new RegExp ColorRegexes['hexa'].source, 'i'
+                _match = value.match COLOR_REGEXES.HEXA
                 return (Convert.hexToRgb _match[1]).concat [parseFloat _match[2], 10]
         }
