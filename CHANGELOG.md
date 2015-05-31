@@ -25,6 +25,9 @@ https://github.com/thomaslindstrom/color-picker
 - `Return` element was being unnecessarily rendered
 - Prevent sporadic `Format` element flicker
 - Better output abbreviation
+- Add Stylus variable support – *if they are preceded by `$`*
+- Stop mistakingly assuming color variables in unrelated files
+- *Behind the scenes* improvements
 
 ## v1.7.0
 - Fix deprecations
