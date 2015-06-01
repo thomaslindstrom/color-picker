@@ -14,7 +14,7 @@
     #  Utility function to get the current hue
     # -------------------------------------
         getHue: ->
-            if @control and @element
+            if (@control and @control.selection) and @element
                 return @control.selection.y / @element.getHeight() * 360
             else return 0
 
