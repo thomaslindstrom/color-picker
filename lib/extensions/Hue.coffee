@@ -166,13 +166,13 @@
                 # If the Color Picker is fed a color, set it
                 colorPicker.onInputColor (smartColor) =>
                     _hue = smartColor.toHSVArray()[0]
-                    @control.setSelection null, ((@element.getHeight() / 360) * _hue), true
+                    @control.setSelection null, (@element.getHeight() / 360) * _hue
 
                 # When the selection changes, the color has changed
                 Hue.onSelectionChanged -> Hue.emitColorChanged()
 
                 # Reset
-                colorPicker.onOpen => @control.refreshSelection true
+                colorPicker.onOpen => @control.refreshSelection()
                 colorPicker.onOpen => @control.isGrabbing = no
                 colorPicker.onClose => @control.isGrabbing = no
 

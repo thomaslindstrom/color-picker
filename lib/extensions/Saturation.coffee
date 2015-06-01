@@ -165,7 +165,8 @@
                             _y = _rect.height * key
                         # Default to previous values
                         else
-                            @selection.x = _rect.width if typeof @selection.x isnt 'number'
+                            if (typeof @selection.x isnt 'number')
+                                @selection.x = _rect.width
                             _x = @selection.x
                             _y = @selection.y
 
@@ -183,7 +184,7 @@
                             @el.style.top = "#{ _position.y }px"
                         return Saturation.emitSelectionChanged()
 
-                    refreshSelection: (silent=false) -> @setSelection()
+                    refreshSelection: -> @setSelection()
                 @control.refreshSelection()
 
                 # If the Color Picker is fed a color, set it
@@ -195,7 +196,7 @@
                 Saturation.onSelectionChanged -> Saturation.emitColorChanged()
 
                 # Reset
-                colorPicker.onOpen => @control.refreshSelection true
+                colorPicker.onOpen => @control.refreshSelection()
                 colorPicker.onOpen => @control.isGrabbing = no
                 colorPicker.onClose => @control.isGrabbing = no
 
