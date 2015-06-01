@@ -1,6 +1,6 @@
 # ----------------------------------------------------------------------------
 #  SmartColor
-#  Easily find colors, and convert between color types
+#  Easily find colors, and convert between color formats
 # ----------------------------------------------------------------------------
 
     module.exports = ->
@@ -115,12 +115,12 @@
 
         # -------------------------------------
         #  Base color object, all colors are versions of this object
-        #  - type {String}: an identifier
+        #  - format {String}: the color format
         #  - value {String|Array}: The color value
         #  - RGBAArray {Array}: The color value in RGBAArray format
         # -------------------------------------
-            color: (type, value, RGBAArray) ->
-                type: type
+            color: (format, value, RGBAArray) ->
+                format: format
                 value: value
                 RGBAArray: RGBAArray
 

@@ -309,29 +309,27 @@
                 else @emitInputColor _match.getSmartColor()
             # No match, but `randomColor` option is set
             else if atom.config.get 'color-picker.randomColor'
-                _randomColor = @SmartColor.RGB 'rgb(' + ([
+                _randomColor = @SmartColor.RGBArray [
                     ((Math.random() * 255) + .5) << 0
                     ((Math.random() * 255) + .5) << 0
-                    ((Math.random() * 255) + .5) << 0].join ', ') + ')'
+                    ((Math.random() * 255) + .5) << 0]
 
                 # Convert to `preferredColor`, and then emit it
                 _preferredFormat = atom.config.get 'color-picker.preferredFormat'
-
-                if _randomColor.type isnt _preferredFormat
-                    _convertedColor = _randomColor["to#{ _preferredFormat }"]()
-                    _randomColor = @SmartColor[_preferredFormat] _convertedColor
+                _convertedColor = _randomColor["to#{ _preferredFormat }"]()
+                _randomColor = @SmartColor[_preferredFormat](_convertedColor)
 
                 @emitInputColor _randomColor, false
             # No match, and it's the first open
             else if @isFirstOpen
-                _redColor = @SmartColor.RGB 'rgb(255, 0, 0)'
+                _redColor = @SmartColor.HEX '#f00'
 
                 # Convert to `preferredColor`, and then emit it
                 _preferredFormat = atom.config.get 'color-picker.preferredFormat'
 
-                if _redColor.type isnt _preferredFormat
+                if _redColor.format isnt _preferredFormat
                     _convertedColor = _redColor["to#{ _preferredFormat }"]()
-                    _redColor = @SmartColor[_preferredFormat] _convertedColor
+                    _redColor = @SmartColor[_preferredFormat](_convertedColor)
                 @isFirstOpen = no
 
                 @emitInputColor _redColor, false

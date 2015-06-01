@@ -118,7 +118,7 @@
                 # Set the text element to contain the Color data
                 setColor = (smartColor) =>
                     _preferredFormat = atom.config.get 'color-picker.preferredFormat'
-                    _format = _formatFormat or _inputColor?.type or _preferredFormat or 'RGB'
+                    _format = _formatFormat or _inputColor?.format or _preferredFormat or 'RGB'
 
                     # TODO: This is very fragile
                     _function = if smartColor.getAlpha() < 1
@@ -129,7 +129,7 @@
                     # show the inital value not to confuse the user, but only
                     # if the input color format is still the same
                     _outputColor = do ->
-                        if _inputColor and (_inputColor.type is _format or _inputColor.type is "#{ _format }A")
+                        if _inputColor and (_inputColor.format is _format or _inputColor.format is "#{ _format }A")
                             if smartColor.equals _inputColor
                                 return _inputColor.value
                         return _function.call smartColor
