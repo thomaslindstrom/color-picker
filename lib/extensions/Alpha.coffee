@@ -41,8 +41,10 @@
 
                     return _el
                 # Utility functions
-                width: -> @el.offsetWidth
-                height: -> @el.offsetHeight
+                width: 0
+                height: 0
+                getWidth: -> return @width or @el.offsetWidth
+                getHeight: -> return @height or @el.offsetHeight
 
                 rect: null
                 getRect: -> return @rect or (@rect = @el.getClientRects()[0])
@@ -65,8 +67,8 @@
                 Saturation = colorPicker.getExtension 'Saturation'
 
                 # Prepare some variables
-                _elementWidth = @element.width()
-                _elementHeight = @element.height()
+                _elementWidth = @element.getWidth()
+                _elementHeight = @element.getHeight()
 
                 # Create canvas element
                 @canvas =

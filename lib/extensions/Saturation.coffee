@@ -41,8 +41,8 @@
 
                     return _el
                 # Utility functions
-                width: null
-                height: null
+                width: 0
+                height: 0
                 getWidth: -> return @width or @el.offsetWidth
                 getHeight: -> return @height or @el.offsetHeight
 
