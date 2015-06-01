@@ -106,6 +106,8 @@
                     Editor.clearSelections()
                     Editor.setSelectedBufferRange @pointer.range
                     Editor.scrollToCursorPosition()
+
+                    colorPicker.close()
                 return
 
         #  Create Definition definition text element
