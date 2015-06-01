@@ -85,7 +85,7 @@
                     render: (smartColor) ->
                         _rgb = ( do ->
                             unless smartColor
-                                return colorPicker.SmartColor.HEX '#ff0000'
+                                return colorPicker.SmartColor.HEX '#f00'
                             else return smartColor
                         ).toRGBArray().join ', '
 

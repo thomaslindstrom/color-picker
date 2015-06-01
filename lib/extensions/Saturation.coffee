@@ -94,7 +94,7 @@
                     render: (smartColor) ->
                         _hslArray = ( do ->
                             unless smartColor
-                                return colorPicker.SmartColor.HEX '#ff0000'
+                                return colorPicker.SmartColor.HEX '#f00'
                             else return smartColor
                         ).toHSLArray()
 

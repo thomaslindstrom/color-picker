@@ -80,7 +80,7 @@
                 _elementHeight = @element.getHeight()
 
                 # Red through all the main colors and back to red
-                _hexes = ['#FF0000', '#FFFF00', '#00FF00', '#00FFFF', '#0000FF', '#FF00FF', '#FF0000']
+                _hexes = ['#f00', '#ff0', '#0f0', '#0ff', '#00f', '#f0f', '#f00']
 
                 # Create canvas element
                 @canvas =

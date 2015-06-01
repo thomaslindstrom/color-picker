@@ -58,8 +58,8 @@
 
                 Alpha.onColorChanged (smartColor) =>
                     if smartColor then @element.setColor smartColor
-                    # Default to #ff0000 red
-                    else colorPicker.SmartColor.HEX '#ff0000'
+                    # Default to #f00 red
+                    else colorPicker.SmartColor.HEX '#f00'
                 return
 
         #  Set Arrow color to transparent when a variable is input

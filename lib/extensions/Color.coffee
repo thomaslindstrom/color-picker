@@ -83,8 +83,8 @@
                 Alpha.onColorChanged (smartColor) =>
                     @element.setColor do ->
                         if smartColor then return smartColor
-                        # Default to #ff0000 red
-                        else return colorPicker.SmartColor.HEX '#ff0000'
+                        # Default to #f00 red
+                        else return colorPicker.SmartColor.HEX '#f00'
                     return
                 return
 
@@ -134,6 +134,8 @@
                                 return _inputColor.value
                         return _function.call smartColor
 
+                    # Finish here if the _outputColor is the same as the
+                    # current color
                     return unless _outputColor isnt @color
 
                     # Automatically replace color in editor if
@@ -154,8 +156,8 @@
                 Alpha.onColorChanged (smartColor) =>
                     setColor _currentColor = do ->
                         if smartColor then return smartColor
-                        # Default to #ff0000 red
-                        else return colorPicker.SmartColor.HEX '#ff0000'
+                        # Default to #f00 red
+                        else return colorPicker.SmartColor.HEX '#f00'
                     return
 
                 # When Format is changed, update color
