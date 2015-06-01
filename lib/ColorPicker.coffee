@@ -53,7 +53,7 @@
                 description: 'If the Color Picker doesn\'t get an input color, it serves a completely random color.'
                 type: 'boolean'
                 default: true
-            # TODO Automatic Replace configuration: Replace color value on change
+            # Automatic Replace configuration: Replace color value on change
             automaticReplace:
                 title: 'Automatically Replace Color'
                 description: 'Replace selected color automatically on change. Works well with as-you-type CSS reloaders.'
