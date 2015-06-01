@@ -47,7 +47,8 @@
                 getHeight: -> return @height or @el.offsetHeight
 
                 rect: null
-                getRect: -> return @rect or (@rect = @el.getClientRects()[0])
+                getRect: -> return @rect or @updateRect()
+                updateRect: -> @rect = @el.getClientRects()[0]
 
                 # Add a child on the Alpha element
                 add: (element) ->
@@ -57,8 +58,7 @@
 
         #  Update element rect position when Color Picker opens
         # ---------------------------
-            colorPicker.onOpen =>
-                @element.rect = @element.el.getClientRects()[0]
+            colorPicker.onOpen => @element.updateRect()
 
         #  Create and draw canvas
         # ---------------------------

@@ -47,7 +47,8 @@
                 getHeight: -> return @height or @el.offsetHeight
 
                 rect: null
-                getRect: -> return @rect or (@rect = @el.getClientRects()[0])
+                getRect: -> return @rect or @updateRect()
+                updateRect: -> @rect = @el.getClientRects()[0]
 
                 # Add a child on the Saturation element
                 add: (element) ->
@@ -58,9 +59,9 @@
         #  Update element rect when Color Picker opens
         # ---------------------------
             colorPicker.onOpen =>
-                return unless @element.rect = @element.el.getClientRects()[0]
-                @width = @element.rect.width
-                @height = @element.rect.height
+                return unless @element.updateRect() and _rect = @element.getRect()
+                @width = _rect.width
+                @height = _rect.height
 
         #  Create and draw canvas
         # ---------------------------
