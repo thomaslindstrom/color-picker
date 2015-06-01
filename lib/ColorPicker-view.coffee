@@ -272,15 +272,13 @@
             _lineContent = Cursor.getCurrentBufferLine()
 
             _colorMatches = @SmartColor.find _lineContent
-            _variableMatches = @SmartVariable.find _lineContent, Editor
+            _variableMatches = @SmartVariable.find _lineContent, Editor.getPath()
             _matches = _colorMatches.concat _variableMatches
 
             # Figure out which of the matches is the one the user wants
             _cursorColumn = Cursor.getBufferColumn()
             _match = do -> for _match in _matches
                 return _match if _match.start <= _cursorColumn and _match.end >= _cursorColumn
-
-            console.log 'match:', _match
 
             # If we've got a match, we should select it
             if _match

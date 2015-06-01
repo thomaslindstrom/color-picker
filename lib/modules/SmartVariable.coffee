@@ -51,7 +51,7 @@
         #
         #  @return String
         # -------------------------------------
-            find: (string, Editor) ->
+            find: (string, pathName) ->
                 SmartVariable = this
                 _variables = []
 
@@ -60,7 +60,8 @@
                     continue unless _matches
 
                     # Make sure the file type matches possible extensions
-                    continue unless (path.extname Editor.getPath()) in extensions
+                    if pathName
+                        continue unless (path.extname pathName) in extensions
 
                     for _match in _matches then do (type, extensions, _match) ->
                         return if (_index = string.indexOf _match) is -1
@@ -89,7 +90,7 @@
         #
         #  @return Promise
         # -------------------------------------
-            getDefinition: (variable) ->
+            getDefinition: (variable, initial) ->
                 {match, type, extensions} = variable
 
                 # Figure out what to look for
@@ -97,23 +98,40 @@
 
                 # We already know where the definition is
                 if _definition = DEFINITIONS[match]
+                    # Save initial pointer value, if it isn't set already
+                    initial ?= _definition
                     _pointer = _definition.pointer
 
                     # ... but check if it's still there
-                    return (atom.project.bufferForPath _pointer.filePath).then (buffer) =>
-                        _text = buffer.getTextInRange _pointer.range
-                        _match = _text.match _regExp
+                    return atom.project.bufferForPath _pointer.filePath
+                        .then (buffer) =>
+                            _text = buffer.getTextInRange _pointer.range
+                            _match = _text.match _regExp
 
-                        # TODO: If the definition is a variable, go deeper
+                            # Definition not found, reset and try again
+                            unless _match
+                                DEFINITIONS[match] = null
+                                return @getDefinition variable, initial
 
-                        # Definition not found, reset and try again
-                        unless _match
-                            DEFINITIONS[match] = null
-                            return @getDefinition variable
+                            # Definition found, save it on the DEFINITION object
+                            _definition.value = _match[1]
 
-                        # Definition found, return it
-                        _definition.value = _match[1]
-                        return _definition
+                            # ... but it might be another variable, in which
+                            # case we must keep digging to find what we're after
+                            _found = (@find _match[1], _pointer.filePath)[0]
+
+                            # Run the search again, but keep the initial pointer
+                            if _found and _found.isVariable
+                                return @getDefinition _found, initial
+
+                            return {
+                                value: _definition.value
+                                variable: _definition.variable
+                                type: _definition.type
+
+                                pointer: initial.pointer
+                            }
+                        .catch (error) => console.error error
 
                 # Figure out where to look
                 _options = paths: do ->
@@ -144,11 +162,16 @@
                     return unless _bestMatch and _match = _bestMatch.matches[0]
 
                     DEFINITIONS[match] =
+                        value: null
                         variable: match
                         type: type
 
                         pointer:
                             filePath: _bestMatch.filePath
                             range: _match.range
-                    return @getDefinition variable
+
+                    # Save initial pointer value, if it isn't set already
+                    initial ?= DEFINITIONS[match]
+                    return @getDefinition variable, initial
+                .catch (error) => console.error error
         }
