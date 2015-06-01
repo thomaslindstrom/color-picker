@@ -133,11 +133,11 @@
                             }
                         .catch (error) => console.error error
 
+                # ... we don't know where the definition is
+                
                 # Figure out where to look
                 _options = paths: do ->
                     "**/*#{ _extension }" for _extension in extensions
-
-                # We don't know where the definition is, look it up
                 _results = []
 
                 return atom.workspace.scan _regExp, _options, (result) ->
@@ -161,7 +161,9 @@
                             _bestMatchHits = _thisMatchHits
                     return unless _bestMatch and _match = _bestMatch.matches[0]
 
-                    DEFINITIONS[match] =
+                    # Save the definition on the DEFINITION object so that it
+                    # can be accessed later
+                    DEFINITIONS[match] = {
                         value: null
                         variable: match
                         type: type
@@ -169,6 +171,7 @@
                         pointer:
                             filePath: _bestMatch.filePath
                             range: _match.range
+                    }
 
                     # Save initial pointer value, if it isn't set already
                     initial ?= DEFINITIONS[match]
