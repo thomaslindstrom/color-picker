@@ -29,6 +29,9 @@ https://github.com/thomaslindstrom/color-picker
 - Stop mistakingly assuming color variables in unrelated files
 - *Behind the scenes* improvements
 
+### v2.0.4
+- Remove Atom Module Cache from `package.json`
+
 ## v1.7.0
 - Fix deprecations
 
