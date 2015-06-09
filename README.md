@@ -22,4 +22,3 @@ Open `Atom Settings`, go to `Packages` in the left hand sidebar, and press `Sett
 ## To do
 
 - Selectable list of the current project color variables
-- Spaces in color values was opened as an issue in the Brackets color editor. Add setting to remove spaces https://github.com/adobe/brackets/issues/7157
