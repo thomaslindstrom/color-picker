@@ -75,6 +75,13 @@
                 colorPicker.replace @color
                 colorPicker.element.close()
 
+        #  Set or replace Color on key press enter
+        # ---------------------------
+            colorPicker.onKeyDown (e) =>
+                return unless e.which is 13
+                e.stopPropagation()
+                colorPicker.replace @color
+
         #  Set background element color on Alpha change
         # ---------------------------
             setTimeout => # wait for the DOM
