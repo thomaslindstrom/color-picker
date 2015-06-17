@@ -1,7 +1,7 @@
 {
   "name": "color-picker",
   "main": "./lib/ColorPicker",
-  "version": "2.0.4",
+  "version": "2.0.5",
   "private": true,
   "description": "Right click or press CMD-SHIFT-C/CTRL-ALT-C to open it.",
   "repository": {
