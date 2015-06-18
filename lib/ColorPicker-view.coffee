@@ -254,7 +254,7 @@
 
             Editor = atom.workspace.getActiveTextEditor()
             EditorView = atom.views.getView Editor
-            EditorShadowRoot = EditorView.shadowRoot
+            EditorRoot = EditorView.shadowRoot or EditorView
 
             # Reset selection
             @selection = null
@@ -340,11 +340,11 @@
             _editorWidth = Editor.getWidth()
             _editorHeight = Editor.getHeight()
             _editorOffsetTop = EditorView.parentNode.offsetTop
-            _editorOffsetLeft = EditorShadowRoot.querySelector('.scroll-view').offsetLeft
+            _editorOffsetLeft = EditorRoot.querySelector('.scroll-view').offsetLeft
             _editorScrollTop = Editor.getScrollTop()
 
             _lineHeight = Editor.getLineHeightInPixels()
-            _lineOffsetLeft = EditorShadowRoot.querySelector('.line').offsetLeft
+            _lineOffsetLeft = EditorRoot.querySelector('.line').offsetLeft
 
             # Tinker with the `Cursor.getPixelRect` object to center it on
             # the middle of the selection range
