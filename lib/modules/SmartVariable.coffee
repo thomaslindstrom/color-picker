@@ -31,7 +31,7 @@
             # $color-var
             {
                 type: 'stylus'
-                extensions: ['.stylus']
+                extensions: ['.stylus', '.styl']
                 regExp: /([\$])([\w0-9-_]+)/i
             }
         ]
@@ -134,7 +134,7 @@
                         .catch (error) => console.error error
 
                 # ... we don't know where the definition is
-                
+
                 # Figure out where to look
                 _options = paths: do ->
                     "**/*#{ _extension }" for _extension in extensions
