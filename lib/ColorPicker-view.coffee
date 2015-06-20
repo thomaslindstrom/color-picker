@@ -3,6 +3,8 @@
 # ----------------------------------------------------------------------------
 
     module.exports = ->
+        Parent: null
+
         SmartColor: (require './modules/SmartColor')()
         SmartVariable: (require './modules/SmartVariable')()
         Emitter: (require './modules/Emitter')()
@@ -140,8 +142,7 @@
             @close()
 
             # TODO: Is this really the best way to do this? Hint: Probably not
-            atom.views.getView atom.workspace
-                .querySelector '.vertical'
+            (@Parent = (atom.views.getView atom.workspace).querySelector '.vertical')
                 .appendChild @element.el
             return this
 
@@ -254,6 +255,8 @@
 
             Editor = atom.workspace.getActiveTextEditor()
             EditorView = atom.views.getView Editor
+
+            return unless EditorView
             EditorRoot = EditorView.shadowRoot or EditorView
 
             # Reset selection
@@ -337,8 +340,10 @@
         #  After (& if) having selected text (as this might change the scroll
         #  position) gather information about the Editor
         # ---------------------------
-            _editorWidth = Editor.getWidth()
-            _editorHeight = Editor.getHeight()
+            PaneView = atom.views.getView atom.workspace.getActivePane()
+            _paneOffsetTop = PaneView.offsetTop
+            _paneOffsetLeft = PaneView.offsetLeft
+
             _editorOffsetTop = EditorView.parentNode.offsetTop
             _editorOffsetLeft = EditorRoot.querySelector('.scroll-view').offsetLeft
             _editorScrollTop = Editor.getScrollTop()
@@ -356,25 +361,25 @@
 
         #  Figure out where to place the Color Picker
         # ---------------------------
-            _totalOffsetLeft = _editorOffsetLeft + _lineOffsetLeft
+            _totalOffsetTop = _paneOffsetTop + _cursorPosition.height - _editorScrollTop + _editorOffsetTop
+            _totalOffsetLeft = _paneOffsetLeft + _editorOffsetLeft + _lineOffsetLeft
 
             _position =
                 x: _cursorPosition.left + _totalOffsetLeft
-                y: _cursorPosition.top + _cursorPosition.height - _editorScrollTop + _editorOffsetTop
+                y: _cursorPosition.top + _totalOffsetTop
 
         #  Figure out where to actually place the Color Picker by
         #  setting up boundaries and flipping it if necessary
         # ---------------------------
             _colorPickerPosition =
                 x: do =>
-                    _halfColorPickerWidth = (@element.width() / 2) << 0
+                    _colorPickerWidth = @element.width()
+                    _halfColorPickerWidth = (_colorPickerWidth / 2) << 0
 
                     # Make sure the Color Picker isn't too far to the left
-                    _x = Math.max (_totalOffsetLeft / 2), (_position.x - _halfColorPickerWidth)
+                    _x = Math.max 10, _position.x - _halfColorPickerWidth
                     # Make sure the Color Picker isn't too far to the right
-                    _x = Math.min (_editorWidth - _totalOffsetLeft - _halfColorPickerWidth), _x
-
-                    # TODO: It is overflowing on the right
+                    _x = Math.min (@Parent.offsetWidth - _colorPickerWidth - 10), _x
 
                     return _x
                 y: do =>
@@ -383,7 +388,7 @@
                     # TODO: It's not really working out great
 
                     # If the color picker is too far down, flip it
-                    if @element.height() + _position.y > _editorHeight + _editorOffsetTop
+                    if @element.height() + _position.y > @Parent.offsetHeight - 32
                         @element.flip()
                         return _position.y - _lineHeight - @element.height()
                     # But if it's fine, keep the Y position
