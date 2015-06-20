@@ -6,6 +6,7 @@
         SmartColor: (require './modules/SmartColor')()
         SmartVariable: (require './modules/SmartVariable')()
         Emitter: (require './modules/Emitter')()
+        Debounce: require './modules/Debounce'
 
         extensions: {}
         getExtension: (extensionName) -> @extensions[extensionName]
