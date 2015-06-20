@@ -184,10 +184,9 @@
                     @control.isGrabbing = yes
                     @control.setSelection e
 
-                colorPicker.onMouseMove colorPicker.Debounce ((e) =>
+                colorPicker.onMouseMove (e) =>
                     return unless @control.isGrabbing
                     @control.setSelection e
-                ), window.requestAnimationFrame
 
                 colorPicker.onMouseUp (e) =>
                     return unless @control.isGrabbing
