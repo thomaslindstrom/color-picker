@@ -140,20 +140,22 @@
                         alpha: null
                     setSelection: (e, alpha=null, offset=null) ->
                         _rect = Alpha.element.getRect()
+                        _width = Alpha.element.getWidth()
+                        _height = Alpha.element.getHeight()
 
                         if e then _y = e.pageY - _rect.top
                         # Set the alpha directly
                         else if (typeof alpha is 'number')
-                            _y = _rect.height - (alpha * _rect.height) # reversed, 1 is top
+                            _y = _height - (alpha * _height) # reversed, 1 is top
                         # Handle scroll
                         else if (typeof offset is 'number')
                             _y = @selection.y + offset
                         # Default to previous values
                         else _y = @selection.y
 
-                        _y = @selection.y = Math.max 0, (Math.min _rect.height, _y)
+                        _y = @selection.y = Math.max 0, (Math.min _height, _y)
 
-                        _alpha = 1 - (_y / _rect.height) # reversed, 1 is top
+                        _alpha = 1 - (_y / _height) # reversed, 1 is top
                         @selection.alpha = (Math.round _alpha * 100) / 100 # 2 decimal precision
 
                         # Update the smartColor (if any)
@@ -167,7 +169,7 @@
                         else @selection.color = colorPicker.SmartColor.RGBAArray [255, 0, 0, @selection.alpha]
 
                         _position =
-                            y: Math.max 3, (Math.min (_rect.height - 6), _y)
+                            y: Math.max 3, (Math.min (_height - 6), _y)
 
                         requestAnimationFrame =>
                             @el.style.top = "#{ _position.y }px"

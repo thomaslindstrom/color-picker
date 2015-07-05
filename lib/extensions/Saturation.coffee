@@ -157,26 +157,29 @@
                     setSelection: (e, saturation=null, key=null) ->
                         return unless Saturation.canvas and _rect = Saturation.element.getRect()
 
+                        _width = Saturation.element.getWidth()
+                        _height = Saturation.element.getHeight()
+
                         if e
                             _x = e.pageX - _rect.left
                             _y = e.pageY - _rect.top
                         # Set saturation and key directly
                         else if (typeof saturation is 'number') and (typeof key is 'number')
-                            _x = _rect.width * saturation
-                            _y = _rect.height * key
+                            _x = _width * saturation
+                            _y = _height * key
                         # Default to previous values
                         else
                             if (typeof @selection.x isnt 'number')
-                                @selection.x = _rect.width
+                                @selection.x = _width
                             _x = @selection.x
                             _y = @selection.y
 
-                        _x = @selection.x = Math.max 0, (Math.min _rect.width, _x)
-                        _y = @selection.y = Math.max 0, (Math.min _rect.height, _y)
+                        _x = @selection.x = Math.max 0, (Math.min _width, _x)
+                        _y = @selection.y = Math.max 0, (Math.min _height, _y)
 
                         _position =
-                            x: Math.max 6, (Math.min (_rect.width - 7), _x)
-                            y: Math.max 6, (Math.min (_rect.height - 7), _y)
+                            x: Math.max 6, (Math.min (_width - 7), _x)
+                            y: Math.max 6, (Math.min (_height - 7), _y)
 
                         @selection.color = Saturation.canvas.getColorAtPosition _x, _y
 

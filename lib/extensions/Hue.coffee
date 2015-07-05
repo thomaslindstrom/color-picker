@@ -142,6 +142,9 @@
                     setSelection: (e, y=null, offset=null) ->
                         return unless Hue.canvas and _rect = Hue.element.getRect()
 
+                        _width = Hue.element.getWidth()
+                        _height = Hue.element.getHeight()
+
                         if e then _y = e.pageY - _rect.top
                         # Set the y directly
                         else if (typeof y is 'number')
@@ -152,10 +155,10 @@
                         # Default to top
                         else _y = @selection.y
 
-                        _y = @selection.y = Math.max 0, (Math.min _rect.height, _y)
+                        _y = @selection.y = Math.max 0, (Math.min _height, _y)
                         @selection.color = Hue.canvas.getColorAtPosition _y
 
-                        _position = y: Math.max 3, (Math.min (_rect.height - 6), _y)
+                        _position = y: Math.max 3, (Math.min (_height - 6), _y)
 
                         requestAnimationFrame =>
                             @el.style.top = "#{ _position.y }px"
