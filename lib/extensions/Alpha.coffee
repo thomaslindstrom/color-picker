@@ -84,12 +84,15 @@
                     getContext: -> @context or (@context = @el.getContext '2d')
 
                     # Render Alpha canvas
+                    previousRender: null
                     render: (smartColor) ->
                         _rgb = ( do ->
                             unless smartColor
                                 return colorPicker.SmartColor.HEX '#f00'
                             else return smartColor
-                        ).toRGBArray().join ', '
+                        ).toRGBArray().join ','
+
+                        return if @previousRender and @previousRender is _rgb
 
                         # Get context and clear it
                         _context = @getContext()
@@ -97,12 +100,12 @@
 
                         # Draw alpha channel
                         _gradient = _context.createLinearGradient 0, 0, 1, _elementHeight
-                        _gradient.addColorStop .01, "rgba(#{ _rgb }, 1)"
-                        _gradient.addColorStop .99, "rgba(#{ _rgb }, 0)"
+                        _gradient.addColorStop .01, "rgba(#{ _rgb },1)"
+                        _gradient.addColorStop .99, "rgba(#{ _rgb },0)"
 
                         _context.fillStyle = _gradient
                         _context.fillRect 0, 0, _elementWidth, _elementHeight
-                        return
+                        return @previousRender = _rgb
 
                 # Render again on Saturation color change
                 Saturation.onColorChanged (smartColor) =>
@@ -133,6 +136,15 @@
 
                         return _el
                     isGrabbing: no
+
+                    previousControlPosition: null
+                    updateControlPosition: (y) ->
+                        _joined = ",#{ y }"
+                        return if @previousControlPosition and @previousControlPosition is _joined
+
+                        requestAnimationFrame =>
+                            @el.style.top = "#{ y }px"
+                        return @previousControlPosition = _joined
 
                     selection:
                         y: 0
@@ -170,9 +182,8 @@
 
                         _position =
                             y: Math.max 3, (Math.min (_height - 6), _y)
+                        @updateControlPosition _position.y
 
-                        requestAnimationFrame =>
-                            @el.style.top = "#{ _position.y }px"
                         return Alpha.emitSelectionChanged()
 
                     refreshSelection: -> @setSelection()
