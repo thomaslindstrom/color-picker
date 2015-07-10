@@ -109,16 +109,16 @@
 
                         # Draw hue channel on top
                         _gradient = _context.createLinearGradient 0, 0, _elementWidth, 1
-                        _gradient.addColorStop .01, 'hsl(0, 100%, 100%)'
-                        _gradient.addColorStop .99, "hsl(#{ _hslArray[0] }, 100%, 50%)"
+                        _gradient.addColorStop .01, 'hsl(0,100%,100%)'
+                        _gradient.addColorStop .99, "hsl(#{ _hslArray[0] },100%,50%)"
 
                         _context.fillStyle = _gradient
                         _context.fillRect 0, 0, _elementWidth, _elementHeight
 
                         # Draw saturation channel on the bottom
                         _gradient = _context.createLinearGradient 0, 0, 1, _elementHeight
-                        _gradient.addColorStop .01, 'rgba(0, 0, 0, 0)'
-                        _gradient.addColorStop .99, 'rgba(0, 0, 0, 1)'
+                        _gradient.addColorStop .01, 'rgba(0,0,0,0)'
+                        _gradient.addColorStop .99, 'rgba(0,0,0,1)'
 
                         _context.fillStyle = _gradient
                         _context.fillRect 0, 0, _elementWidth, _elementHeight
