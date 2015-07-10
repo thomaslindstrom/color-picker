@@ -41,8 +41,13 @@
                     return this
 
                 # Set the Color element background color
+                previousColor: null
                 setColor: (smartColor) ->
-                    @el.style.backgroundColor = smartColor.toRGBA()
+                    _color = smartColor.toRGBA()
+                    return if @previousColor and @previousColor is _color
+                    
+                    @el.style.backgroundColor = _color
+                    return @previousColor = _color
             colorPicker.element.add @element.el
 
         #  Increase Color Picker height
