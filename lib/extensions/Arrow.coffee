@@ -36,9 +36,14 @@
                     return this
 
                 # Set the Color element background color
+                previousColor: null
                 setColor: (smartColor) ->
-                    @el.style.borderTopColor = smartColor.toRGBA?() or 'none'
-                    @el.style.borderBottomColor = smartColor.toRGBA?() or 'none'
+                    _color = smartColor.toRGBA?() or 'none'
+                    return if @previousColor and @previousColor is _color
+
+                    @el.style.borderTopColor = _color
+                    @el.style.borderBottomColor = _color
+                    return @previousColor = _color
             colorPicker.element.add @element.el
 
         #  Get and save arrow width
