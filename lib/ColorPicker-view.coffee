@@ -268,8 +268,8 @@
 
             # Fail if the cursor isn't visible
             _visibleRowRange = Editor.getVisibleRowRange()
-            _cursorScreenRow = Cursor.getScreenRow();
-            _cursorBufferRow = Cursor.getBufferRow();
+            _cursorScreenRow = Cursor.getScreenRow()
+            _cursorBufferRow = Cursor.getBufferRow()
             return if (_cursorScreenRow < _visibleRowRange[0] - 1) or (_cursorScreenRow > _visibleRowRange[1])
 
             # Try matching the contents of the current line to color regexes
