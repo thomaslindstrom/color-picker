@@ -268,8 +268,9 @@
 
             # Fail if the cursor isn't visible
             _visibleRowRange = Editor.getVisibleRowRange()
-            _cursorRow = Cursor.getBufferRow()
-            return if (_cursorRow < _visibleRowRange[0] - 1) or (_cursorRow > _visibleRowRange[1])
+            _cursorScreenRow = Cursor.getScreenRow()
+            _cursorBufferRow = Cursor.getBufferRow()
+            return if (_cursorScreenRow < _visibleRowRange[0] - 1) or (_cursorScreenRow > _visibleRowRange[1])
 
             # Try matching the contents of the current line to color regexes
             _lineContent = Cursor.getCurrentBufferLine()
@@ -288,13 +289,13 @@
                 Editor.clearSelections()
 
                 _selection = Editor.addSelectionForBufferRange [
-                    [_cursorRow, _match.start]
-                    [_cursorRow, _match.end]]
-                @selection = match: _match, row: _cursorRow
+                    [_cursorBufferRow, _match.start]
+                    [_cursorBufferRow, _match.end]]
+                @selection = match: _match, row: _cursorBufferRow
             # But if we don't have a match, center the Color Picker on last cursor
             else
                 _cursorPosition = Cursor.getPixelRect()
-                @selection = column: Cursor.getBufferColumn(), row: _cursorRow
+                @selection = column: Cursor.getBufferColumn(), row: _cursorBufferRow
 
         #  Emit
         # ---------------------------
