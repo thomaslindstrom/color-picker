@@ -42,6 +42,18 @@ https://github.com/thomaslindstrom/color-picker
 ### v2.0.7
 - Fix issues with placement when using `Split View`
 
+### v2.0.8
+- Minor enhancements
+
+### v2.0.9
+- Fix Atom version dependency
+
+### v2.0.10
+- Avoid multiple of the same rendering in elements: Results in a snappier experience
+
+### v2.0.11
+- Fix issue where the Color Picker, in some cases, wouldn't open
+
 ## v1.7.0
 - Fix deprecations
 
