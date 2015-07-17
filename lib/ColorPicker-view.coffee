@@ -270,7 +270,8 @@
             _visibleRowRange = Editor.getVisibleRowRange()
             _cursorScreenRow = Cursor.getScreenRow()
             _cursorBufferRow = Cursor.getBufferRow()
-            return if (_cursorScreenRow < _visibleRowRange[0] - 1) or (_cursorScreenRow > _visibleRowRange[1])
+
+            return if (_cursorScreenRow < _visibleRowRange[0]) or (_cursorScreenRow > _visibleRowRange[1])
 
             # Try matching the contents of the current line to color regexes
             _lineContent = Cursor.getCurrentBufferLine()
