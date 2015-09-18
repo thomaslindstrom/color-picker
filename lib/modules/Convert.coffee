@@ -81,9 +81,8 @@
             computedS = 0
             computedV = 0
 
-            if not r? or not g? or not b? or isNaN(r) or isNaN(g) or isNaN(b)
-                return
-            if r < 0 or g < 0 or b < 0 or r > 255 or g > 255 or b > 255
+            for elem in [r, g, b]
+              if not elem? or isNaN(elem) or elem < 0 or elem > 255
                 return
 
             r = r / 255
