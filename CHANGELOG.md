@@ -54,6 +54,9 @@ https://github.com/thomaslindstrom/color-picker
 ### v2.0.11
 - Fix issue where the Color Picker, in some cases, wouldn't open
 
+### v2.0.12
+- Fix issue where CSS 3D layering had broken “return” element in a recent Atom update 
+
 ## v1.7.0
 - Fix deprecations
 

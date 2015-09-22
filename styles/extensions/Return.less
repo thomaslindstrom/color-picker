@@ -12,7 +12,8 @@
         border-radius: 2px 2px 0 0;
         box-shadow: 0 -1px 0 rgba(0, 0, 0, .07);
         position: absolute;
-        top: 0; bottom: auto;
+        top: 0; bottom: auto; left: 0;
+        z-index: 1;
         visibility: hidden;
 
         backface-visibility: hidden;
@@ -29,7 +30,7 @@
             z-index: -1;
 
             backface-visibility: hidden;
-            transform: translateZ(-1px); }
+            transform: translateZ(-3px); }
 
         &:before {
             background: #fff;
