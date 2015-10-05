@@ -357,10 +357,10 @@
             # the middle of the selection range
             # TODO: There can be lines over more than one row
             if _match
-                {left, width} = Editor.pixelRectForScreenRange(_selection.getScreenRange())
-                right = left + width
+                _rect = Editor.pixelRectForScreenRange(_selection.getScreenRange())
+                _right = _rect.left + _rect.width
                 _cursorPosition = Cursor.getPixelRect()
-                _cursorPosition.left = right - (width / 2)
+                _cursorPosition.left = _right - (_rect.width / 2)
 
         #  Figure out where to place the Color Picker
         # ---------------------------
