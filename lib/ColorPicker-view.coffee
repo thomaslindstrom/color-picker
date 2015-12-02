@@ -86,21 +86,21 @@
                 _isPickerEvent = @element.hasChild e.target
                 @emitMouseDown e, _isPickerEvent
                 return @close() unless _isPickerEvent]
-            window.addEventListener 'mousedown', onMouseDown
+            window.addEventListener 'mousedown', onMouseDown, true
 
             @listeners.push ['mousemove', onMouseMove = (e) =>
                 return unless @element.isOpen()
 
                 _isPickerEvent = @element.hasChild e.target
                 @emitMouseMove e, _isPickerEvent]
-            window.addEventListener 'mousemove', onMouseMove
+            window.addEventListener 'mousemove', onMouseMove, true
 
             @listeners.push ['mouseup', onMouseUp = (e) =>
                 return unless @element.isOpen()
 
                 _isPickerEvent = @element.hasChild e.target
                 @emitMouseUp e, _isPickerEvent]
-            window.addEventListener 'mouseup', onMouseUp
+            window.addEventListener 'mouseup', onMouseUp, true
 
             @listeners.push ['mousewheel', onMouseWheel = (e) =>
                 return unless @element.isOpen()
