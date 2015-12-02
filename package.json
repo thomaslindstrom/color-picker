@@ -15,7 +15,7 @@
   ],
   "license": "MIT",
   "engines": {
-    "atom": ">=1.0.19"
+    "atom": ">=1.2.4"
   },
   "readmeFilename": "README.md",
   "bugs": {
