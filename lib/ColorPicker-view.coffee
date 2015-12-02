@@ -85,7 +85,7 @@
 
                 _isPickerEvent = @element.hasChild e.target
                 @emitMouseDown e, _isPickerEvent
-                return @close() unless @element.hasChild e.target]
+                return @close() unless _isPickerEvent]
             window.addEventListener 'mousedown', onMouseDown
 
             @listeners.push ['mousemove', onMouseMove = (e) =>
@@ -118,8 +118,9 @@
 
             # Close it on scroll also
             atom.workspace.observeTextEditors (editor) =>
-                _subscriptionTop = editor.onDidChangeScrollTop => @close()
-                _subscriptionLeft = editor.onDidChangeScrollLeft => @close()
+                _editorView = atom.views.getView editor
+                _subscriptionTop = _editorView.onDidChangeScrollTop => @close()
+                _subscriptionLeft = _editorView.onDidChangeScrollLeft => @close()
 
                 editor.onDidDestroy ->
                     _subscriptionTop.dispose()
@@ -267,7 +268,7 @@
             Cursor = Editor.getLastCursor()
 
             # Fail if the cursor isn't visible
-            _visibleRowRange = Editor.getVisibleRowRange()
+            _visibleRowRange = EditorView.getVisibleRowRange()
             _cursorScreenRow = Cursor.getScreenRow()
             _cursorBufferRow = Cursor.getBufferRow()
 
@@ -348,16 +349,15 @@
 
             _editorOffsetTop = EditorView.parentNode.offsetTop
             _editorOffsetLeft = EditorRoot.querySelector('.scroll-view').offsetLeft
-            _editorScrollTop = Editor.getScrollTop()
+            _editorScrollTop = EditorView.getScrollTop()
 
             _lineHeight = Editor.getLineHeightInPixels()
             _lineOffsetLeft = EditorRoot.querySelector('.line').offsetLeft
 
-            # Tinker with the `Cursor.getPixelRect` object to center it on
-            # the middle of the selection range
+            # Center it on the middle of the selection range
             # TODO: There can be lines over more than one row
             if _match
-                _rect = Editor.pixelRectForScreenRange(_selection.getScreenRange())
+                _rect = EditorView.pixelRectForScreenRange(_selection.getScreenRange())
                 _right = _rect.left + _rect.width
                 _cursorPosition = Cursor.getPixelRect()
                 _cursorPosition.left = _right - (_rect.width / 2)
