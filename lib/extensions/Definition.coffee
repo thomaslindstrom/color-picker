@@ -51,14 +51,9 @@
                     # Reset picker on close, and clear the event
                     # TODO handle this on the ColorPicker itself, maybe?
                     onClose = ->
-                        colorPicker.canOpen = no
-
-                        onTransitionEnd = ->
-                            $colorPicker.setHeight _oldHeight
-                            $colorPicker.el.removeEventListener 'transitionend', onTransitionEnd
-                            $colorPicker.removeClass 'view--definition'
-                            colorPicker.canOpen = yes
-                        $colorPicker.el.addEventListener 'transitionend', onTransitionEnd
+                        colorPicker.canOpen = yes
+                        $colorPicker.setHeight _oldHeight
+                        $colorPicker.removeClass 'view--definition'
 
                         # TODO: This kinda goes against the 'no strings' thing
                         colorPicker.Emitter.off 'close', onClose
