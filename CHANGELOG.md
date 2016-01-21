@@ -2,6 +2,9 @@
 
 https://github.com/thomaslindstrom/color-picker
 
+## v2.1.0
+- Expose opening the `color-picker` as a service
+
 ## v2.0.0
 - Completely rewritten source code
 - Easily convert between color formats in the Color Picker UI
