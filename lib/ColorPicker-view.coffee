@@ -405,7 +405,7 @@
             requestAnimationFrame => # wait for class delay
                 @element.open()
                 @emitOpen()
-            return
+            return true
 
     # -------------------------------------
     #  Replace selected color

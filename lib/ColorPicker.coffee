@@ -49,9 +49,8 @@
         provideColorPicker: ->
             return {
                 open: (Editor, Cursor) =>
-                    return false unless @view
-                    @view.open(Editor, Cursor)
-                    return true
+                    return unless @view
+                    return @view.open Editor, Cursor
             }
 
         config:
