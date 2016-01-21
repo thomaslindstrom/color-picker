@@ -250,11 +250,11 @@
     # -------------------------------------
     #  Open the Color Picker
     # -------------------------------------
-        open: ->
+        open: (Editor=null, Cursor=null) ->
             return unless @canOpen
             @emitBeforeOpen()
 
-            Editor = atom.workspace.getActiveTextEditor()
+            Editor = atom.workspace.getActiveTextEditor() unless Editor
             EditorView = atom.views.getView Editor
 
             return unless EditorView
@@ -265,7 +265,7 @@
 
         #  Find the current cursor
         # ---------------------------
-            Cursor = Editor.getLastCursor()
+            Cursor = Editor.getLastCursor() unless Cursor
 
             # Fail if the cursor isn't visible
             _visibleRowRange = EditorView.getVisibleRowRange()
@@ -405,7 +405,7 @@
             requestAnimationFrame => # wait for class delay
                 @element.open()
                 @emitOpen()
-            return
+            return true
 
     # -------------------------------------
     #  Replace selected color

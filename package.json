@@ -22,5 +22,11 @@
     "url": "https://github.com/thomaslindstrom/color-picker/issues"
   },
   "homepage": "https://github.com/thomaslindstrom/color-picker",
-  "readme": "# A Color Picker for Atom\n\nRight click and select `Color Picker`, or hit `CMD-SHIFT-C`/`CTRL-ALT-C` to open it. Currently reads `HEX`, `HEXa`, `RGB`, `RGBa`, `HSL`, `HSLa`, `HSV`, `HSVa`, `VEC3` and `VEC4` colors – and is able to convert between the formats.\n\nIt also inspects `Sass` and `LESS` color variables. Just open the `Color Picker` with the cursor at a variable and it'll look up the definition for you. From there, you can click the definition and go directly to where it's defined.\n\n## Preview\n\n![Color Picker in action](https://github.com/thomaslindstrom/color-picker/raw/master/preview.gif)\n\n## Settings\n\nOpen `Atom Settings`, go to `Packages` in the left hand sidebar, and press `Settings` on `color-picker` to open the list of settings available for the Color Picker.\n\n- **Abbreviate Color Values:** If possible, abbreviate color values, like for example “0.3” to “.3” and “#ffffff” to “#fff”.\n- **Automatically Replace Color:** Replace selected color automatically on change. Works well with as-you-type CSS reloaders.\n- **Preferred Color Format:** On open, the Color Picker will show a color in this format.\n- **Serve a random color on open:** If the Color Picker doesn't get an input color, it serves a completely random color.\n- **Trigger key:** Decide what trigger key should open the Color Picker. `CMD-SHIFT-{TRIGGER_KEY}` and `CTRL-ALT-{TRIGGER_KEY}`. Requires a restart.\n- **Uppercase Color Values:** If sensible, uppercase the color value. For example, “#aaa” becomes “#AAA”.\n\n## To do\n\n- Selectable list of the current project color variables\n"
+  "providedServices": {
+    "color-picker": {
+      "versions": {
+        "1.0.0": "provideColorPicker"
+      }
+    }
+  }
 }
