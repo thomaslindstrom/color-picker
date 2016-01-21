@@ -250,11 +250,12 @@
     # -------------------------------------
     #  Open the Color Picker
     # -------------------------------------
-        open: ->
+        open: (Editor = null, Cursor = null) ->
             return unless @canOpen
             @emitBeforeOpen()
 
-            Editor = atom.workspace.getActiveTextEditor()
+            unless Editor
+                Editor = atom.workspace.getActiveTextEditor()
             EditorView = atom.views.getView Editor
 
             return unless EditorView
@@ -265,7 +266,8 @@
 
         #  Find the current cursor
         # ---------------------------
-            Cursor = Editor.getLastCursor()
+            unless Cursor
+                Cursor = Editor.getLastCursor()
 
             # Fail if the cursor isn't visible
             _visibleRowRange = EditorView.getVisibleRowRange()
