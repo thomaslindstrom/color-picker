@@ -46,6 +46,14 @@
 
         deactivate: -> @view?.destroy()
 
+        provideColorPicker: ->
+            return {
+                open: (Editor, Cursor) =>
+                    return false unless @view
+                    @view.open(Editor, Cursor)
+                    return true
+            }
+
         config:
             # Random color configuration: On Color Picker open, show a random color
             randomColor:
