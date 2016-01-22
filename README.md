@@ -1,4 +1,4 @@
-# A Color Picker for Atom
+# A Color Picker for Atom [](https://travis-ci.org/thomaslindstrom/color-picker.svg?branch=master)
 
 Right click and select `Color Picker`, or hit `CMD-SHIFT-C`/`CTRL-ALT-C` to open it. Currently reads `HEX`, `HEXa`, `RGB`, `RGBa`, `HSL`, `HSLa`, `HSV`, `HSVa`, `VEC3` and `VEC4` colors – and is able to convert between the formats.
 

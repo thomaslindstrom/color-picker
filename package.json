@@ -1,9 +1,9 @@
 {
   "name": "color-picker",
-  "main": "./lib/ColorPicker",
-  "version": "2.1.0",
+  "main": "./lib/color-picker",
+  "version": "3.0.0",
   "private": true,
-  "description": "Right click or press CMD-SHIFT-C/CTRL-ALT-C to open it.",
+  "description": "Inspect and manipulate colors in Atom on the fly.",
   "repository": {
     "type": "git",
     "url": "https://github.com/thomaslindstrom/color-picker"
@@ -15,7 +15,7 @@
   ],
   "license": "MIT",
   "engines": {
-    "atom": ">=1.2.4"
+    "atom": ">=1.4.0"
   },
   "readmeFilename": "README.md",
   "bugs": {
