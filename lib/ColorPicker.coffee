@@ -3,6 +3,8 @@
 # ----------------------------------------------------------------------------
 
     module.exports =
+        view: (require './ColorPicker-view')()
+
         activate: ->
             _command = 'color-picker:open'
 
@@ -44,7 +46,9 @@
 
             return @view.activate()
 
-        deactivate: -> @view?.destroy()
+        deactivate: ->
+            @view?.destroy()
+            @view = null
 
         provideColorPicker: ->
             return {
@@ -95,5 +99,3 @@
                 type: 'string'
                 enum: ['C', 'E', 'H', 'K']
                 default: 'C'
-
-        view: (require './ColorPicker-view')()

@@ -151,6 +151,7 @@
     #  Destroy the view and unbind events
     # -------------------------------------
         destroy: ->
+            @canOpen = no
             @emitBeforeDestroy()
 
             for [_event, _listener] in @listeners
