@@ -141,6 +141,7 @@
         #  Place the Color Picker element
         # ---------------------------
             @close()
+            @canOpen = yes
 
             # TODO: Is this really the best way to do this? Hint: Probably not
             (@Parent = (atom.views.getView atom.workspace).querySelector '.vertical')
@@ -151,12 +152,13 @@
     #  Destroy the view and unbind events
     # -------------------------------------
         destroy: ->
-            @canOpen = no
             @emitBeforeDestroy()
 
             for [_event, _listener] in @listeners
                 window.removeEventListener _event, _listener
+
             @element.remove()
+            @canOpen = no
 
     # -------------------------------------
     #  Load Color Picker extensions // more like dependencies
