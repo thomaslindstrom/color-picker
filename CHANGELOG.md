@@ -5,6 +5,9 @@ https://github.com/thomaslindstrom/color-picker
 ## v2.1.0
 - Expose opening the `color-picker` as a service
 
+### v2.1.1
+- [Probably fix](https://github.com/thomaslindstrom/color-picker/commit/a0a3c43afac9407ccbc95733113014b695d1387a) [the one bug report that has been occurring over and over again](https://github.com/thomaslindstrom/color-picker/issues/114) for the past half year or so
+
 ## v2.0.0
 - Completely rewritten source code
 - Easily convert between color formats in the Color Picker UI
