@@ -387,6 +387,11 @@
                     # Make sure the Color Picker isn't too far to the right
                     _x = Math.min (@Parent.offsetWidth - _colorPickerWidth - 10), _x
 
+                    # Move to the left if there is a left panel
+                    _leftPanel = (atom.views.getView atom.workspace).querySelector 'atom-panel-container.left'
+                    if _leftPanel
+                        _x += _leftPanel.offsetWidth
+
                     return _x
                 y: do =>
                     @element.unflip()
