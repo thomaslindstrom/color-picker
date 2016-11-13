@@ -8,7 +8,7 @@
     # -------------------------------------
     #  Variable Types
     # -------------------------------------
-        VARIABLE_PATTERN = '\\{{ VARIABLE }}[\\s]*\\:[\\s]*([^\\;\\n]+)[\\;|\\n]'
+        VARIABLE_PATTERN = '\\{{ VARIABLE }}[\\s]*[:=][\\s]*([^\\;\\n]+)[\\;|\\n]'
 
         VARIABLE_TYPES = [
             # Matches Sass variable: eg.
