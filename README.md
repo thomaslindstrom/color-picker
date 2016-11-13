@@ -1,5 +1,7 @@
 # A Color Picker for Atom
 
+[![apm](https://img.shields.io/apm/v/color-picker.svg?style=flat-square)]() [![apm](https://img.shields.io/apm/dm/color-picker.svg?style=flat-square)]()
+
 Right click and select `Color Picker`, or hit `CMD-SHIFT-C`/`CTRL-ALT-C` to open it. Currently reads `HEX`, `HEXa`, `RGB`, `RGBa`, `HSL`, `HSLa`, `HSV`, `HSVa`, `VEC3` and `VEC4` colors – and is able to convert between the formats.
 
 It also inspects `Sass` and `LESS` color variables. Just open the `Color Picker` with the cursor at a variable and it'll look up the definition for you. From there, you can click the definition and go directly to where it's defined.
