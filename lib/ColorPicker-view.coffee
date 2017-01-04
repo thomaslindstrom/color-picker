@@ -259,6 +259,7 @@
 
             Editor = atom.workspace.getActiveTextEditor() unless Editor
             EditorView = atom.views.getView Editor
+            EditorElement = Editor.getElement()
 
             return unless EditorView
             EditorRoot = EditorView.shadowRoot or EditorView
@@ -360,7 +361,7 @@
             # Center it on the middle of the selection range
             # TODO: There can be lines over more than one row
             if _match
-                _rect = EditorView.pixelRectForScreenRange(_selection.getScreenRange())
+                _rect = EditorElement.pixelRectForScreenRange(_selection.getScreenRange())
                 _right = _rect.left + _rect.width
                 _cursorPosition = Cursor.getPixelRect()
                 _cursorPosition.left = _right - (_rect.width / 2)
