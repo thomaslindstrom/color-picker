@@ -300,7 +300,7 @@
                 @selection = match: _match, row: _cursorBufferRow
             # But if we don't have a match, center the Color Picker on last cursor
             else
-                _cursorPosition = Cursor.getPixelRect()
+                _cursorPosition = EditorElement.pixelPositionForScreenPosition Cursor.getScreenPosition()
                 @selection = column: _cursorColumn, row: _cursorBufferRow
 
         #  Emit
@@ -363,12 +363,12 @@
             if _match
                 _rect = EditorElement.pixelRectForScreenRange(_selection.getScreenRange())
                 _right = _rect.left + _rect.width
-                _cursorPosition = Cursor.getPixelRect()
+                _cursorPosition = EditorElement.pixelPositionForScreenPosition Cursor.getScreenPosition()
                 _cursorPosition.left = _right - (_rect.width / 2)
 
         #  Figure out where to place the Color Picker
         # ---------------------------
-            _totalOffsetTop = _paneOffsetTop + _cursorPosition.height - _editorScrollTop + _editorOffsetTop
+            _totalOffsetTop = _paneOffsetTop + _lineHeight - _editorScrollTop + _editorOffsetTop
             _totalOffsetLeft = _paneOffsetLeft + _editorOffsetLeft + _lineOffsetLeft
 
             _position =
