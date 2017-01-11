@@ -301,7 +301,7 @@
             # But if we don't have a match, center the Color Picker on last cursor
             else
                 _cursorPosition = Cursor.getPixelRect()
-                @selection = column: Cursor.getBufferColumn(), row: _cursorBufferRow
+                @selection = column: _cursorColumn, row: _cursorBufferRow
 
         #  Emit
         # ---------------------------
