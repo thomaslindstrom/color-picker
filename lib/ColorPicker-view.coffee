@@ -262,7 +262,7 @@
             EditorElement = Editor.getElement()
 
             return unless EditorView
-            EditorRoot = EditorView.shadowRoot or EditorView
+            EditorRoot = EditorView
 
             # Reset selection
             @selection = null
