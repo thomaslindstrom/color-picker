@@ -82,8 +82,8 @@
             computedV = 0
 
             for elem in [r, g, b]
-              if not elem? or isNaN(elem) or elem < 0 or elem > 255
-                return
+                if not elem? or isNaN(elem) or elem < 0 or elem > 255
+                    return
 
             r = r / 255
             g = g / 255
