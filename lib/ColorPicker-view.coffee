@@ -262,7 +262,6 @@
             EditorElement = Editor.getElement()
 
             return unless EditorView
-            EditorRoot = EditorView.shadowRoot or EditorView
 
             # Reset selection
             @selection = null
@@ -353,11 +352,11 @@
             _paneOffsetLeft = PaneView.offsetLeft
 
             _editorOffsetTop = EditorView.parentNode.offsetTop
-            _editorOffsetLeft = EditorRoot.querySelector('.scroll-view').offsetLeft
+            _editorOffsetLeft = EditorView.querySelector('.scroll-view').offsetLeft
             _editorScrollTop = EditorView.getScrollTop()
 
             _lineHeight = Editor.getLineHeightInPixels()
-            _lineOffsetLeft = EditorRoot.querySelector('.line').offsetLeft
+            _lineOffsetLeft = EditorView.querySelector('.line').offsetLeft
 
             # Center it on the middle of the selection range
             # TODO: There can be lines over more than one row
