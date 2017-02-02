@@ -81,5 +81,9 @@
         #  Place the Arrow
         # ---------------------------
             colorPicker.onPositionChange (position, colorPickerPosition) =>
+                _leftPanel = (atom.views.getView atom.workspace).querySelector 'atom-panel-container.left'
+                if _leftPanel
+                    @element.setPosition position.x - (colorPickerPosition.x - _leftPanel.offsetWidth)
+                else
                 @element.setPosition position.x - colorPickerPosition.x
             return this
