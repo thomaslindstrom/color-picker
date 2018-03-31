@@ -182,7 +182,7 @@
                 toVECA: ->
                     _vecaArray = @toVECAArray()
                     return s "vec4(#{ f _vecaArray[0] }, #{ f _vecaArray[1] }, #{ f _vecaArray[2] }, #{ f _vecaArray[3] })"
-                toVECAArray: -> @toVECArray().concat [@getAlpha()]
+                toVECAArray: -> @toVECArray().concat [(@getAlpha()).toFixed 2]
 
             #  HEX
             # ---------------------------
