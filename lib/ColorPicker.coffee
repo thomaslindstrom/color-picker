@@ -71,6 +71,12 @@
                 description: 'Replace selected color automatically on change. Works well with as-you-type CSS reloaders.'
                 type: 'boolean'
                 default: false
+            # Always output alpha value
+            alphaChannelAlways:
+                title: 'Always include alpha channel value'
+                description: 'Output alpha channel value, even if it is 1.0'
+                type: 'boolean'
+                default: false
             # Abbreviate values configuration: If possible, abbreviate color values. Eg. “0.3” to “.3”
             # TODO: Can we abbreviate something else?
             abbreviateValues:

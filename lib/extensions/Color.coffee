@@ -45,7 +45,7 @@
                 setColor: (smartColor) ->
                     _color = smartColor.toRGBA()
                     return if @previousColor and @previousColor is _color
-                    
+
                     @el.style.backgroundColor = _color
                     return @previousColor = _color
             colorPicker.element.add @element.el
@@ -133,7 +133,7 @@
                     _format = _formatFormat or _inputColor?.format or _preferredFormat or 'RGB'
 
                     # TODO: This is very fragile
-                    _function = if smartColor.getAlpha() < 1
+                    _function = if smartColor.getAlpha() < 1 || atom.config.get 'color-picker.alphaChannelAlways'
                         (smartColor["to#{ _format }A"] or smartColor["to#{ _format }"])
                     else smartColor["to#{ _format }"]
 
