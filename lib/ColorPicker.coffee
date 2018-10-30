@@ -105,4 +105,4 @@
                 description: 'Decide what trigger key should open the Color Picker. `CMD-SHIFT-{TRIGGER_KEY}` and `CTRL-ALT-{TRIGGER_KEY}`. Requires a restart.'
                 type: 'string'
                 enum: ['C', 'E', 'H', 'K']
-                default: 'C'
+                default: 'H'
